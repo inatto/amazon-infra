@@ -1,0 +1,260 @@
+#!/usr/bin/env bash
+set -e
+
+REMOTE_USER="ubuntu"
+REMOTE_HOST="44.219.174.82"
+SSH_KEY="/home/daniel/amazon.ssh"
+
+#DOMAIN="sinproprev.sindicatto.com"
+DOMAIN="sinproprev.org.br"
+
+SSH_OPTS="-i $SSH_KEY -o ServerAliveInterval=30 -o ServerAliveCountMax=120 -o TCPKeepAlive=yes -o ConnectTimeout=10"
+
+OK_COUNT=0
+FAIL_COUNT=0
+WARN_COUNT=0
+
+ok() {
+  echo "OK   - $1"
+  OK_COUNT=$((OK_COUNT + 1))
+}
+
+fail() {
+  echo "FAIL - $1"
+  FAIL_COUNT=$((FAIL_COUNT + 1))
+}
+
+warn() {
+  echo "WARN - $1"
+  WARN_COUNT=$((WARN_COUNT + 1))
+}
+
+line() {
+  echo "------------------------------------------------------------"
+}
+
+echo ""
+echo "CHECK SERVER"
+echo "Servidor: $REMOTE_USER@$REMOTE_HOST"
+echo "Domínio:  $DOMAIN"
+echo ""
+
+line
+echo "1. Verificando arquivos locais"
+line
+
+if [ -f "$SSH_KEY" ]; then
+  ok "Chave SSH existe: $SSH_KEY"
+else
+  fail "Chave SSH não encontrada: $SSH_KEY"
+fi
+
+if [ -d "/home/daniel/Code/sind-amazon/lightsail/$REMOTE_HOST/server/etc/nginx" ]; then
+  ok "Backup local do Nginx existe"
+else
+  warn "Backup local do Nginx não encontrado"
+fi
+
+line
+echo "2. Testando conexão SSH"
+line
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "echo ssh-ok" >/tmp/check-server-ssh.out 2>/tmp/check-server-ssh.err; then
+  ok "SSH conectou no servidor"
+else
+  fail "SSH falhou"
+  cat /tmp/check-server-ssh.err
+  exit 1
+fi
+
+line
+echo "3. Verificando sudo remoto"
+line
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "sudo -n true" >/dev/null 2>&1; then
+  ok "sudo remoto funciona sem senha"
+else
+  warn "sudo remoto pode pedir senha ou não está liberado sem senha"
+fi
+
+line
+echo "4. Verificando sistema básico"
+line
+
+ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "
+  echo 'Hostname: ' \$(hostname)
+  echo 'Usuário:  ' \$(whoami)
+  echo 'Uptime:   ' \$(uptime -p)
+  echo 'Disco:'
+  df -h /
+  echo ''
+  echo 'Memória:'
+  free -h
+"
+
+ok "Informações básicas coletadas"
+
+line
+echo "5. Verificando Nginx"
+line
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "command -v nginx" >/dev/null 2>&1; then
+  ok "nginx instalado"
+else
+  fail "nginx não instalado"
+fi
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "sudo nginx -t" >/tmp/check-nginx.out 2>/tmp/check-nginx.err; then
+  ok "nginx -t passou"
+else
+  fail "nginx -t falhou"
+  cat /tmp/check-nginx.err
+fi
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "systemctl is-active --quiet nginx" >/dev/null 2>&1; then
+  ok "serviço nginx está ativo"
+else
+  fail "serviço nginx não está ativo"
+fi
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "[ -d /etc/nginx/sites-available ]" >/dev/null 2>&1; then
+  ok "/etc/nginx/sites-available existe"
+else
+  fail "/etc/nginx/sites-available não existe"
+fi
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "[ -d /etc/nginx/sites-enabled ]" >/dev/null 2>&1; then
+  ok "/etc/nginx/sites-enabled existe"
+else
+  fail "/etc/nginx/sites-enabled não existe"
+fi
+
+line
+echo "6. Verificando configuração do domínio"
+line
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "[ -f /etc/nginx/sites-available/$DOMAIN ]" >/dev/null 2>&1; then
+  ok "arquivo em sites-available existe: $DOMAIN"
+else
+  warn "arquivo em sites-available não existe: $DOMAIN"
+fi
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "[ -e /etc/nginx/sites-enabled/$DOMAIN ]" >/dev/null 2>&1; then
+  ok "site habilitado em sites-enabled: $DOMAIN"
+else
+  warn "site não habilitado em sites-enabled: $DOMAIN"
+fi
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "sudo nginx -T 2>/dev/null | grep -q 'server_name $DOMAIN'" >/dev/null 2>&1; then
+  ok "nginx carregou server_name $DOMAIN"
+else
+  warn "server_name $DOMAIN não apareceu no nginx -T"
+fi
+
+line
+echo "7. Verificando portas"
+line
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "sudo ss -ltnp | grep -q ':80 '" >/dev/null 2>&1; then
+  ok "porta 80 escutando"
+else
+  fail "porta 80 não está escutando"
+fi
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "sudo ss -ltnp | grep -q ':443 '" >/dev/null 2>&1; then
+  ok "porta 443 escutando"
+else
+  warn "porta 443 não está escutando"
+fi
+
+line
+echo "8. Verificando Certbot / SSL"
+line
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "command -v certbot" >/dev/null 2>&1; then
+  ok "certbot instalado"
+else
+  warn "certbot não instalado"
+fi
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "[ -d /etc/letsencrypt/live/$DOMAIN ]" >/dev/null 2>&1; then
+  ok "certificado existe em /etc/letsencrypt/live/$DOMAIN"
+else
+  warn "certificado ainda não existe para $DOMAIN"
+fi
+
+line
+echo "9. Verificando aplicação local atrás do Nginx"
+line
+
+if ssh $SSH_OPTS "$REMOTE_USER@$REMOTE_HOST" "curl -I --max-time 5 http://127.0.0.1:3001" >/tmp/check-app.out 2>/tmp/check-app.err; then
+  ok "Astro respondeu em 127.0.0.1:3001"
+  cat /tmp/check-app.out | head -n 5
+else
+  warn "Astro não respondeu em 127.0.0.1:3001"
+fi
+
+
+line
+echo "10. Verificando DNS público do domínio"
+line
+
+if command -v dig >/dev/null 2>&1; then
+  echo "A records de $DOMAIN:"
+  dig +short A "$DOMAIN" || true
+
+  if dig +short A "$DOMAIN" | grep -q .; then
+    ok "DNS respondeu para $DOMAIN"
+  else
+    warn "DNS não retornou A record para $DOMAIN"
+  fi
+else
+  warn "dig não instalado localmente. Instale com: sudo apt install dnsutils"
+fi
+
+line
+echo "11. Verificando HTTP público pelo domínio"
+line
+
+if curl -I --max-time 10 "http://$DOMAIN" >/tmp/check-http.out 2>/tmp/check-http.err; then
+  ok "HTTP público respondeu: http://$DOMAIN"
+  cat /tmp/check-http.out | head -n 8
+else
+  warn "HTTP público não respondeu"
+  cat /tmp/check-http.err
+fi
+
+line
+echo "12. Verificando HTTPS público pelo domínio"
+line
+
+if curl -I --max-time 10 "https://$DOMAIN" >/tmp/check-https.out 2>/tmp/check-https.err; then
+  ok "HTTPS público respondeu: https://$DOMAIN"
+  cat /tmp/check-https.out | head -n 8
+else
+  warn "HTTPS público não respondeu"
+  cat /tmp/check-https.err
+fi
+
+line
+echo "RESUMO"
+line
+
+echo "OK:    $OK_COUNT"
+echo "WARN:  $WARN_COUNT"
+echo "FAIL:  $FAIL_COUNT"
+
+if [ "$FAIL_COUNT" -gt 0 ]; then
+  echo ""
+  echo "Resultado: existem falhas que precisam correção."
+  exit 1
+fi
+
+if [ "$WARN_COUNT" -gt 0 ]; then
+  echo ""
+  echo "Resultado: servidor funcional, mas com avisos."
+  exit 0
+fi
+
+echo ""
+echo "Resultado: tudo OK."
