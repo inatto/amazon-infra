@@ -7,7 +7,8 @@ SSH_KEY="/home/daniel/amazon.ssh"
 
 LOCAL_NGINX_DIR="/home/daniel/Code/sind-amazon/lightsail/44.219.174.82/server/etc/nginx"
 #SITE_NAME="sinproprev.sindicatto.com"
-SITE_NAME="sinproprev.org.br"
+#SITE_NAME="sinproprev.org.br"
+SITE_NAME="admin.sindicatto.com"
 SSH_OPTS="-i $SSH_KEY -o ServerAliveInterval=30 -o ServerAliveCountMax=120 -o TCPKeepAlive=yes"
 
 LOCAL_SITE_FILE="$LOCAL_NGINX_DIR/sites-available/$SITE_NAME"
