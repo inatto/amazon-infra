@@ -5,7 +5,8 @@ REMOTE_USER="ubuntu"
 REMOTE_HOST="44.219.174.82"
 SSH_KEY="/home/daniel/amazon.ssh"
 
-LOCAL_NGINX_DIR="/home/daniel/Code/sind-amazon/lightsail/44.219.174.82/server/etc/nginx"
+#deve ser relativo a este arquivo
+LOCAL_NGINX_DIR="/home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/server/etc/nginx"
 #SITE_NAME="sinproprev.sindicatto.com"
 #SITE_NAME="sinproprev.org.br"
 SITE_NAME="admin.sindicatto.com"

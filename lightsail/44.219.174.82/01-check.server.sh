@@ -49,7 +49,8 @@ else
   fail "Chave SSH não encontrada: $SSH_KEY"
 fi
 
-if [ -d "/home/daniel/Code/sind-amazon/lightsail/$REMOTE_HOST/server/etc/nginx" ]; then
+#deve ser relativo a este arquivo
+if [ -d "/home/daniel/Code/sind-infra/sind-amazon/lightsail/$REMOTE_HOST/server/etc/nginx" ]; then
   ok "Backup local do Nginx existe"
 else
   warn "Backup local do Nginx não encontrado"

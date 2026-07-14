@@ -5,7 +5,8 @@ REMOTE_USER="ubuntu"
 REMOTE_HOST="44.219.174.82"
 SSH_KEY="/home/daniel/amazon.ssh"
 
-LOCAL_BACKUP_DIR="/home/daniel/Code/sind-amazon/lightsail/44.219.174.82/server/etc/nginx"
+#deve ser relativo a este arquivo
+LOCAL_BACKUP_DIR="/home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/server/etc/nginx"
 
 mkdir -p "$LOCAL_BACKUP_DIR"
 
