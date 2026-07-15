@@ -1,0 +1,30 @@
+<VirtualHost 127.0.0.1:443 _default_:443>
+  ServerName sinproprev.org.br
+  ServerAlias www.sinproprev.org.br
+  SSLEngine on
+
+  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+
+  DocumentRoot /home/sindicatto/sites/sinproprev/www/public/
+  # BEGIN: Configuration for letsencrypt
+  Include "/opt/bitnami/apps/letsencrypt/conf/httpd-prefix.conf"
+  # END: Configuration for letsencrypt
+  # BEGIN: Support domain renewal when using mod_proxy without Location
+  <IfModule mod_proxy.c>
+    ProxyPass /.well-known !
+  </IfModule>
+  # END: Support domain renewal when using mod_proxy without Location
+  <Directory "/home/sindicatto/sites/sinproprev/www/public/">
+    Options -Indexes +FollowSymLinks -MultiViews
+    AllowOverride All
+    Require all granted
+  </Directory>
+  # BEGIN: Support domain renewal when using mod_proxy within Location
+  <Location /.well-known>
+    <IfModule mod_proxy.c>
+      ProxyPass !
+    </IfModule>
+  </Location>
+  # END: Support domain renewal when using mod_proxy within Location
+</VirtualHost>

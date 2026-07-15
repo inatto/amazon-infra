@@ -1,0 +1,221 @@
+--- IDENTIFICAÇÃO ---
+ip-172-26-4-131
+Linux ip-172-26-4-131 6.1.0-43-cloud-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.1.162-1 (2026-02-08) x86_64 GNU/Linux
+Bitnami detectado
+
+--- STATUS APACHE ---
+apache already running
+
+--- VERSÃO APACHE ---
+Server version: Apache/2.4.66 (Unix)
+Server built:   Dec  4 2025 14:18:29
+
+--- VIRTUAL HOSTS CARREGADOS ---
+VirtualHost configuration:
+127.0.0.1:80           status.localhost (/opt/bitnami/apache/conf/vhosts/00_status-vhost.conf:1)
+127.0.0.1:443          is a NameVirtualHost
+         default server anpprev.sinproprev.org.br (/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf:1)
+         port 443 namevhost anpprev.sinproprev.org.br (/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf:1)
+         port 443 namevhost asaclub.org.br (/opt/bitnami/apache/conf/vhosts/asaclub.org.br-https-vhost.conf:1)
+                 alias www.asaclub.org.br
+         port 443 namevhost inatto.com (/opt/bitnami/apache/conf/vhosts/inatto.com-https-vhost.conf:1)
+                 alias www.inatto.com
+         port 443 namevhost sinproprev.org.br (/opt/bitnami/apache/conf/vhosts/sinproprev.org.br-https-vhost.conf:1)
+                 alias www.sinproprev.org.br
+*:80                   anpprev.sinproprev.org.br (/opt/bitnami/apache/conf/bitnami/bitnami.conf:6)
+*:443                  is a NameVirtualHost
+         default server anpprev.sinproprev.org.br (/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf:1)
+         port 443 namevhost anpprev.sinproprev.org.br (/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf:1)
+         port 443 namevhost asaclub.org.br (/opt/bitnami/apache/conf/vhosts/asaclub.org.br-https-vhost.conf:1)
+                 alias www.asaclub.org.br
+         port 443 namevhost inatto.com (/opt/bitnami/apache/conf/vhosts/inatto.com-https-vhost.conf:1)
+                 alias www.inatto.com
+         port 443 namevhost sinproprev.org.br (/opt/bitnami/apache/conf/vhosts/sinproprev.org.br-https-vhost.conf:1)
+                 alias www.sinproprev.org.br
+         port 443 namevhost anpprev.sinproprev.org.br (/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf:17)
+ServerRoot: "/opt/bitnami/apache"
+Main DocumentRoot: "/opt/bitnami/apache/htdocs"
+Main ErrorLog: "/opt/bitnami/apache/logs/error_log"
+Mutex default: dir="/opt/bitnami/apache/logs/" mechanism=default 
+Mutex proxy-balancer-shm: using_defaults
+Mutex ssl-stapling-refresh: using_defaults
+Mutex rewrite-map: using_defaults
+Mutex ssl-stapling: using_defaults
+Mutex proxy: using_defaults
+Mutex ssl-cache: using_defaults
+PidFile: "/opt/bitnami/apache/var/run/httpd.pid"
+Define: DUMP_VHOSTS
+Define: DUMP_RUN_CFG
+Define: USE_PHP_FPM
+User: name="daemon" id=1
+Group: name="daemon" id=1
+
+--- REFERÊNCIAS A FARM.INATTO.COM ---
+/opt/bitnami/apache/conf/vhosts/backup/asaclub.org.br-https-vhost.conf:6:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/backup/asaclub.org.br-https-vhost.conf:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+/opt/bitnami/apache/conf/vhosts/backup/inatto.com-https-vhost.conf:5:  SSLCertificateFile "/opt/bitnami/apache/conf/inatto.com.crt"
+/opt/bitnami/apache/conf/vhosts/backup/inatto.com-https-vhost.conf:6:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/inatto.com.key"
+/opt/bitnami/apache/conf/vhosts/backup/anpprev.sinproprev.org.br-https-vhost.conf:6:  SSLCertificateFile "/opt/bitnami/apache/conf/anpprev.sinproprev.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/backup/anpprev.sinproprev.org.br-https-vhost.conf:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/anpprev.sinproprev.org.br.key"
+/opt/bitnami/apache/conf/vhosts/backup/sinproprev.org.br-https-vhost.conf:6:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/backup/sinproprev.org.br-https-vhost.conf:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+/opt/bitnami/apache/conf/vhosts/backup/sample-https-vhost.conf.disabled:5:  SSLCertificateFile "/opt/bitnami/apache/conf/bitnami/certs/tls.crt"
+/opt/bitnami/apache/conf/vhosts/backup/sample-https-vhost.conf.disabled:6:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/bitnami/certs/tls.key"
+/opt/bitnami/apache/conf/vhosts/asaclub.org.br-https-vhost.conf:6:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/asaclub.org.br-https-vhost.conf:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+/opt/bitnami/apache/conf/vhosts/inatto.com-https-vhost.conf:5:  SSLCertificateFile "/opt/bitnami/apache/conf/inatto.com.crt"
+/opt/bitnami/apache/conf/vhosts/inatto.com-https-vhost.conf:6:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/inatto.com.key"
+/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf:6:  SSLCertificateFile "/opt/bitnami/apache/conf/anpprev.sinproprev.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/anpprev.sinproprev.org.br.key"
+/opt/bitnami/apache/conf/vhosts/inatto.com-https-vhost.conf.back.202607032145:5:  SSLCertificateFile "/opt/bitnami/apache/conf/inatto.com.crt"
+/opt/bitnami/apache/conf/vhosts/inatto.com-https-vhost.conf.back.202607032145:6:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/inatto.com.key"
+/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf.back.202607032145:6:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf.back.202607032145:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+/opt/bitnami/apache/conf/vhosts/sinproprev.org.br-https-vhost.conf.back.202607032145:6:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/sinproprev.org.br-https-vhost.conf.back.202607032145:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+/opt/bitnami/apache/conf/vhosts/sinproprev.org.br-https-vhost.conf:6:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/sinproprev.org.br-https-vhost.conf:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+/opt/bitnami/apache/conf/vhosts/sample-https-vhost.conf.disabled:5:  SSLCertificateFile "/opt/bitnami/apache/conf/bitnami/certs/tls.crt"
+/opt/bitnami/apache/conf/vhosts/sample-https-vhost.conf.disabled:6:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/bitnami/certs/tls.key"
+/opt/bitnami/apache/conf/vhosts/asaclub.org.br-https-vhost.conf.back.202607032145:6:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/vhosts/asaclub.org.br-https-vhost.conf.back.202607032145:7:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:135:#   Point SSLCertificateFile at a PEM encoded certificate.  If
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:144:SSLCertificateFile "/opt/bitnami/apache/conf/server.crt"
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:145:#SSLCertificateFile "/opt/bitnami/apache/conf/server-dsa.crt"
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:146:#SSLCertificateFile "/opt/bitnami/apache/conf/server-ecc.crt"
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:154:SSLCertificateKeyFile "/opt/bitnami/apache/conf/server.key"
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:155:#SSLCertificateKeyFile "/opt/bitnami/apache/conf/server-dsa.key"
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:156:#SSLCertificateKeyFile "/opt/bitnami/apache/conf/server-ecc.key"
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:159:#   Point SSLCertificateChainFile at a file containing the
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:162:#   the referenced file can be the same as SSLCertificateFile
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf:165:#SSLCertificateChainFile "/opt/bitnami/apache/conf/server-ca.crt"
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:135:#   Point SSLCertificateFile at a PEM encoded certificate.  If
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:144:SSLCertificateFile "/opt/bitnami/apache/conf/server.crt"
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:145:#SSLCertificateFile "/opt/bitnami/apache/conf/server-dsa.crt"
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:146:#SSLCertificateFile "/opt/bitnami/apache/conf/server-ecc.crt"
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:154:SSLCertificateKeyFile "/opt/bitnami/apache/conf/server.key"
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:155:#SSLCertificateKeyFile "/opt/bitnami/apache/conf/server-dsa.key"
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:156:#SSLCertificateKeyFile "/opt/bitnami/apache/conf/server-ecc.key"
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:159:#   Point SSLCertificateChainFile at a file containing the
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:162:#   the referenced file can be the same as SSLCertificateFile
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf:165:#SSLCertificateChainFile "/opt/bitnami/apache/conf/server-ca.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202604010128:18:  SSLCertificateFile "/opt/bitnami/apache/conf/sinproprev.org.br.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202604010128:19:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/sinproprev.org.br.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf:20:  SSLCertificateFile "/opt/bitnami/apache/conf/anpprev.sinproprev.org.br.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf:21:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/anpprev.sinproprev.org.br.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170142:18:  SSLCertificateFile "/opt/bitnami/apache/conf/clubs.inatto.com.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170142:19:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/clubs.inatto.com.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202603312331:18:  SSLCertificateFile "/opt/bitnami/apache/conf/bitnami/certs/tls.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202603312331:19:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/bitnami/certs/tls.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170229:20:  SSLCertificateFile "/opt/bitnami/apache/conf/bitnami/certs/tls.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170229:21:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/bitnami/certs/tls.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170212:20:  SSLCertificateFile "/opt/bitnami/apache/conf/bitnami/certs/tls.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170212:21:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/bitnami/certs/tls.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170112:18:  SSLCertificateFile "/opt/bitnami/apache/conf/inatto.com.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170112:19:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/inatto.com.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202604010257:18:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202604010257:19:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170109:18:  SSLCertificateFile "/opt/bitnami/apache/conf/inatto.com.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606170109:19:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/inatto.com.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606301615:20:  SSLCertificateFile "/opt/bitnami/apache/conf/inatto.com.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202606301615:21:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/inatto.com.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202604010129:18:  SSLCertificateFile "/opt/bitnami/apache/conf/sinproprev.org.br.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202604010129:19:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/sinproprev.org.br.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202603312347:18:  SSLCertificateFile "/opt/bitnami/apache/conf/bitnami/certs/tls.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202603312347:19:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/bitnami/certs/tls.key"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202607032145:20:  SSLCertificateFile "/opt/bitnami/apache/conf/asaclub.org.br.crt"
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf.back.202607032145:21:  SSLCertificateKeyFile "/opt/bitnami/apache/conf/asaclub.org.br.key"
+
+--- ARQUIVOS DE CONFIGURAÇÃO APACHE ---
+/opt/bitnami/apache/conf/bitnami/bitnami.conf
+/opt/bitnami/apache/conf/bitnami/bitnami-ssl.conf
+/opt/bitnami/apache/conf/bitnami/memory/httpd-2xlarge.conf
+/opt/bitnami/apache/conf/bitnami/memory/httpd-large.conf
+/opt/bitnami/apache/conf/bitnami/memory/httpd-medium.conf
+/opt/bitnami/apache/conf/bitnami/memory/httpd-micro.conf
+/opt/bitnami/apache/conf/bitnami/memory/httpd-small.conf
+/opt/bitnami/apache/conf/bitnami/memory/httpd-xlarge.conf
+/opt/bitnami/apache/conf/bitnami/php-fpm.conf
+/opt/bitnami/apache/conf/bitnami/phpmyadmin.conf
+/opt/bitnami/apache/conf/deflate.conf
+/opt/bitnami/apache/conf/extra/httpd-autoindex.conf
+/opt/bitnami/apache/conf/extra/httpd-dav.conf
+/opt/bitnami/apache/conf/extra/httpd-default.conf
+/opt/bitnami/apache/conf/extra/httpd-info.conf
+/opt/bitnami/apache/conf/extra/httpd-languages.conf
+/opt/bitnami/apache/conf/extra/httpd-manual.conf
+/opt/bitnami/apache/conf/extra/httpd-mpm.conf
+/opt/bitnami/apache/conf/extra/httpd-multilang-errordoc.conf
+/opt/bitnami/apache/conf/extra/httpd-ssl.conf
+/opt/bitnami/apache/conf/extra/httpd-userdir.conf
+/opt/bitnami/apache/conf/extra/httpd-vhosts.conf
+/opt/bitnami/apache/conf/extra/proxy-html.conf
+/opt/bitnami/apache/conf/httpd.conf
+/opt/bitnami/apache/conf/modsecurity.conf
+/opt/bitnami/apache/conf/original/extra/httpd-autoindex.conf
+/opt/bitnami/apache/conf/original/extra/httpd-dav.conf
+/opt/bitnami/apache/conf/original/extra/httpd-default.conf
+/opt/bitnami/apache/conf/original/extra/httpd-info.conf
+/opt/bitnami/apache/conf/original/extra/httpd-languages.conf
+/opt/bitnami/apache/conf/original/extra/httpd-manual.conf
+/opt/bitnami/apache/conf/original/extra/httpd-mpm.conf
+/opt/bitnami/apache/conf/original/extra/httpd-multilang-errordoc.conf
+/opt/bitnami/apache/conf/original/extra/httpd-ssl.conf
+/opt/bitnami/apache/conf/original/extra/httpd-userdir.conf
+/opt/bitnami/apache/conf/original/extra/httpd-vhosts.conf
+/opt/bitnami/apache/conf/original/extra/proxy-html.conf
+/opt/bitnami/apache/conf/original/httpd.conf
+/opt/bitnami/apache/conf/vhosts/00_status-vhost.conf
+/opt/bitnami/apache/conf/vhosts/anpprev.sinproprev.org.br-https-vhost.conf
+/opt/bitnami/apache/conf/vhosts/asaclub.org.br-https-vhost.conf
+/opt/bitnami/apache/conf/vhosts/backup/00_status-vhost.conf
+/opt/bitnami/apache/conf/vhosts/backup/anpprev.sinproprev.org.br-https-vhost.conf
+/opt/bitnami/apache/conf/vhosts/backup/asaclub.org.br-https-vhost.conf
+/opt/bitnami/apache/conf/vhosts/backup/inatto.com-https-vhost.conf
+/opt/bitnami/apache/conf/vhosts/backup/sinproprev.org.br-https-vhost.conf
+/opt/bitnami/apache/conf/vhosts/inatto.com-https-vhost.conf
+/opt/bitnami/apache/conf/vhosts/sinproprev.org.br-https-vhost.conf
+
+--- CERTIFICADOS ENCONTRADOS ---
+/opt/bitnami/apache/conf/bitnami/certs/tls.crt
+/opt/bitnami/apache/conf/bitnami/certs/tls.key
+/opt/bitnami/apache/conf/clubs.inatto.com.crt
+/opt/bitnami/apache/conf/clubs.inatto.com.key
+/opt/bitnami/letsencrypt/accounts/acme-v02.api.letsencrypt.org/danielmaiax@gmail.com/keys/danielmaiax@gmail.com.key
+/opt/bitnami/letsencrypt/accounts/acme-v02.api.letsencrypt.org/inattox@gmail.com/keys/inattox@gmail.com.key
+/opt/bitnami/letsencrypt/archives/1781660584.inatto.com.crt
+/opt/bitnami/letsencrypt/archives/1781660584.inatto.com.issuer.crt
+/opt/bitnami/letsencrypt/archives/1781660584.inatto.com.key
+/opt/bitnami/letsencrypt/certificates/anpprev.sinproprev.org.br.crt
+/opt/bitnami/letsencrypt/certificates/anpprev.sinproprev.org.br.issuer.crt
+/opt/bitnami/letsencrypt/certificates/anpprev.sinproprev.org.br.key
+/opt/bitnami/letsencrypt/certificates/asaclub.org.br.crt
+/opt/bitnami/letsencrypt/certificates/asaclub.org.br.issuer.crt
+/opt/bitnami/letsencrypt/certificates/asaclub.org.br.key
+/opt/bitnami/letsencrypt/certificates/clubs.inatto.com.crt
+/opt/bitnami/letsencrypt/certificates/clubs.inatto.com.issuer.crt
+/opt/bitnami/letsencrypt/certificates/clubs.inatto.com.key
+/opt/bitnami/letsencrypt/certificates/inatto.com.crt
+/opt/bitnami/letsencrypt/certificates/inatto.com.issuer.crt
+/opt/bitnami/letsencrypt/certificates/inatto.com.key
+/opt/bitnami/letsencrypt/certificates/sinproprev.org.br.crt
+/opt/bitnami/letsencrypt/certificates/sinproprev.org.br.issuer.crt
+/opt/bitnami/letsencrypt/certificates/sinproprev.org.br.key
+/opt/bitnami/stats/cert.pem
+
+--- LINKS SIMBÓLICOS DE CERTIFICADOS ---
+/opt/bitnami/apache/conf/anpprev.sinproprev.org.br.crt -> /opt/bitnami/letsencrypt/certificates/anpprev.sinproprev.org.br.crt
+/opt/bitnami/apache/conf/anpprev.sinproprev.org.br.key -> /opt/bitnami/letsencrypt/certificates/anpprev.sinproprev.org.br.key
+/opt/bitnami/apache/conf/asaclub.org.br.crt -> /opt/bitnami/letsencrypt/certificates/asaclub.org.br.crt
+/opt/bitnami/apache/conf/asaclub.org.br.key -> /opt/bitnami/letsencrypt/certificates/asaclub.org.br.key
+/opt/bitnami/apache/conf/bitnami/httpd.conf -> memory/httpd-small.conf
+/opt/bitnami/apache/conf/inatto.com.crt -> /opt/bitnami/letsencrypt/certificates/inatto.com.crt
+/opt/bitnami/apache/conf/inatto.com.key -> /opt/bitnami/letsencrypt/certificates/inatto.com.key
+/opt/bitnami/apache/conf/sinproprev.org.br.crt -> /opt/bitnami/letsencrypt/certificates/sinproprev.org.br.crt
+/opt/bitnami/apache/conf/sinproprev.org.br.key -> /opt/bitnami/letsencrypt/certificates/sinproprev.org.br.key
+
+--- BNCERT ---
+lrwxrwxrwx 1 root root 46 Feb 18  2025 /opt/bitnami/bncert-tool -> /opt/bitnami/bncert/bncert-2.0.1-linux-x64.run
+
+--- TESTE DA CONFIGURAÇÃO APACHE ---
+Syntax OK
