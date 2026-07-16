@@ -82,7 +82,7 @@ Sem parametro, ele pergunta URLs. Se voce apertar Enter vazio, testa as URLs pad
 
 ```text
 site-sinproprev-v2      -> 127.0.0.1:4321
-site-sindicatto-admin   -> 127.0.0.1:4322
+station-app   -> 127.0.0.1:3126
 sind-services API       -> 127.0.0.1:8000
 site sinproprev.org.br  -> 127.0.0.1:3001
 Nginx publico           -> 80 / 443
@@ -98,4 +98,4 @@ Na Amazon/Lightsail, liberar somente:
 443 HTTPS
 ```
 
-Nao abrir 4321, 4322, 8000 nem 3001.
+Nao abrir 4321, 3126, 8000 nem 3001.

@@ -21,7 +21,7 @@ remote "
   sudo nginx -t || true
   echo ''
   echo '=== PORTAS ==='
-  sudo ss -ltnp | grep -E ':(80|443|4321|4322|8000|3000|3001|5173) ' || true
+  sudo ss -ltnp | grep -E ':(80|443|4321|3126|8000|3000|3001|5173) ' || true
   echo ''
   echo '=== PM2 ==='
   if command -v pm2 >/dev/null 2>&1; then pm2 list; else echo 'pm2 nao instalado'; fi
