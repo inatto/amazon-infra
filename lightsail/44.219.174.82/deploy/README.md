@@ -2,6 +2,51 @@
 
 Os scripts deste diretório cuidam somente de DNS, Nginx, SSL e instalação dos serviços systemd. O envio e a inicialização da aplicação pertencem ao deploy da própria aplicação.
 
+## Preparar `station.anpprev.org`
+
+Crie no DNS de `anpprev.org` um registro `A`:
+
+```text
+Nome: station
+IPv4: 44.219.174.82
+Proxy: desativado durante a primeira publicação
+```
+
+As portas reservadas para o `station-app` são:
+
+- Astro: `4002`;
+- API: `8002`.
+
+O domínio pode ser preparado antes de a aplicação estar rodando. Execute:
+
+```bash
+cd /home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/deploy
+
+./01-testar-dns.sh ../domains/station.anpprev.org.conf
+./02-copiar-nginx-do-servidor.sh ../domains/station.anpprev.org.conf
+./03-configurar-nginx.sh ../domains/station.anpprev.org.conf
+./04-instalar-ssl.sh ../domains/station.anpprev.org.conf
+```
+
+O passo 03 solicita a confirmação `PUBLICAR`. Não execute o passo 05: a instalação dos serviços pertence ao deploy do `station-app`.
+
+Enquanto o Astro e a API não estiverem rodando, o domínio pode responder `502 Bad Gateway`. O certificado e o cabeçalho do Nginx já devem estar corretos:
+
+```bash
+curl -sSI https://station.anpprev.org/
+curl -sSI https://station.anpprev.org/ | grep -i '^x-site-app: station-app'
+```
+
+Depois de publicar o `station-app`, valide:
+
+```bash
+ssh -i /home/daniel/amazon.ssh ubuntu@44.219.174.82 \
+  'curl -fsSI http://127.0.0.1:4002/ | head; curl -fsS http://127.0.0.1:8002/health'
+
+curl -fsSI https://station.anpprev.org/
+curl -fsS https://station.anpprev.org/api/health
+```
+
 ## Publicar `previa.anpprev.org`
 
 Antes de executar os scripts, crie no DNS de `anpprev.org` um registro `A`:
