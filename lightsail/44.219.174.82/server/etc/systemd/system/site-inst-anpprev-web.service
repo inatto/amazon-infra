@@ -1,18 +1,18 @@
 [Unit]
 Description=Site Inst ANPPREV Astro Web
-After=network-online.target site-inst-api.service
+After=network-online.target site-inst-anpprev-api.service
 Wants=network-online.target
 
 [Service]
 Type=simple
 User=ubuntu
 Group=ubuntu
-WorkingDirectory=/home/ubuntu/apps/site-inst/apps/web
-EnvironmentFile=/home/ubuntu/apps/site-inst/.env
+WorkingDirectory=/home/ubuntu/apps/site-inst-anpprev/apps/web
+EnvironmentFile=/home/ubuntu/apps/site-inst-anpprev/deploy/tenants/anpprev/anpprev.env
 Environment=NODE_ENV=production
 Environment=HOST=127.0.0.1
 Environment=PORT=4100
-ExecStart=/usr/bin/node /home/ubuntu/apps/site-inst/apps/web/dist/server/entry.mjs
+ExecStart=/usr/bin/node /home/ubuntu/apps/site-inst-anpprev/apps/web/dist/server/entry.mjs
 Restart=always
 RestartSec=5
 

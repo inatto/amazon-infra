@@ -1,5 +1,25 @@
 server {
+    if ($host = previa.anpprev.org) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    listen [::]:80;
     server_name previa.anpprev.org;
+    return 301 https://$host$request_uri;
+
+
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name previa.anpprev.org;
+    ssl_certificate /etc/letsencrypt/live/previa.anpprev.org/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/previa.anpprev.org/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     add_header X-Site-App "site-inst-anpprev" always;
     client_max_body_size 20m;
@@ -9,7 +29,7 @@ server {
     }
 
     location /api/ {
-        proxy_pass http://127.0.0.1:8003/;
+        proxy_pass http://127.0.0.1:8100/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -29,25 +49,5 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 60s;
     }
-
-    listen [::]:443 ssl; # managed by Certbot
-    listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/previa.anpprev.org/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/previa.anpprev.org/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
-}
-server {
-    if ($host = previa.anpprev.org) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    listen 80;
-    listen [::]:80;
-    server_name previa.anpprev.org;
-    return 404; # managed by Certbot
-
 
 }
