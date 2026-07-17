@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# cd /home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/deploy
 # CONFIG PRINCIPAL DO DEPLOY DO SERVIDOR
 # Copie/edite este arquivo se mudar IP, usuario ou chave SSH.
 

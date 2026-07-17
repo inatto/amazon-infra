@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# cd /home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/deploy
 # Carregador robusto: funciona executando ./script.sh e tambem se colar no terminal dentro da pasta deploy.
 SCRIPT_SOURCE="${BASH_SOURCE[0]:-$0}"
 SCRIPT_DIR="$(cd -- "$(dirname -- "$SCRIPT_SOURCE")" 2>/dev/null && pwd || pwd)"
