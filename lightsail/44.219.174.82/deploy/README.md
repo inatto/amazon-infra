@@ -89,9 +89,10 @@ cd /home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/deploy
 ./02-copiar-nginx-do-servidor.sh ../domains/previa.anpprev.org.conf
 ./03-configurar-nginx.sh ../domains/previa.anpprev.org.conf
 ./04-instalar-ssl.sh ../domains/previa.anpprev.org.conf
+./05-instalar-servicos.sh ../domains/previa.anpprev.org.conf
 ```
 
-O passo 03 solicita a confirmação `PUBLICAR`. Não é necessário executar o passo 05: os serviços serão instalados pelo deploy do próprio `site-inst`.
+O passo 03 solicita a confirmação `PUBLICAR`. O passo 05 instala e habilita os serviços `site-inst-api.service` e `site-inst-anpprev-web.service`, mas não inicia a aplicação. O primeiro início continua sendo feito pelo deploy remoto do próprio `site-inst`, depois que os arquivos, dependências, `.env` e builds estiverem prontos no servidor.
 
 Enquanto a aplicação não estiver rodando, o domínio pode responder `502 Bad Gateway`. Isso é esperado e não significa erro no DNS, Nginx ou SSL.
 
