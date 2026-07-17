@@ -1,0 +1,132 @@
+# Publicar orbital.sindicatto.com
+
+O fluxo tem duas partes independentes: primeiro a aplicação, pelo repositório
+`orbital-app`; depois o domínio, SSL e Nginx, pelo `sind-infra`.
+
+## 1. DNS
+
+Crie um registro `A` para `orbital.sindicatto.com` apontando para
+`44.219.174.82`. Aguarde até este comando retornar esse IP:
+
+```bash
+getent ahostsv4 orbital.sindicatto.com
+```
+
+## 2. Preparar o orbital-app local
+
+Os arquivos `.env` continuam locais e não entram no ZIP.
+
+```bash
+cd /home/daniel/Code/orbital-app
+cp apps/web/.env.example apps/web/.env
+cp services/api/.env.example services/api/.env
+cp deploy/remote/config.example deploy/remote/config
+```
+
+Confirme estas portas:
+
+```env
+# apps/web/.env
+ORBITAL_WEB_LOCAL_PORT="4001"
+
+# services/api/.env
+APP_PORT="8001"
+```
+
+Preencha no `services/api/.env` as credenciais reais do banco e teste localmente:
+
+```bash
+cd /home/daniel/Code/orbital-app
+./deploy/local/setup.sh
+./deploy/local/test-api.sh
+```
+
+## 3. Preparar os segredos no servidor
+
+Entre no servidor:
+
+```bash
+ssh -i /home/daniel/amazon.ssh ubuntu@44.219.174.82
+mkdir -p /home/ubuntu/apps/orbital/shared/services/api
+nano /home/ubuntu/apps/orbital/shared/services/api/.env
+```
+
+Use `services/api/.env.example` como referência. Em produção, confirme pelo menos:
+
+```env
+APP_NAME="Orbital API"
+APP_ENV="production"
+APP_HOST="127.0.0.1"
+APP_PORT="8001"
+CORS_ORIGINS="https://orbital.sindicatto.com"
+DB_PROVIDER="oracle"
+DB_SQL_ECHO="false"
+API_DEBUG_DETAILS="false"
+APP_SESSION_SECRET="PREENCHER_COM_SEGREDO_FORTE"
+```
+
+Preencha também `ORACLE_USER`, `ORACLE_PASSWORD`, `ORACLE_CONNECT_STRING`,
+`ORACLE_WALLET_DIR`, `ORACLE_WALLET_PASSWORD` e `ORACLE_CURRENT_SCHEMA`.
+O wallet precisa existir no servidor no caminho informado.
+
+## 4. Publicar a aplicação
+
+Saia do SSH e execute localmente:
+
+```bash
+cd /home/daniel/Code/orbital-app
+./deploy/remote/deploy.sh
+./deploy/remote/status.sh
+```
+
+O status deve mostrar `orbital-api.service` e `orbital-web.service` ativos,
+API `200` na porta `8001` e web `200` na porta `4001`.
+
+## 5. Conferir o domínio sem alterar o servidor
+
+```bash
+cd /home/daniel/Code/sind-infra
+./deploy/publicar-dominio.sh --check deploy/publicar-dominio.orbital.conf
+```
+
+Esse modo sincroniza o espelho do Nginx, valida a aplicação e a API, verifica
+conflitos de `server_name`, gera o arquivo local e mostra o diff. Não publica.
+
+## 6. Publicar Nginx e SSL
+
+Se o check estiver correto:
+
+```bash
+cd /home/daniel/Code/sind-infra
+./deploy/publicar-dominio.sh --apply deploy/publicar-dominio.orbital.conf
+```
+
+Quando solicitado, digite `PUBLICAR`. O script altera somente
+`orbital.sindicatto.com`, testa o Nginx, recarrega o serviço, emite o certificado
+Let's Encrypt se necessário e confirma o cabeçalho `X-Site-App: orbital`.
+
+## 7. Verificação final
+
+```bash
+curl -I https://orbital.sindicatto.com
+curl -sS https://orbital.sindicatto.com/api/health
+```
+
+O primeiro comando deve responder por HTTPS. O segundo deve retornar
+`"status":"ok"`.
+
+## Rollback da aplicação
+
+```bash
+cd /home/daniel/Code/orbital-app
+./deploy/remote/rollback.sh
+```
+
+O publicador do domínio também restaura automaticamente a configuração anterior
+do Nginx se ocorrer falha depois de começar a alteração.
+
+## Arquivos com prefixo --
+
+São scripts, configurações ou espelhos antigos mantidos apenas para consulta.
+Eles não fazem parte do fluxo acima e podem ser apagados depois que a publicação
+for confirmada em produção.

@@ -7,9 +7,9 @@ Wants=network-online.target
 Type=simple
 User=ubuntu
 Group=ubuntu
-WorkingDirectory=/home/ubuntu/apps/orbital/current/services/api
-EnvironmentFile=/home/ubuntu/apps/orbital/shared/services/api/.env
-ExecStart=/home/ubuntu/apps/orbital/current/services/api/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8004 --workers 2
+WorkingDirectory=/home/ubuntu/apps/orbital-app/current/services/api
+EnvironmentFile=/home/ubuntu/apps/orbital-app/shared/services/api/.env
+ExecStart=/home/ubuntu/apps/orbital-app/current/services/api/.venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 8001 --workers 2
 Restart=always
 RestartSec=5
 

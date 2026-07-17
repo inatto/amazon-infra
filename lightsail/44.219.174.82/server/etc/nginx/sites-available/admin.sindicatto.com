@@ -13,7 +13,7 @@ server {
     }
 
     location / {
-        proxy_pass http://127.0.0.1:3126;
+        proxy_pass http://127.0.0.1:4322;
 
         proxy_http_version 1.1;
 

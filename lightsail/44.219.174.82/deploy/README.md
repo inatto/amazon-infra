@@ -23,6 +23,9 @@ cd deploy
 ./17_test_urls.sh https://admin.sindicatto.com
 ```
 
+Para publicar domínios deste servidor, use o fluxo documentado em
+`domains/README.md`. Ele separa DNS, backup, Nginx, SSL, teste e restore.
+
 ## Arquivos mais importantes
 
 ```text
@@ -82,6 +85,8 @@ Sem parametro, ele pergunta URLs. Se voce apertar Enter vazio, testa as URLs pad
 
 ```text
 site-sinproprev-v2      -> 127.0.0.1:4321
+orbital-app web         -> 127.0.0.1:4001
+orbital-app API         -> 127.0.0.1:8001
 station-app   -> 127.0.0.1:3126
 sind-services API       -> 127.0.0.1:8000
 site sinproprev.org.br  -> 127.0.0.1:3001
