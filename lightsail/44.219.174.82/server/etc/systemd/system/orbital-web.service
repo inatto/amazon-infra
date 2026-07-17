@@ -7,11 +7,10 @@ Wants=network-online.target
 Type=simple
 User=ubuntu
 Group=ubuntu
-WorkingDirectory=/home/ubuntu/apps/orbital-app/current/apps/web
+WorkingDirectory=/home/ubuntu/apps/orbital-app/apps/web
+EnvironmentFile=/home/ubuntu/apps/orbital-app/apps/web/.env
 Environment=NODE_ENV=production
-Environment=HOST=127.0.0.1
-Environment=PORT=4001
-ExecStart=/usr/bin/node /home/ubuntu/apps/orbital-app/current/apps/web/dist/server/entry.mjs
+ExecStart=/usr/bin/node /home/ubuntu/apps/orbital-app/apps/web/dist/server/entry.mjs
 Restart=always
 RestartSec=5
 
