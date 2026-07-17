@@ -1,0 +1,18 @@
+[Unit]
+Description=Station Astro Web
+After=network-online.target station-api.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/apps/station-app/apps/web
+EnvironmentFile=/home/ubuntu/apps/station-app/apps/web/.env
+Environment=NODE_ENV=production
+ExecStart=/usr/bin/node /home/ubuntu/apps/station-app/apps/web/dist/server/entry.mjs
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

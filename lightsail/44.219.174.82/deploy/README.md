@@ -26,9 +26,18 @@ cd /home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/deploy
 ./02-copiar-nginx-do-servidor.sh ../domains/station.anpprev.org.conf
 ./03-configurar-nginx.sh ../domains/station.anpprev.org.conf
 ./04-instalar-ssl.sh ../domains/station.anpprev.org.conf
+./05-instalar-servicos.sh ../domains/station.anpprev.org.conf
 ```
 
-O passo 03 solicita a confirmação `PUBLICAR`. Não execute o passo 05: a instalação dos serviços pertence ao deploy do `station-app`.
+O passo 03 solicita a confirmação `PUBLICAR`. No passo 05, digite `INSTALAR`. Ele instala e habilita `station-api.service` e `station-web.service`, mas não inicia a aplicação.
+
+Depois do passo 05, execute:
+
+```bash
+cd /home/daniel/Code/station-app
+
+./deploy/remote/start.sh
+```
 
 Enquanto o Astro e a API não estiverem rodando, o domínio pode responder `502 Bad Gateway`. O certificado e o cabeçalho do Nginx já devem estar corretos:
 
