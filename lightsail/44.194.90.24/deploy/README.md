@@ -68,3 +68,21 @@ curl -I https://orbital.anpprev.org
 
 curl https://orbital.anpprev.org/api/health
 ```
+
+## Copiar configurações finais do servidor
+
+Depois de configurar Nginx, serviços e SSL, copie para o projeto o estado relevante da infraestrutura:
+
+```bash
+cd /home/daniel/Code/infra/amazon-infra/lightsail/44.194.90.24/deploy
+
+./06-copiar-configuracoes-do-servidor.sh ../domains/orbital.anpprev.org.conf
+```
+
+O snapshot é salvo em:
+
+```text
+/home/daniel/Code/infra/amazon-infra/lightsail/44.194.90.24/server
+```
+
+São copiados somente arquivos de configuração: Nginx, systemd, configurações públicas do Certbot e os arquivos do repositório NodeSource. Não são gerados relatórios e não são copiadas pastas de aplicações, `.env`, Wallet Oracle, bancos, uploads, `node_modules`, `.venv`, builds, certificados ou chaves privadas de SSL.
