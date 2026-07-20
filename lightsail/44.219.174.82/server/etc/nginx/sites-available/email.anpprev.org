@@ -1,5 +1,25 @@
 server {
+    if ($host = email.anpprev.org) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    listen [::]:80;
     server_name email.anpprev.org;
+    return 301 https://$host$request_uri;
+
+
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name email.anpprev.org;
+    ssl_certificate /etc/letsencrypt/live/email.anpprev.org/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/email.anpprev.org/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
     add_header X-Site-App "email-app" always;
     client_max_body_size 20m;
@@ -29,25 +49,5 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 60s;
     }
-
-    listen 443 ssl; # managed by Certbot
-    listen [::]:443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/email.anpprev.org/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/email.anpprev.org/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
-}
-server {
-    if ($host = email.anpprev.org) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    listen 80;
-    listen [::]:80;
-    server_name email.anpprev.org;
-    return 404; # managed by Certbot
-
 
 }
