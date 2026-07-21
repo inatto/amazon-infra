@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 CONFIG_FILE="${1:-}"
 [[ -n "$CONFIG_FILE" && -f "$CONFIG_FILE" ]] || {
-  echo "Uso: ./03-configurar-nginx.sh ../domains/admin.anpprev.org.conf" >&2
+  echo "Uso: ./02-configurar-nginx.sh ../domains/admin.anpprev.org.conf" >&2
   exit 1
 }
 
@@ -155,6 +155,5 @@ CHANGED="true"
 remote "sudo install -m 0644 '$REMOTE_TMP' '$REMOTE_AVAILABLE/$SITE_NAME'; sudo ln -sfn '$REMOTE_AVAILABLE/$SITE_NAME' '$REMOTE_ENABLED/$SITE_NAME'; sudo nginx -t; sudo systemctl reload nginx"
 CHANGED="false"
 
-"$SCRIPT_DIR/02-copiar-nginx-do-servidor.sh" "$CONFIG_FILE"
 echo "OK: Nginx configurado para $DOMAIN_LIST"
 

@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 CONFIG_FILE="${1:-}"
 [[ -n "$CONFIG_FILE" && -f "$CONFIG_FILE" ]] || {
-  echo "Uso: ./05-instalar-servicos.sh ../domains/admin.anpprev.org.conf" >&2
+  echo "Uso: ./04-instalar-servicos.sh ../domains/admin.anpprev.org.conf" >&2
   exit 1
 }
 

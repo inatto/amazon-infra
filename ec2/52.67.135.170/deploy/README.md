@@ -1,88 +1,46 @@
-# Publicação de admin.anpprev.org
+# Publicação no servidor 52.67.135.170
 
-Execute os scripts localmente no WSL. Eles acessam a instância `52.67.135.170` por SSH.
+Execute os scripts localmente no WSL. Os passos 01 a 04 recebem o arquivo do domínio. O passo 05 é geral e não recebe parâmetro.
 
 ## Pré-requisitos
 
 - Setup da instância concluído até `06-validar-ferramentas.sh`.
-- Porta 22, 80 e 443 liberadas no Lightsail.
-- Registro DNS A de `admin.anpprev.org` apontando para `52.67.135.170`.
-- Chave SSH em `/home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/inatto01-sp.pem`.
+- Portas 22, 80 e 443 liberadas na EC2.
+- Registro DNS A do domínio apontando para `52.67.135.170`.
+- Chave SSH em `/home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/core/inatto01-sp.pem`.
 
-## Infraestrutura
+## Fluxo de infraestrutura
+
+Exemplo para `painel.anpprev.org`:
 
 ```bash
 cd /home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/deploy
 
-./01-testar-dns.sh ../domains/admin.anpprev.org.conf
+./01-testar-dns.sh ../domains/painel.anpprev.org.conf
 
-./02-copiar-nginx-do-servidor.sh ../domains/admin.anpprev.org.conf
+./02-configurar-nginx.sh ../domains/painel.anpprev.org.conf
 
-./03-configurar-nginx.sh ../domains/admin.anpprev.org.conf
+./03-instalar-ssl.sh ../domains/painel.anpprev.org.conf
 
-./05-instalar-servicos.sh ../domains/admin.anpprev.org.conf
+./04-instalar-servicos.sh ../domains/painel.anpprev.org.conf
+
+./05-copiar-configuracoes-do-servidor.sh
 ```
 
-No passo 03, digite `PUBLICAR`.
+No passo 02, digite `PUBLICAR` quando solicitado.
 
-No passo 05, digite `INSTALAR`.
+No passo 04, digite `INSTALAR` quando solicitado.
 
-## Aplicação
+## Passo 05: cópia final geral
 
-Antes do deploy do Orbital, confirme que os scripts em `orbital-app/deploy/remote` usam:
+O último passo não recebe domínio. Ele copia para `server/`:
 
 ```text
-ubuntu@52.67.135.170
+/etc/nginx/                         -> server/etc/nginx/
+/etc/systemd/system/*.service       -> server/etc/systemd/system/
+/etc/letsencrypt/renewal/*.conf     -> server/etc/letsencrypt/renewal/
 ```
 
-Depois, na raiz do projeto Orbital:
+O Nginx é copiado por completo, incluindo `nginx.conf`, `conf.d`, `sites-available`, `sites-enabled` e `snippets`.
 
-```bash
-cd /home/daniel/Code/orgs/orbital-app
-
-./deploy/remote/setup.sh
-
-./deploy/remote/test.sh
-
-./deploy/remote/start.sh
-```
-
-Os arquivos `.env` e o Oracle Wallet não são enviados pelo rsync e devem existir no novo servidor.
-
-## SSL
-
-Depois que o DNS e o Nginx estiverem funcionando:
-
-```bash
-cd /home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/deploy
-
-./04-instalar-ssl.sh ../domains/admin.anpprev.org.conf
-```
-
-## Validação
-
-```bash
-curl -I http://admin.anpprev.org
-
-curl -I https://admin.anpprev.org
-
-curl https://admin.anpprev.org/api/health
-```
-
-## Copiar configurações finais do servidor
-
-Depois de configurar Nginx, serviços e SSL, copie para o projeto o estado relevante da infraestrutura:
-
-```bash
-cd /home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/deploy
-
-./06-copiar-configuracoes-do-servidor.sh ../domains/admin.anpprev.org.conf
-```
-
-O snapshot é salvo em:
-
-```text
-/home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/server
-```
-
-São copiados somente arquivos de configuração: Nginx, systemd, configurações públicas do Certbot e os arquivos do repositório NodeSource. Não são gerados relatórios e não são copiadas pastas de aplicações, `.env`, Wallet Oracle, bancos, uploads, `node_modules`, `.venv`, builds, certificados ou chaves privadas de SSL.
+Não são copiadas aplicações, `.env`, Oracle Wallet, bancos, uploads, certificados SSL nem chaves privadas.
