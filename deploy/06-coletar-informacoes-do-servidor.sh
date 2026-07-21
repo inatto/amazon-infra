@@ -36,7 +36,7 @@ mapfile -t INSTANCE_DIRS < <(
 }
 
 INSTANCE_DIR="${INSTANCE_DIRS[0]}"
-OUTPUT_FILE="$INSTANCE_DIR/server/local-server-info.md"
+OUTPUT_FILE="$INSTANCE_DIR/server/server-info.md"
 TEMP_FILE="${OUTPUT_FILE}.tmp"
 
 mapfile -t RELATED_CONFIGS < <(

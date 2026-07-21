@@ -1,0 +1,720 @@
+SERVER DIAGNOSTIC LOG
+Collected: 2026-07-21T18:49:05+00:00
+Hostname: ip-172-31-23-158.sa-east-1.compute.internal
+Window: last 24 hours; maximum 200 journal lines per unit
+
+================================================================================
+FAILED SYSTEMD UNITS
+================================================================================
+  UNIT LOAD ACTIVE SUB DESCRIPTION
+
+0 loaded units listed.
+
+================================================================================
+NGINX SERVICE STATUS
+================================================================================
+● nginx.service - A high performance web server and a reverse proxy server
+     Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-07-21 15:39:34 UTC; 3h 9min ago
+       Docs: man:nginx(8)
+   Main PID: 2730 (nginx)
+      Tasks: 3 (limit: 2209)
+     Memory: 6.3M (peak: 10.2M)
+        CPU: 3.844s
+     CGroup: /system.slice/nginx.service
+             ├─ 2730 "nginx: master process /usr/sbin/nginx -g daemon on; master_process on;"
+             ├─19552 "nginx: worker process"
+             └─19553 "nginx: worker process"
+
+Jul 21 18:16:01 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+Jul 21 18:30:03 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+Jul 21 18:30:03 ip-172-31-23-158 nginx[16352]: 2026/07/21 18:30:03 [notice] 16352#16352: signal process started
+Jul 21 18:30:03 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+Jul 21 18:36:04 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+Jul 21 18:36:05 ip-172-31-23-158 nginx[17740]: 2026/07/21 18:36:05 [notice] 17740#17740: signal process started
+Jul 21 18:36:05 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+Jul 21 18:42:52 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+Jul 21 18:42:52 ip-172-31-23-158 nginx[19390]: 2026/07/21 18:42:52 [notice] 19390#19390: signal process started
+Jul 21 18:42:52 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+
+================================================================================
+NGINX CONFIGURATION TEST
+================================================================================
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+
+================================================================================
+NGINX JOURNAL — LAST 24 HOURS
+================================================================================
+2026-07-21T15:39:34+00:00 ip-172-31-23-158 systemd[1]: Starting nginx.service - A high performance web server and a reverse proxy server...
+2026-07-21T15:39:34+00:00 ip-172-31-23-158 systemd[1]: Started nginx.service - A high performance web server and a reverse proxy server.
+2026-07-21T16:07:50+00:00 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+2026-07-21T16:07:50+00:00 ip-172-31-23-158 nginx[4534]: 2026/07/21 16:07:50 [notice] 4534#4534: signal process started
+2026-07-21T16:07:50+00:00 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+2026-07-21T17:04:36+00:00 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+2026-07-21T17:04:36+00:00 ip-172-31-23-158 nginx[11425]: 2026/07/21 17:04:36 [notice] 11425#11425: signal process started
+2026-07-21T17:04:36+00:00 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+2026-07-21T18:16:01+00:00 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+2026-07-21T18:16:01+00:00 ip-172-31-23-158 nginx[14893]: 2026/07/21 18:16:01 [notice] 14893#14893: signal process started
+2026-07-21T18:16:01+00:00 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+2026-07-21T18:30:03+00:00 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+2026-07-21T18:30:03+00:00 ip-172-31-23-158 nginx[16352]: 2026/07/21 18:30:03 [notice] 16352#16352: signal process started
+2026-07-21T18:30:03+00:00 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+2026-07-21T18:36:04+00:00 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+2026-07-21T18:36:05+00:00 ip-172-31-23-158 nginx[17740]: 2026/07/21 18:36:05 [notice] 17740#17740: signal process started
+2026-07-21T18:36:05+00:00 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+2026-07-21T18:42:52+00:00 ip-172-31-23-158 systemd[1]: Reloading nginx.service - A high performance web server and a reverse proxy server...
+2026-07-21T18:42:52+00:00 ip-172-31-23-158 nginx[19390]: 2026/07/21 18:42:52 [notice] 19390#19390: signal process started
+2026-07-21T18:42:52+00:00 ip-172-31-23-158 systemd[1]: Reloaded nginx.service - A high performance web server and a reverse proxy server.
+
+================================================================================
+NGINX ERROR LOG — LAST 300 LINES
+================================================================================
+2026/07/21 15:39:37 [notice] 2730#2730: using inherited sockets from "5;6;"
+2026/07/21 16:08:20 [error] 4772#4772: *14 connect() failed (111: Connection refused) while connecting to upstream, client: 188.166.88.194, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:08:21 [error] 4774#4774: *17 connect() failed (111: Connection refused) while connecting to upstream, client: 188.166.88.194, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:08:21 [error] 4775#4775: *19 connect() failed (111: Connection refused) while connecting to upstream, client: 188.166.88.194, server: admin.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4001/favicon.ico", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *24 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *23 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "POST / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /storage/logs/laravel.log HTTP/1.1", upstream: "http://127.0.0.1:4001/storage/logs/laravel.log", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /etc/ssl/private/server.key HTTP/1.1", upstream: "http://127.0.0.1:4001/etc/ssl/private/server.key", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.env.production HTTP/1.1", upstream: "http://127.0.0.1:4001/.env.production", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /_vti_pvt/service.pwd HTTP/1.1", upstream: "http://127.0.0.1:4001/_vti_pvt/service.pwd", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /server.key HTTP/1.1", upstream: "http://127.0.0.1:4001/server.key", host: "admin.anpprev.org"
+2026/07/21 16:09:12 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /config/production.json HTTP/1.1", upstream: "http://127.0.0.1:4001/config/production.json", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.vscode/sftp.json HTTP/1.1", upstream: "http://127.0.0.1:4001/.vscode/sftp.json", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /secrets.json HTTP/1.1", upstream: "http://127.0.0.1:4001/secrets.json", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.npmrc HTTP/1.1", upstream: "http://127.0.0.1:4001/.npmrc", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.bash_history HTTP/1.1", upstream: "http://127.0.0.1:4001/.bash_history", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /phpinfo.php HTTP/1.1", upstream: "http://127.0.0.1:4001/phpinfo.php", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /docker-compose.yml HTTP/1.1", upstream: "http://127.0.0.1:4001/docker-compose.yml", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /user_secrets.yml HTTP/1.1", upstream: "http://127.0.0.1:4001/user_secrets.yml", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /api/.env HTTP/1.1", upstream: "http://127.0.0.1:8001/.env", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /wp-config.php HTTP/1.1", upstream: "http://127.0.0.1:4001/wp-config.php", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /wp-admin/setup-config.php HTTP/1.1", upstream: "http://127.0.0.1:4001/wp-admin/setup-config.php", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.git/HEAD HTTP/1.1", upstream: "http://127.0.0.1:4001/.git/HEAD", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /backup.tar.gz HTTP/1.1", upstream: "http://127.0.0.1:4001/backup.tar.gz", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /backup.zip HTTP/1.1", upstream: "http://127.0.0.1:4001/backup.zip", host: "admin.anpprev.org"
+2026/07/21 16:09:13 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /actuator/heapdump HTTP/1.1", upstream: "http://127.0.0.1:4001/actuator/heapdump", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.svn/wc.db HTTP/1.1", upstream: "http://127.0.0.1:4001/.svn/wc.db", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /backup.sql HTTP/1.1", upstream: "http://127.0.0.1:4001/backup.sql", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /config.php HTTP/1.1", upstream: "http://127.0.0.1:4001/config.php", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /dump.sql HTTP/1.1", upstream: "http://127.0.0.1:4001/dump.sql", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /config.xml HTTP/1.1", upstream: "http://127.0.0.1:4001/config.xml", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /database.sql HTTP/1.1", upstream: "http://127.0.0.1:4001/database.sql", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.ssh/id_ecdsa HTTP/1.1", upstream: "http://127.0.0.1:4001/.ssh/id_ecdsa", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.ssh/id_ed25519 HTTP/1.1", upstream: "http://127.0.0.1:4001/.ssh/id_ed25519", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *33 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.ssh/id_rsa HTTP/1.1", upstream: "http://127.0.0.1:4001/.ssh/id_rsa", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *32 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /database_backup.sql HTTP/1.1", upstream: "http://127.0.0.1:4001/database_backup.sql", host: "admin.anpprev.org"
+2026/07/21 16:09:14 [error] 4774#4774: *25 connect() failed (111: Connection refused) while connecting to upstream, client: 91.148.244.131, server: admin.anpprev.org, request: "GET /.env HTTP/1.1", upstream: "http://127.0.0.1:4001/.env", host: "admin.anpprev.org"
+2026/07/21 16:09:30 [error] 4775#4775: *76 connect() failed (111: Connection refused) while connecting to upstream, client: 103.4.250.200, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:09:32 [error] 4775#4775: *77 connect() failed (111: Connection refused) while connecting to upstream, client: 103.196.9.241, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:09:34 [error] 4775#4775: *82 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:09:35 [error] 4775#4775: *86 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /console/ HTTP/1.1", upstream: "http://127.0.0.1:4001/console/", host: "admin.anpprev.org"
+2026/07/21 16:09:36 [error] 4775#4775: *89 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /server HTTP/1.1", upstream: "http://127.0.0.1:4001/server", host: "admin.anpprev.org"
+2026/07/21 16:09:37 [error] 4775#4775: *92 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /server-status HTTP/1.1", upstream: "http://127.0.0.1:4001/server-status", host: "admin.anpprev.org"
+2026/07/21 16:09:39 [error] 4775#4775: *95 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /about HTTP/1.1", upstream: "http://127.0.0.1:4001/about", host: "admin.anpprev.org"
+2026/07/21 16:09:40 [error] 4775#4775: *99 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /login.action HTTP/1.1", upstream: "http://127.0.0.1:4001/login.action", host: "admin.anpprev.org"
+2026/07/21 16:09:41 [error] 4775#4775: *102 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:09:41 [error] 4775#4775: *104 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /___proxy_subdomain_whm/login HTTP/1.1", upstream: "http://127.0.0.1:4001/___proxy_subdomain_whm/login", host: "admin.anpprev.org"
+2026/07/21 16:09:42 [error] 4774#4774: *107 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /___proxy_subdomain_cpanel HTTP/1.1", upstream: "http://127.0.0.1:4001/___proxy_subdomain_cpanel", host: "admin.anpprev.org"
+2026/07/21 16:09:42 [error] 4774#4774: *110 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /v2/_catalog HTTP/1.1", upstream: "http://127.0.0.1:4001/v2/_catalog", host: "admin.anpprev.org"
+2026/07/21 16:09:43 [error] 4775#4775: *98 connect() failed (111: Connection refused) while connecting to upstream, client: 173.46.91.163, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:09:43 [error] 4774#4774: *115 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /.DS_Store HTTP/1.1", upstream: "http://127.0.0.1:4001/.DS_Store", host: "admin.anpprev.org"
+2026/07/21 16:09:44 [error] 4774#4774: *118 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /.env HTTP/1.1", upstream: "http://127.0.0.1:4001/.env", host: "admin.anpprev.org"
+2026/07/21 16:09:46 [error] 4774#4774: *121 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application HTTP/1.1", upstream: "http://127.0.0.1:4001/ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application", host: "admin.anpprev.org"
+2026/07/21 16:09:48 [error] 4774#4774: *124 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /.git/config HTTP/1.1", upstream: "http://127.0.0.1:4001/.git/config", host: "admin.anpprev.org"
+2026/07/21 16:09:49 [error] 4774#4774: *127 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "POST /graphql HTTP/1.1", upstream: "http://127.0.0.1:4001/graphql", host: "admin.anpprev.org"
+2026/07/21 16:09:50 [error] 4774#4774: *131 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "POST /api/graphql HTTP/1.1", upstream: "http://127.0.0.1:8001/graphql", host: "admin.anpprev.org"
+2026/07/21 16:09:50 [error] 4774#4774: *134 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "POST /graphql/api HTTP/1.1", upstream: "http://127.0.0.1:4001/graphql/api", host: "admin.anpprev.org"
+2026/07/21 16:09:51 [error] 4774#4774: *137 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "POST /api/gql HTTP/1.1", upstream: "http://127.0.0.1:8001/gql", host: "admin.anpprev.org"
+2026/07/21 16:09:51 [error] 4774#4774: *140 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /s/037313e2533313e27363e22353/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.properties HTTP/1.1", upstream: "http://127.0.0.1:4001/s/037313e2533313e27363e22353/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.properties", host: "admin.anpprev.org"
+2026/07/21 16:09:52 [error] 4774#4774: *144 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /config.json HTTP/1.1", upstream: "http://127.0.0.1:4001/config.json", host: "admin.anpprev.org"
+2026/07/21 16:09:54 [error] 4774#4774: *147 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /telescope/requests HTTP/1.1", upstream: "http://127.0.0.1:4001/telescope/requests", host: "admin.anpprev.org"
+2026/07/21 16:09:54 [error] 4774#4774: *149 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /info.php HTTP/1.1", upstream: "http://127.0.0.1:4001/info.php", host: "admin.anpprev.org"
+2026/07/21 16:09:55 [error] 4774#4774: *153 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /.well-known/security.txt HTTP/1.1", upstream: "http://127.0.0.1:4001/.well-known/security.txt", host: "admin.anpprev.org"
+2026/07/21 16:09:56 [error] 4775#4775: *156 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /actuator/env HTTP/1.1", upstream: "http://127.0.0.1:4001/actuator/env", host: "admin.anpprev.org"
+2026/07/21 16:09:57 [error] 4775#4775: *159 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /trace.axd HTTP/1.1", upstream: "http://127.0.0.1:4001/trace.axd", host: "admin.anpprev.org"
+2026/07/21 16:09:58 [error] 4775#4775: *162 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /@vite/env HTTP/1.1", upstream: "http://127.0.0.1:4001/@vite/env", host: "admin.anpprev.org"
+2026/07/21 16:09:59 [error] 4775#4775: *165 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /.vscode/sftp.json HTTP/1.1", upstream: "http://127.0.0.1:4001/.vscode/sftp.json", host: "admin.anpprev.org"
+2026/07/21 16:10:00 [error] 4775#4775: *168 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "OPTIONS / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:10:01 [error] 4775#4775: *171 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /?rest_route=/wp/v2/users/ HTTP/1.1", upstream: "http://127.0.0.1:4001/?rest_route=/wp/v2/users/", host: "admin.anpprev.org"
+2026/07/21 16:10:02 [error] 4775#4775: *174 connect() failed (111: Connection refused) while connecting to upstream, client: 147.182.149.75, server: admin.anpprev.org, request: "GET /debug/default/view?panel=config HTTP/1.1", upstream: "http://127.0.0.1:4001/debug/default/view?panel=config", host: "admin.anpprev.org"
+2026/07/21 16:11:02 [error] 4775#4775: *177 connect() failed (111: Connection refused) while connecting to upstream, client: 135.136.19.180, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org"
+2026/07/21 16:11:03 [error] 4775#4775: *179 connect() failed (111: Connection refused) while connecting to upstream, client: 135.136.19.180, server: admin.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4001/favicon.ico", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *194 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /js/config.js HTTP/1.1", upstream: "http://127.0.0.1:4001/js/config.js", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *195 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /.env HTTP/1.1", upstream: "http://127.0.0.1:4001/.env", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *193 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /config.js HTTP/1.1", upstream: "http://127.0.0.1:4001/config.js", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *201 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /config.json HTTP/1.1", upstream: "http://127.0.0.1:4001/config.json", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *197 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /.env.production HTTP/1.1", upstream: "http://127.0.0.1:4001/.env.production", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *198 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /.env.example HTTP/1.1", upstream: "http://127.0.0.1:4001/.env.example", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *192 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *199 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /api/config HTTP/1.1", upstream: "http://127.0.0.1:8001/config", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *200 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /api/env HTTP/1.1", upstream: "http://127.0.0.1:8001/env", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *196 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /.env.local HTTP/1.1", upstream: "http://127.0.0.1:4001/.env.local", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *194 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /js/env.js HTTP/1.1", upstream: "http://127.0.0.1:4001/js/env.js", host: "admin.anpprev.org"
+2026/07/21 16:12:55 [error] 4774#4774: *193 connect() failed (111: Connection refused) while connecting to upstream, client: 64.89.161.85, server: admin.anpprev.org, request: "GET /settings.js HTTP/1.1", upstream: "http://127.0.0.1:4001/settings.js", host: "admin.anpprev.org"
+2026/07/21 16:13:01 [error] 4774#4774: *216 connect() failed (111: Connection refused) while connecting to upstream, client: 64.23.226.10, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:13:05 [error] 4775#4775: *228 connect() failed (111: Connection refused) while connecting to upstream, client: 64.23.226.10, server: admin.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4001/favicon.ico", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org/"
+2026/07/21 16:17:22 [error] 4774#4774: *242 connect() failed (111: Connection refused) while connecting to upstream, client: 64.23.255.31, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "52.67.135.170"
+2026/07/21 16:17:25 [error] 4774#4774: *241 connect() failed (111: Connection refused) while connecting to upstream, client: 98.88.137.2, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org:443"
+2026/07/21 16:17:26 [error] 4775#4775: *255 connect() failed (111: Connection refused) while connecting to upstream, client: 64.23.255.31, server: admin.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4001/favicon.ico", host: "52.67.135.170", referrer: "https://52.67.135.170/"
+2026/07/21 16:17:44 [error] 4775#4775: *257 connect() failed (111: Connection refused) while connecting to upstream, client: 91.134.54.94, server: admin.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4001/", host: "admin.anpprev.org"
+2026/07/21 16:38:17 [error] 4774#4774: *695 connect() failed (111: Connection refused) while connecting to upstream, client: 148.227.83.107, server: admin.anpprev.org, request: "GET /api/health HTTP/1.1", upstream: "http://127.0.0.1:8001/health", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org/login/anpprev"
+2026/07/21 16:38:17 [error] 4774#4774: *695 connect() failed (111: Connection refused) while connecting to upstream, client: 148.227.83.107, server: admin.anpprev.org, request: "GET /api/tenants/anpprev HTTP/1.1", upstream: "http://127.0.0.1:8001/tenants/anpprev", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org/login/anpprev"
+2026/07/21 16:38:18 [error] 4774#4774: *699 connect() failed (111: Connection refused) while connecting to upstream, client: 148.227.83.107, server: admin.anpprev.org, request: "GET /api/tenants/anpprev HTTP/1.1", upstream: "http://127.0.0.1:8001/tenants/anpprev", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org/login/anpprev"
+2026/07/21 16:38:18 [error] 4774#4774: *694 connect() failed (111: Connection refused) while connecting to upstream, client: 148.227.83.107, server: admin.anpprev.org, request: "GET /api/health HTTP/1.1", upstream: "http://127.0.0.1:8001/health", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org/login/anpprev"
+2026/07/21 16:38:19 [error] 4774#4774: *695 connect() failed (111: Connection refused) while connecting to upstream, client: 148.227.83.107, server: admin.anpprev.org, request: "GET /api/tenants/anpprev HTTP/1.1", upstream: "http://127.0.0.1:8001/tenants/anpprev", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org/login/anpprev"
+2026/07/21 16:38:19 [error] 4774#4774: *699 connect() failed (111: Connection refused) while connecting to upstream, client: 148.227.83.107, server: admin.anpprev.org, request: "GET /api/health HTTP/1.1", upstream: "http://127.0.0.1:8001/health", host: "admin.anpprev.org", referrer: "https://admin.anpprev.org/login/anpprev"
+2026/07/21 17:05:25 [error] 11652#11652: *1153 connect() failed (111: Connection refused) while connecting to upstream, client: 167.172.47.107, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:05:25 [error] 11653#11653: *1161 connect() failed (111: Connection refused) while connecting to upstream, client: 167.172.47.107, server: painel.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.ico", host: "painel.anpprev.org"
+2026/07/21 17:05:26 [error] 11656#11656: *1173 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /etc/ssl/private/server.key HTTP/1.1", upstream: "http://127.0.0.1:4002/etc/ssl/private/server.key", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11655#11655: *1174 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /config.php HTTP/1.1", upstream: "http://127.0.0.1:4002/config.php", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1173 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /database.sql HTTP/1.1", upstream: "http://127.0.0.1:4002/database.sql", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1177 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /database_backup.sql HTTP/1.1", upstream: "http://127.0.0.1:4002/database_backup.sql", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1178 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /api/.env HTTP/1.1", upstream: "http://127.0.0.1:8002/.env", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11655#11655: *1174 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /phpinfo.php HTTP/1.1", upstream: "http://127.0.0.1:4002/phpinfo.php", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1173 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /docker-compose.yml HTTP/1.1", upstream: "http://127.0.0.1:4002/docker-compose.yml", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1177 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /user_secrets.yml HTTP/1.1", upstream: "http://127.0.0.1:4002/user_secrets.yml", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1178 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.env.production HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.production", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11655#11655: *1174 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /wp-config.php HTTP/1.1", upstream: "http://127.0.0.1:4002/wp-config.php", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1173 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /dump.sql HTTP/1.1", upstream: "http://127.0.0.1:4002/dump.sql", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1177 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.vscode/sftp.json HTTP/1.1", upstream: "http://127.0.0.1:4002/.vscode/sftp.json", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1178 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /server.key HTTP/1.1", upstream: "http://127.0.0.1:4002/server.key", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1180 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /secrets.json HTTP/1.1", upstream: "http://127.0.0.1:4002/secrets.json", host: "painel.anpprev.org"
+2026/07/21 17:05:27 [error] 11656#11656: *1179 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.npmrc HTTP/1.1", upstream: "http://127.0.0.1:4002/.npmrc", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11659#11659: *1196 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /config/production.json HTTP/1.1", upstream: "http://127.0.0.1:4002/config/production.json", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11658#11658: *1197 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.bash_history HTTP/1.1", upstream: "http://127.0.0.1:4002/.bash_history", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11659#11659: *1196 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.ssh/id_ecdsa HTTP/1.1", upstream: "http://127.0.0.1:4002/.ssh/id_ecdsa", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11659#11659: *1199 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.ssh/id_rsa HTTP/1.1", upstream: "http://127.0.0.1:4002/.ssh/id_rsa", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11658#11658: *1197 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /_vti_pvt/service.pwd HTTP/1.1", upstream: "http://127.0.0.1:4002/_vti_pvt/service.pwd", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11659#11659: *1201 connect() failed (111: Connection refused) while connecting to upstream, client: 167.172.47.107, server: painel.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.ico", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11659#11659: *1196 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /backup.tar.gz HTTP/1.1", upstream: "http://127.0.0.1:4002/backup.tar.gz", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11659#11659: *1199 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /wp-admin/setup-config.php HTTP/1.1", upstream: "http://127.0.0.1:4002/wp-admin/setup-config.php", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11658#11658: *1197 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.svn/wc.db HTTP/1.1", upstream: "http://127.0.0.1:4002/.svn/wc.db", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11659#11659: *1196 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.ssh/id_ed25519 HTTP/1.1", upstream: "http://127.0.0.1:4002/.ssh/id_ed25519", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11659#11659: *1199 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /actuator/heapdump HTTP/1.1", upstream: "http://127.0.0.1:4002/actuator/heapdump", host: "painel.anpprev.org"
+2026/07/21 17:05:28 [error] 11658#11658: *1197 connect() failed (111: Connection refused) while connecting to upstream, client: 81.171.72.93, server: painel.anpprev.org, request: "GET /.git/HEAD HTTP/1.1", upstream: "http://127.0.0.1:4002/.git/HEAD", host: "painel.anpprev.org"
+2026/07/21 17:05:33 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env HTTP/1.1", upstream: "http://127.0.0.1:4002/.env", host: "painel.anpprev.org:443"
+2026/07/21 17:05:35 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.git/HEAD HTTP/1.1", upstream: "http://127.0.0.1:4002/.git/HEAD", host: "painel.anpprev.org:443"
+2026/07/21 17:05:37 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.backup HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.backup", host: "painel.anpprev.org:443"
+2026/07/21 17:05:39 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.old HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.old", host: "painel.anpprev.org:443"
+2026/07/21 17:05:41 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.save HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.save", host: "painel.anpprev.org:443"
+2026/07/21 17:05:43 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.bak HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.bak", host: "painel.anpprev.org:443"
+2026/07/21 17:05:46 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.prod HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.prod", host: "painel.anpprev.org:443"
+2026/07/21 17:05:48 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.production HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.production", host: "painel.anpprev.org:443"
+2026/07/21 17:05:50 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.staging HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.staging", host: "painel.anpprev.org:443"
+2026/07/21 17:05:53 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.local HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.local", host: "painel.anpprev.org:443"
+2026/07/21 17:05:55 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.live HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.live", host: "painel.anpprev.org:443"
+2026/07/21 17:05:57 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.dev HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.dev", host: "painel.anpprev.org:443"
+2026/07/21 17:06:01 [error] 11659#11659: *1215 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /.env.stage HTTP/1.1", upstream: "http://127.0.0.1:4002/.env.stage", host: "painel.anpprev.org:443"
+2026/07/21 17:06:30 [error] 11659#11659: *1243 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:06:31 [error] 11659#11659: *1247 connect() failed (111: Connection refused) while connecting to upstream, client: 154.28.229.223, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:06:31 [error] 11659#11659: *1248 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /console/ HTTP/1.1", upstream: "http://127.0.0.1:4002/console/", host: "painel.anpprev.org"
+2026/07/21 17:06:32 [error] 11658#11658: *1252 connect() failed (111: Connection refused) while connecting to upstream, client: 154.28.229.75, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:06:32 [error] 11658#11658: *1253 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /server HTTP/1.1", upstream: "http://127.0.0.1:4002/server", host: "painel.anpprev.org"
+2026/07/21 17:06:33 [error] 11658#11658: *1258 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /server-status HTTP/1.1", upstream: "http://127.0.0.1:4002/server-status", host: "painel.anpprev.org"
+2026/07/21 17:06:35 [error] 11658#11658: *1260 connect() failed (111: Connection refused) while connecting to upstream, client: 171.22.217.10, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:06:35 [error] 11658#11658: *1264 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /about HTTP/1.1", upstream: "http://127.0.0.1:4002/about", host: "painel.anpprev.org"
+2026/07/21 17:06:37 [error] 11658#11658: *1269 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /login.action HTTP/1.1", upstream: "http://127.0.0.1:4002/login.action", host: "painel.anpprev.org"
+2026/07/21 17:06:38 [error] 11658#11658: *1272 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:06:38 [error] 11658#11658: *1262 connect() failed (111: Connection refused) while connecting to upstream, client: 104.197.69.115, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:06:39 [error] 11658#11658: *1276 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /___proxy_subdomain_whm/login HTTP/1.1", upstream: "http://127.0.0.1:4002/___proxy_subdomain_whm/login", host: "painel.anpprev.org"
+2026/07/21 17:06:40 [error] 11658#11658: *1280 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /___proxy_subdomain_cpanel HTTP/1.1", upstream: "http://127.0.0.1:4002/___proxy_subdomain_cpanel", host: "painel.anpprev.org"
+2026/07/21 17:06:40 [error] 11658#11658: *1267 connect() failed (111: Connection refused) while connecting to upstream, client: 178.16.54.137, server: painel.anpprev.org, request: "GET /functions/.env HTTP/1.1", upstream: "http://127.0.0.1:4002/functions/.env", host: "painel.anpprev.org:443"
+2026/07/21 17:06:41 [error] 11658#11658: *1284 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /v2/_catalog HTTP/1.1", upstream: "http://127.0.0.1:4002/v2/_catalog", host: "painel.anpprev.org"
+2026/07/21 17:06:42 [error] 11658#11658: *1287 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /.DS_Store HTTP/1.1", upstream: "http://127.0.0.1:4002/.DS_Store", host: "painel.anpprev.org"
+2026/07/21 17:06:43 [error] 11658#11658: *1289 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /.env HTTP/1.1", upstream: "http://127.0.0.1:4002/.env", host: "painel.anpprev.org"
+2026/07/21 17:06:45 [error] 11658#11658: *1292 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application HTTP/1.1", upstream: "http://127.0.0.1:4002/ecp/Current/exporttool/microsoft.exchange.ediscovery.exporttool.application", host: "painel.anpprev.org"
+2026/07/21 17:06:47 [error] 11658#11658: *1296 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /.git/config HTTP/1.1", upstream: "http://127.0.0.1:4002/.git/config", host: "painel.anpprev.org"
+2026/07/21 17:06:49 [error] 11659#11659: *1300 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "POST /graphql HTTP/1.1", upstream: "http://127.0.0.1:4002/graphql", host: "painel.anpprev.org"
+2026/07/21 17:06:51 [error] 11659#11659: *1306 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "POST /api/graphql HTTP/1.1", upstream: "http://127.0.0.1:8002/graphql", host: "painel.anpprev.org"
+2026/07/21 17:06:52 [error] 11659#11659: *1309 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "POST /graphql/api HTTP/1.1", upstream: "http://127.0.0.1:4002/graphql/api", host: "painel.anpprev.org"
+2026/07/21 17:06:53 [error] 11659#11659: *1311 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "POST /api/gql HTTP/1.1", upstream: "http://127.0.0.1:8002/gql", host: "painel.anpprev.org"
+2026/07/21 17:06:54 [error] 11659#11659: *1314 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /s/037313e2533313e27363e22353/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.properties HTTP/1.1", upstream: "http://127.0.0.1:4002/s/037313e2533313e27363e22353/_/;/META-INF/maven/com.atlassian.jira/jira-webapp-dist/pom.properties", host: "painel.anpprev.org"
+2026/07/21 17:06:55 [error] 11659#11659: *1317 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /config.json HTTP/1.1", upstream: "http://127.0.0.1:4002/config.json", host: "painel.anpprev.org"
+2026/07/21 17:06:57 [error] 11659#11659: *1321 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /telescope/requests HTTP/1.1", upstream: "http://127.0.0.1:4002/telescope/requests", host: "painel.anpprev.org"
+2026/07/21 17:06:58 [error] 11659#11659: *1324 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /info.php HTTP/1.1", upstream: "http://127.0.0.1:4002/info.php", host: "painel.anpprev.org"
+2026/07/21 17:06:59 [error] 11659#11659: *1328 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /.well-known/security.txt HTTP/1.1", upstream: "http://127.0.0.1:4002/.well-known/security.txt", host: "painel.anpprev.org"
+2026/07/21 17:07:00 [error] 11659#11659: *1331 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /actuator/env HTTP/1.1", upstream: "http://127.0.0.1:4002/actuator/env", host: "painel.anpprev.org"
+2026/07/21 17:07:01 [error] 11659#11659: *1334 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /trace.axd HTTP/1.1", upstream: "http://127.0.0.1:4002/trace.axd", host: "painel.anpprev.org"
+2026/07/21 17:07:02 [error] 11659#11659: *1337 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /@vite/env HTTP/1.1", upstream: "http://127.0.0.1:4002/@vite/env", host: "painel.anpprev.org"
+2026/07/21 17:07:04 [error] 11659#11659: *1339 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /.vscode/sftp.json HTTP/1.1", upstream: "http://127.0.0.1:4002/.vscode/sftp.json", host: "painel.anpprev.org"
+2026/07/21 17:07:05 [error] 11659#11659: *1341 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "OPTIONS / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:07:06 [error] 11659#11659: *1343 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /?rest_route=/wp/v2/users/ HTTP/1.1", upstream: "http://127.0.0.1:4002/?rest_route=/wp/v2/users/", host: "painel.anpprev.org"
+2026/07/21 17:07:07 [error] 11658#11658: *1345 connect() failed (111: Connection refused) while connecting to upstream, client: 157.245.204.205, server: painel.anpprev.org, request: "GET /debug/default/view?panel=config HTTP/1.1", upstream: "http://127.0.0.1:4002/debug/default/view?panel=config", host: "painel.anpprev.org"
+2026/07/21 17:07:17 [error] 11658#11658: *1347 connect() failed (111: Connection refused) while connecting to upstream, client: 103.4.250.157, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:07:17 [error] 11658#11658: *1347 connect() failed (111: Connection refused) while connecting to upstream, client: 103.4.250.157, server: painel.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.ico", host: "painel.anpprev.org", referrer: "https://painel.anpprev.org/"
+2026/07/21 17:07:18 [error] 11658#11658: *1351 connect() failed (111: Connection refused) while connecting to upstream, client: 161.123.84.204, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:07:18 [error] 11658#11658: *1351 connect() failed (111: Connection refused) while connecting to upstream, client: 161.123.84.204, server: painel.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.ico", host: "painel.anpprev.org", referrer: "https://painel.anpprev.org/"
+2026/07/21 17:07:36 [error] 11658#11658: *1355 connect() failed (111: Connection refused) while connecting to upstream, client: 5.78.140.151, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:07:43 [error] 11658#11658: *1387 connect() failed (111: Connection refused) while connecting to upstream, client: 34.72.176.129, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:08:40 [error] 11658#11658: *1460 connect() failed (111: Connection refused) while connecting to upstream, client: 108.132.13.233, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:09:12 [error] 11658#11658: *1464 connect() failed (111: Connection refused) while connecting to upstream, client: 146.190.247.242, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:09:16 [error] 11659#11659: *1476 connect() failed (111: Connection refused) while connecting to upstream, client: 146.190.247.242, server: painel.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.ico", host: "painel.anpprev.org", referrer: "https://painel.anpprev.org/"
+2026/07/21 17:10:15 [error] 11659#11659: *1483 connect() failed (111: Connection refused) while connecting to upstream, client: 98.88.137.2, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org:443"
+2026/07/21 17:16:29 [error] 11659#11659: *1486 connect() failed (111: Connection refused) while connecting to upstream, client: 195.123.244.84, server: painel.anpprev.org, request: "HEAD / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org", referrer: "http://painel.anpprev.org"
+2026/07/21 17:17:13 [error] 11659#11659: *1491 connect() failed (111: Connection refused) while connecting to upstream, client: 34.123.170.104, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:22:35 [error] 11658#11658: *1512 connect() failed (111: Connection refused) while connecting to upstream, client: 3.236.110.110, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:22:36 [error] 11659#11659: *1516 connect() failed (111: Connection refused) while connecting to upstream, client: 45.15.246.77, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:22:36 [error] 11659#11659: *1517 connect() failed (111: Connection refused) while connecting to upstream, client: 45.15.245.239, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+2026/07/21 17:22:59 [error] 11659#11659: *1523 connect() failed (111: Connection refused) while connecting to upstream, client: 45.15.246.77, server: painel.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.ico", host: "painel.anpprev.org"
+2026/07/21 17:22:59 [error] 11659#11659: *1521 connect() failed (111: Connection refused) while connecting to upstream, client: 45.15.245.239, server: painel.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.ico", host: "painel.anpprev.org"
+2026/07/21 17:22:59 [error] 11659#11659: *1520 connect() failed (111: Connection refused) while connecting to upstream, client: 45.15.245.239, server: painel.anpprev.org, request: "GET /favicon.png HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.png", host: "painel.anpprev.org"
+2026/07/21 17:22:59 [error] 11658#11658: *1525 connect() failed (111: Connection refused) while connecting to upstream, client: 45.15.246.77, server: painel.anpprev.org, request: "GET /favicon.png HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.png", host: "painel.anpprev.org"
+2026/07/21 17:22:59 [error] 11659#11659: *1521 connect() failed (111: Connection refused) while connecting to upstream, client: 45.15.245.239, server: painel.anpprev.org, request: "GET /favicon.png HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.png", host: "painel.anpprev.org"
+2026/07/21 17:22:59 [error] 11659#11659: *1520 connect() failed (111: Connection refused) while connecting to upstream, client: 45.15.245.239, server: painel.anpprev.org, request: "GET /favicon.ico HTTP/1.1", upstream: "http://127.0.0.1:4002/favicon.ico", host: "painel.anpprev.org"
+2026/07/21 17:23:26 [error] 11659#11659: *1534 connect() failed (111: Connection refused) while connecting to upstream, client: 91.231.89.36, server: painel.anpprev.org, request: "GET / HTTP/1.1", upstream: "http://127.0.0.1:4002/", host: "painel.anpprev.org"
+
+================================================================================
+APPLICATION SERVICES
+================================================================================
+
+================================================================================
+SERVICE STATUS — orbital-api.service
+================================================================================
+● orbital-api.service - orbital-app API FastAPI
+     Loaded: loaded (/etc/systemd/system/orbital-api.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-07-21 16:55:22 UTC; 1h 53min ago
+   Main PID: 11012 (uvicorn)
+      Tasks: 11 (limit: 2209)
+     Memory: 161.6M (peak: 161.9M)
+        CPU: 36.629s
+     CGroup: /system.slice/orbital-api.service
+             ├─11012 /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/python /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8001 --workers 2
+             ├─11016 /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/python -c "from multiprocessing.resource_tracker import main;main(6)"
+             ├─11017 /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/python -c "from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=9)" --multiprocessing-fork
+             └─11018 /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/python -c "from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=13)" --multiprocessing-fork
+
+Jul 21 17:49:50 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+Jul 21 17:49:50 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+Jul 21 17:49:51 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+Jul 21 17:49:51 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+Jul 21 17:49:51 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+Jul 21 18:04:21 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+Jul 21 18:04:21 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+Jul 21 18:43:11 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+Jul 21 18:43:11 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+Jul 21 18:43:11 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/page?limit=20&offset=0 HTTP/1.1" 200 OK
+
+================================================================================
+SERVICE JOURNAL — orbital-api.service — LAST 24 HOURS
+================================================================================
+2026-07-21T17:07:40+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:07:40+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:07:41+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:07:42+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:07:43+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:23:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:23:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:23:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:23:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:31:47+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:48+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:31:50+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:31:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:31:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:31:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=associate HTTP/1.1" 200 OK
+2026-07-21T17:32:03+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:32:03+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:32:03+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/profiles HTTP/1.1" 200 OK
+2026-07-21T17:32:03+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?limit=20&offset=0&etype_code=financial HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:04+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:32:06+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:32:06+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:32:06+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=20&offset=0 HTTP/1.1" 200 OK
+2026-07-21T17:33:07+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:33:07+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:33:10+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "POST /auth/login HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:33:11+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:33:12+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:19+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:19+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:25+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:25+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:34:26+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "POST /auth/login HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:27+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:29+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:29+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:29+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=20&offset=0 HTTP/1.1" 200 OK
+2026-07-21T17:34:32+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:32+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:32+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /votings/functional-statuses HTTP/1.1" 200 OK
+2026-07-21T17:34:32+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /votings/22 HTTP/1.1" 200 OK
+2026-07-21T17:34:32+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:32+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:33+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=20&offset=0 HTTP/1.1" 200 OK
+2026-07-21T17:34:39+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:39+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:40+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:34:43+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:43+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:43+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /votings/page?limit=20&offset=0 HTTP/1.1" 200 OK
+2026-07-21T17:34:53+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:53+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:53+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/functional-statuses HTTP/1.1" 200 OK
+2026-07-21T17:34:53+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/21 HTTP/1.1" 200 OK
+2026-07-21T17:34:59+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:34:59+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:34:59+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/page?limit=20&offset=0 HTTP/1.1" 200 OK
+2026-07-21T17:35:01+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:35:01+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:35:01+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/functional-statuses HTTP/1.1" 200 OK
+2026-07-21T17:35:01+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/22 HTTP/1.1" 200 OK
+2026-07-21T17:48:18+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:48:19+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:19+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:48:19+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:19+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:19+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:19+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:19+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:19+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:48:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:48:20+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:48:23+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:48:23+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:48:28+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:48:28+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:48:34+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "PUT /votings/22 HTTP/1.1" 200 OK
+2026-07-21T17:48:35+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:48:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:48:35+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/22/monitor HTTP/1.1" 200 OK
+2026-07-21T17:48:36+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /votings/22/ballots/page?limit=20&offset=0&mode=ALL&status=ALL HTTP/1.1" 200 OK
+2026-07-21T17:48:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/22/monitor HTTP/1.1" 200 OK
+2026-07-21T17:48:55+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:48:55+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:48:55+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /votings/page?limit=20&offset=0 HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /tenants/anpprev HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/profiles?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/distributions?dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /votings/page?limit=100&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=admin&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:49:50+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=associate&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:49:51+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=financial&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:49:51+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=dependent&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T17:49:51+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /members/page?tenant_code=anpprev&limit=1&offset=0&etype_code=juridico&dashboard=true HTTP/1.1" 200 OK
+2026-07-21T18:04:21+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T18:04:21+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     148.227.83.107:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T18:43:11+00:00 ip-172-31-23-158 uvicorn[11017]: INFO:     201.48.202.229:0 - "GET /health HTTP/1.1" 200 OK
+2026-07-21T18:43:11+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /me/menu HTTP/1.1" 200 OK
+2026-07-21T18:43:11+00:00 ip-172-31-23-158 uvicorn[11018]: INFO:     201.48.202.229:0 - "GET /votings/page?limit=20&offset=0 HTTP/1.1" 200 OK
+
+================================================================================
+SERVICE STATUS — orbital-web.service
+================================================================================
+● orbital-web.service - orbital-app Astro Web
+     Loaded: loaded (/etc/systemd/system/orbital-web.service; enabled; preset: enabled)
+     Active: active (running) since Tue 2026-07-21 16:55:23 UTC; 1h 53min ago
+   Main PID: 11073 (node)
+      Tasks: 11 (limit: 2209)
+     Memory: 30.0M (peak: 34.0M)
+        CPU: 1.586s
+     CGroup: /system.slice/orbital-web.service
+             └─11073 /usr/bin/node /home/ubuntu/apps/orbital-app/apps/web/dist/server/entry.mjs
+
+Jul 21 16:55:23 ip-172-31-23-158 systemd[1]: Started orbital-web.service - orbital-app Astro Web.
+Jul 21 16:55:23 ip-172-31-23-158 node[11073]: 16:55:23 [@astrojs/node] Server listening on http://127.0.0.1:4001
+
+================================================================================
+SERVICE JOURNAL — orbital-web.service — LAST 24 HOURS
+================================================================================
+2026-07-21T16:20:12+00:00 ip-172-31-23-158 systemd[1]: Started orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:20:13+00:00 ip-172-31-23-158 node[6691]: 16:20:13 [@astrojs/node] Server listening on http://127.0.0.1:4001
+2026-07-21T16:24:36+00:00 ip-172-31-23-158 systemd[1]: Stopping orbital-web.service - orbital-app Astro Web...
+2026-07-21T16:24:36+00:00 ip-172-31-23-158 systemd[1]: orbital-web.service: Deactivated successfully.
+2026-07-21T16:24:36+00:00 ip-172-31-23-158 systemd[1]: Stopped orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:24:36+00:00 ip-172-31-23-158 systemd[1]: Started orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:24:37+00:00 ip-172-31-23-158 node[7206]: 16:24:37 [@astrojs/node] Server listening on http://127.0.0.1:4001
+2026-07-21T16:33:26+00:00 ip-172-31-23-158 systemd[1]: Stopping orbital-web.service - orbital-app Astro Web...
+2026-07-21T16:33:26+00:00 ip-172-31-23-158 systemd[1]: orbital-web.service: Deactivated successfully.
+2026-07-21T16:33:26+00:00 ip-172-31-23-158 systemd[1]: Stopped orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:33:26+00:00 ip-172-31-23-158 systemd[1]: orbital-web.service: Consumed 1.481s CPU time.
+2026-07-21T16:33:26+00:00 ip-172-31-23-158 systemd[1]: Started orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:33:26+00:00 ip-172-31-23-158 node[7941]: 16:33:26 [@astrojs/node] Server listening on http://127.0.0.1:4001
+2026-07-21T16:37:52+00:00 ip-172-31-23-158 systemd[1]: Stopping orbital-web.service - orbital-app Astro Web...
+2026-07-21T16:37:52+00:00 ip-172-31-23-158 systemd[1]: orbital-web.service: Deactivated successfully.
+2026-07-21T16:37:52+00:00 ip-172-31-23-158 systemd[1]: Stopped orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:37:52+00:00 ip-172-31-23-158 systemd[1]: Started orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:37:53+00:00 ip-172-31-23-158 node[8937]: 16:37:53 [@astrojs/node] Server listening on http://127.0.0.1:4001
+2026-07-21T16:55:22+00:00 ip-172-31-23-158 systemd[1]: Stopping orbital-web.service - orbital-app Astro Web...
+2026-07-21T16:55:23+00:00 ip-172-31-23-158 systemd[1]: orbital-web.service: Deactivated successfully.
+2026-07-21T16:55:23+00:00 ip-172-31-23-158 systemd[1]: Stopped orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:55:23+00:00 ip-172-31-23-158 systemd[1]: orbital-web.service: Consumed 1.003s CPU time.
+2026-07-21T16:55:23+00:00 ip-172-31-23-158 systemd[1]: Started orbital-web.service - orbital-app Astro Web.
+2026-07-21T16:55:23+00:00 ip-172-31-23-158 node[11073]: 16:55:23 [@astrojs/node] Server listening on http://127.0.0.1:4001
+
+================================================================================
+SYSTEM ERRORS — LAST 24 HOURS
+================================================================================
+-- No entries --
+
+================================================================================
+RECENT KERNEL WARNINGS AND ERRORS
+================================================================================
+2026-07-21T15:34:33+00:00 ip-172-31-23-158 kernel: MDS CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/mds.html for more details.
+2026-07-21T15:34:33+00:00 ip-172-31-23-158 kernel: MMIO Stale Data CPU bug present and SMT on, data leak possible. See https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/processor_mmio_stale_data.html for more details.
+2026-07-21T15:34:33+00:00 ip-172-31-23-158 kernel: acpi PNP0A03:00: fail to add MMCONFIG information, can't access extended configuration space under this bridge
+2026-07-21T15:34:33+00:00 ip-172-31-23-158 kernel: ena 0000:00:05.0: LLQ is not supported Fallback to host mode policy.
+2026-07-21T15:34:33+00:00 ip-172-31-23-158 kernel: i8042: Warning: Keylock active
+2026-07-21T15:34:33+00:00 ip-172-31-23-158 kernel: device-mapper: core: CONFIG_IMA_DISABLE_HTABLE is disabled. Duplicate IMA measurements will not be recorded in the IMA log.
+2026-07-21T15:34:33+00:00 ip-172-31-23-158 kernel: check access for rdinit=/init failed: -2, ignoring
+2026-07-21T15:34:34+00:00 ip-172-31-23-158 kernel: nvme nvme0: using unchecked data buffer
+2026-07-21T15:34:42+00:00 ip-172-31-23-158 kernel: kauditd_printk_skb: 113 callbacks suppressed
+2026-07-21T16:36:20+00:00 ip-172-31-23-158 kernel: ena 0000:00:05.0: Type was not set for devlink port.
+
+================================================================================
+LISTENING TCP/UDP PORTS
+================================================================================
+Netid State  Recv-Q Send-Q      Local Address:Port Peer Address:PortProcess                                                                                
+udp   UNCONN 0      0               127.0.0.1:323       0.0.0.0:*    users:(("chronyd",pid=632,fd=5))                                                      
+udp   UNCONN 0      0              127.0.0.54:53        0.0.0.0:*    users:(("systemd-resolve",pid=335,fd=16))                                             
+udp   UNCONN 0      0           127.0.0.53%lo:53        0.0.0.0:*    users:(("systemd-resolve",pid=335,fd=14))                                             
+udp   UNCONN 0      0      172.31.23.158%ens5:68        0.0.0.0:*    users:(("systemd-network",pid=471,fd=21))                                             
+udp   UNCONN 0      0                   [::1]:323          [::]:*    users:(("chronyd",pid=632,fd=6))                                                      
+tcp   LISTEN 0      4096           127.0.0.54:53        0.0.0.0:*    users:(("systemd-resolve",pid=335,fd=17))                                             
+tcp   LISTEN 0      511               0.0.0.0:80        0.0.0.0:*    users:(("nginx",pid=19553,fd=5),("nginx",pid=19552,fd=5),("nginx",pid=2730,fd=5))     
+tcp   LISTEN 0      2048            127.0.0.1:8002      0.0.0.0:*    users:(("python",pid=14412,fd=3),("python",pid=14411,fd=3),("uvicorn",pid=14359,fd=3))
+tcp   LISTEN 0      2048            127.0.0.1:8001      0.0.0.0:*    users:(("python",pid=11018,fd=3),("python",pid=11017,fd=3),("uvicorn",pid=11012,fd=3))
+tcp   LISTEN 0      4096              0.0.0.0:22        0.0.0.0:*    users:(("sshd",pid=765,fd=3),("systemd",pid=1,fd=133))                                
+tcp   LISTEN 0      511             127.0.0.1:4002      0.0.0.0:*    users:(("node",pid=14417,fd=21))                                                      
+tcp   LISTEN 0      511             127.0.0.1:4001      0.0.0.0:*    users:(("node",pid=11073,fd=21))                                                      
+tcp   LISTEN 0      4096        127.0.0.53%lo:53        0.0.0.0:*    users:(("systemd-resolve",pid=335,fd=15))                                             
+tcp   LISTEN 0      511               0.0.0.0:443       0.0.0.0:*    users:(("nginx",pid=19553,fd=12),("nginx",pid=19552,fd=12),("nginx",pid=2730,fd=12))  
+tcp   LISTEN 0      511                  [::]:80           [::]:*    users:(("nginx",pid=19553,fd=6),("nginx",pid=19552,fd=6),("nginx",pid=2730,fd=6))     
+tcp   LISTEN 0      4096                 [::]:22           [::]:*    users:(("sshd",pid=765,fd=4),("systemd",pid=1,fd=134))                                
+tcp   LISTEN 0      511                  [::]:443          [::]:*    users:(("nginx",pid=19553,fd=11),("nginx",pid=19552,fd=11),("nginx",pid=2730,fd=11))  
+
+================================================================================
+TOP PROCESSES BY MEMORY
+================================================================================
+    PID    PPID USER     %MEM %CPU     ELAPSED COMMAND         COMMAND
+  14417       1 ubuntu    5.4  0.1    01:12:34 node            /usr/bin/node /home/ubuntu/apps/station-app/apps/web/dist/server/entry.mjs
+  11018   11012 ubuntu    4.9  0.2    01:53:43 python          /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=13) --multiprocessing-fork
+  11017   11012 ubuntu    4.8  0.2    01:53:43 python          /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=9) --multiprocessing-fork
+  11073       1 ubuntu    4.5  0.0    01:53:42 node            /usr/bin/node /home/ubuntu/apps/orbital-app/apps/web/dist/server/entry.mjs
+  14412   14359 ubuntu    3.9  0.2    01:12:34 python          /home/ubuntu/apps/station-app/apps/api/.venv/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=13) --multiprocessing-fork
+  14411   14359 ubuntu    3.8  0.2    01:12:34 python          /home/ubuntu/apps/station-app/apps/api/.venv/bin/python -c from multiprocessing.spawn import spawn_main; spawn_main(tracker_fd=7, pipe_handle=9) --multiprocessing-fork
+  14359       1 ubuntu    2.9  0.0    01:12:34 uvicorn         /home/ubuntu/apps/station-app/apps/api/.venv/bin/python /home/ubuntu/apps/station-app/apps/api/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8002 --workers 2
+   6546       1 root      2.4  0.0    02:31:50 fwupd           /usr/libexec/fwupd/fwupd
+    536       1 root      1.7  0.0    03:14:22 snapd           /usr/lib/snapd/snapd
+  11012       1 ubuntu    1.4  0.0    01:53:43 uvicorn         /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/python /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/uvicorn main:app --host 127.0.0.1 --port 8001 --workers 2
+    179       1 root      1.3  0.0    03:14:30 multipathd      /sbin/multipathd -d -s
+    639       1 root      1.1  0.0    03:14:22 unattended-upgr /usr/bin/python3 /usr/share/unattended-upgrades/unattended-upgrade-shutdown --wait-for-signal
+    122       1 root      1.1  0.0    03:14:30 systemd-journal /usr/lib/systemd/systemd-journald
+    533       1 root      1.0  0.0    03:14:22 amazon-ssm-agen /snap/amazon-ssm-agent/13009/amazon-ssm-agent
+    527       1 root      1.0  0.0    03:14:22 networkd-dispat /usr/bin/python3 /usr/bin/networkd-dispatcher --run-startup-triggers
+      1       0 root      0.7  0.0    03:14:32 systemd         /sbin/init
+    558       1 root      0.7  0.0    03:14:22 udisksd         /usr/libexec/udisks2/udisksd
+    335       1 systemd+  0.6  0.0    03:14:29 systemd-resolve /usr/lib/systemd/systemd-resolved
+    711       1 root      0.6  0.0    03:14:21 ModemManager    /usr/sbin/ModemManager
+  11016   11012 ubuntu    0.6  0.0    01:53:43 python          /home/ubuntu/apps/orbital-app/apps/api/.venv/bin/python -c from multiprocessing.resource_tracker import main;main(6)
+  14410   14359 ubuntu    0.6  0.0    01:12:34 python          /home/ubuntu/apps/station-app/apps/api/.venv/bin/python -c from multiprocessing.resource_tracker import main;main(6)
+   6076       1 ubuntu    0.5  0.0    02:34:06 systemd         /usr/lib/systemd/systemd --user
+  20443     765 root      0.5  1.3       00:00 sshd            sshd: ubuntu [priv]
+   6473     765 root      0.5  0.0    02:33:32 sshd            sshd: ubuntu [priv]
+    529       1 polkitd   0.5  0.0    03:14:22 polkitd         /usr/lib/polkit-1/polkitd --no-debug
+    471       1 systemd+  0.5  0.0    03:14:25 systemd-network /usr/lib/systemd/systemd-networkd
+   2730       1 root      0.5  0.0    03:09:27 nginx           nginx: master process /usr/sbin/nginx -g daemon on; master_process on;
+  19553    2730 www-data  0.4  0.0       06:05 nginx           nginx: worker process
+  19552    2730 www-data  0.4  0.0       06:05 nginx           nginx: worker process
+    543       1 root      0.4  0.0    03:14:22 systemd-logind  /usr/lib/systemd/systemd-logind
+    186       1 root      0.4  0.0    03:14:30 systemd-udevd   /usr/lib/systemd/systemd-udevd
+    765       1 root      0.4  0.0    03:14:21 sshd            sshd: /usr/sbin/sshd -D -o AuthorizedKeysCommand /usr/share/ec2-instance-connect/eic_run_authorized_keys %u %f -o AuthorizedKeysCommandUser ec2-instance-connect [listener] 0 of 10-100 startups
+  20490   20443 ubuntu    0.3  0.0       00:00 sshd            sshd: ubuntu@notty
+   6519    6473 ubuntu    0.3  0.0    02:33:31 sshd            sshd: ubuntu@pts/0
+    671       1 syslog    0.3  0.0    03:14:22 rsyslogd        /usr/sbin/rsyslogd -n -iNONE
+    520       1 message+  0.2  0.0    03:14:22 dbus-daemon     @dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only
+   6520    6519 ubuntu    0.2  0.0    02:33:31 bash            -bash
+    525       1 root      0.2  0.0    03:14:22 irqbalance      /usr/sbin/irqbalance
+  20512   20492 ubuntu    0.2  0.0       00:00 ps              ps -eo pid,ppid,user,%mem,%cpu,etime,comm,args --sort=-%mem
+    632       1 _chrony   0.1  0.0    03:14:22 chronyd         /usr/sbin/chronyd -F 1
+   6078    6076 ubuntu    0.1  0.0    02:34:06 (sd-pam)        (sd-pam)
+  20491   20490 ubuntu    0.1  0.0       00:00 bash            bash -s
+    519       1 root      0.1  0.0    03:14:22 cron            /usr/sbin/cron -f -P
+  20495   20493 ubuntu    0.1  0.0       00:00 sed             sed -E -e s/(Authorization:?[[:space:]]*(Bearer|Basic))[[:space:]]+[^[:space:]]+/\1 [REDACTED]/Ig -e s/((password|passwd|pwd|secret|token|api[_-]?key|client[_-]?secret)["']?[[:space:]]*[:=][[:space:]]*)[^,;[:space:]"']+/\1[REDACTED]/Ig -e s#(https?://)[^/@[:space:]]+:[^/@[:space:]]+@#\1[REDACTED]@#g
+  20492   20491 ubuntu    0.1  0.0       00:00 bash            bash -s
+    644     632 _chrony   0.1  0.0    03:14:22 chronyd         /usr/sbin/chronyd -F 1
+    627       1 root      0.1  0.0    03:14:22 agetty          /sbin/agetty -o -p -- \u --keep-baud 115200,57600,38400,9600 - vt220
+    717       1 root      0.1  0.0    03:14:21 agetty          /sbin/agetty -o -p -- \u --noclear - linux
+    515       1 root      0.1  0.0    03:14:22 acpid           /usr/sbin/acpid
+  20493   20491 ubuntu    0.1  0.0       00:00 bash            bash -s
+      2       0 root      0.0  0.0    03:14:32 kthreadd        [kthreadd]
+      3       2 root      0.0  0.0    03:14:32 pool_workqueue_ [pool_workqueue_release]
+      4       2 root      0.0  0.0    03:14:32 kworker/R-rcu_g [kworker/R-rcu_gp]
+      5       2 root      0.0  0.0    03:14:32 kworker/R-sync_ [kworker/R-sync_wq]
+      6       2 root      0.0  0.0    03:14:32 kworker/R-kvfre [kworker/R-kvfree_rcu_reclaim]
+      7       2 root      0.0  0.0    03:14:32 kworker/R-slub_ [kworker/R-slub_flushwq]
+      8       2 root      0.0  0.0    03:14:32 kworker/R-netns [kworker/R-netns]
+     11       2 root      0.0  0.0    03:14:32 kworker/0:0H-ev [kworker/0:0H-events_highpri]
+     13       2 root      0.0  0.0    03:14:32 kworker/R-mm_pe [kworker/R-mm_percpu_wq]
+     14       2 root      0.0  0.0    03:14:32 ksoftirqd/0     [ksoftirqd/0]
+     15       2 root      0.0  0.0    03:14:32 rcu_sched       [rcu_sched]
+     16       2 root      0.0  0.0    03:14:32 rcu_exp_par_gp_ [rcu_exp_par_gp_kthread_worker/0]
+     17       2 root      0.0  0.0    03:14:32 rcu_exp_gp_kthr [rcu_exp_gp_kthread_worker]
+     18       2 root      0.0  0.0    03:14:32 migration/0     [migration/0]
+     19       2 root      0.0  0.0    03:14:32 idle_inject/0   [idle_inject/0]
+     20       2 root      0.0  0.0    03:14:32 cpuhp/0         [cpuhp/0]
+     21       2 root      0.0  0.0    03:14:32 cpuhp/1         [cpuhp/1]
+     22       2 root      0.0  0.0    03:14:32 idle_inject/1   [idle_inject/1]
+     23       2 root      0.0  0.0    03:14:32 migration/1     [migration/1]
+     24       2 root      0.0  0.0    03:14:32 ksoftirqd/1     [ksoftirqd/1]
+     26       2 root      0.0  0.0    03:14:32 kworker/1:0H-ev [kworker/1:0H-events_highpri]
+     27       2 root      0.0  0.0    03:14:32 kdevtmpfs       [kdevtmpfs]
+     28       2 root      0.0  0.0    03:14:32 kworker/R-inet_ [kworker/R-inet_frag_wq]
+     29       2 root      0.0  0.0    03:14:32 rcu_tasks_rude_ [rcu_tasks_rude_kthread]
+     30       2 root      0.0  0.0    03:14:32 rcu_tasks_trace [rcu_tasks_trace_kthread]
+     31       2 root      0.0  0.0    03:14:32 kauditd         [kauditd]
+     32       2 root      0.0  0.0    03:14:32 khungtaskd      [khungtaskd]
+     34       2 root      0.0  0.0    03:14:32 oom_reaper      [oom_reaper]
+     35       2 root      0.0  0.0    03:14:32 kworker/R-write [kworker/R-writeback]
+     37       2 root      0.0  0.0    03:14:32 kcompactd0      [kcompactd0]
+     38       2 root      0.0  0.0    03:14:32 ksmd            [ksmd]
+     39       2 root      0.0  0.0    03:14:32 khugepaged      [khugepaged]
+     40       2 root      0.0  0.0    03:14:32 kworker/R-kbloc [kworker/R-kblockd]
+     41       2 root      0.0  0.0    03:14:32 kworker/R-blkcg [kworker/R-blkcg_punt_bio]
+     42       2 root      0.0  0.0    03:14:32 kworker/R-kinte [kworker/R-kintegrityd]
+     43       2 root      0.0  0.0    03:14:32 irq/9-acpi      [irq/9-acpi]
+     45       2 root      0.0  0.0    03:14:32 kworker/R-tpm_d [kworker/R-tpm_dev_wq]
+     46       2 root      0.0  0.0    03:14:32 kworker/R-ata_s [kworker/R-ata_sff]
+     47       2 root      0.0  0.0    03:14:32 kworker/R-md    [kworker/R-md]
+     48       2 root      0.0  0.0    03:14:32 kworker/R-md_bi [kworker/R-md_bitmap]
+     49       2 root      0.0  0.0    03:14:32 kworker/R-edac- [kworker/R-edac-poller]
+     50       2 root      0.0  0.0    03:14:32 kworker/R-devfr [kworker/R-devfreq_wq]
+     51       2 root      0.0  0.0    03:14:32 watchdogd       [watchdogd]
+     52       2 root      0.0  0.0    03:14:32 kworker/R-quota [kworker/R-quota_events_unbound]
+     53       2 root      0.0  0.0    03:14:32 kworker/1:1H-kb [kworker/1:1H-kblockd]
+     54       2 root      0.0  0.0    03:14:32 kswapd0         [kswapd0]
+     55       2 root      0.0  0.0    03:14:32 ecryptfs-kthrea [ecryptfs-kthread]
+     56       2 root      0.0  0.0    03:14:32 kworker/R-kthro [kworker/R-kthrotld]
+     57       2 root      0.0  0.0    03:14:32 kworker/R-acpi_ [kworker/R-acpi_thermal_pm]
+     58       2 root      0.0  0.0    03:14:32 kworker/R-nvme- [kworker/R-nvme-wq]
+     59       2 root      0.0  0.0    03:14:32 kworker/R-nvme- [kworker/R-nvme-reset-wq]
+     60       2 root      0.0  0.0    03:14:32 kworker/R-nvme- [kworker/R-nvme-delete-wq]
+     61       2 root      0.0  0.0    03:14:32 kworker/R-nvme- [kworker/R-nvme-auth-wq]
+     62       2 root      0.0  0.0    03:14:32 kworker/R-ena   [kworker/R-ena]
+     65       2 root      0.0  0.0    03:14:32 kworker/R-mld   [kworker/R-mld]
+     66       2 root      0.0  0.0    03:14:32 kworker/R-ipv6_ [kworker/R-ipv6_addrconf]
+     67       2 root      0.0  0.0    03:14:32 kworker/R-kstrp [kworker/R-kstrp]
+     69       2 root      0.0  0.0    03:14:32 kworker/u9:0    [kworker/u9:0]
+     80       2 root      0.0  0.0    03:14:32 kworker/R-charg [kworker/R-charger_manager]
+     81       2 root      0.0  0.0    03:14:32 kworker/0:1H-kb [kworker/0:1H-kblockd]
+     82       2 root      0.0  0.0    03:14:32 jbd2/nvme0n1p1- [jbd2/nvme0n1p1-8]
+     83       2 root      0.0  0.0    03:14:32 kworker/R-ext4- [kworker/R-ext4-rsv-conversion]
+    167       2 root      0.0  0.0    03:14:30 kworker/R-kmpat [kworker/R-kmpathd]
+    168       2 root      0.0  0.0    03:14:30 kworker/R-kmpat [kworker/R-kmpath_handlerd]
+    197       2 root      0.0  0.0    03:14:30 psimon          [psimon]
+    285       2 root      0.0  0.0    03:14:29 jbd2/nvme0n1p16 [jbd2/nvme0n1p16-8]
+    286       2 root      0.0  0.0    03:14:29 kworker/R-ext4- [kworker/R-ext4-rsv-conversion]
+   4762       2 root      0.0  0.0    02:40:57 kworker/R-tls-s [kworker/R-tls-strp]
+  12391       2 root      0.0  0.0    01:31:31 kworker/u8:3-kv [kworker/u8:3-kvfree_rcu_reclaim]
+  13332       2 root      0.0  0.0    01:23:55 kworker/0:3-eve [kworker/0:3-events]
+  16244       2 root      0.0  0.0       19:10 kworker/1:1-cgr [kworker/1:1-cgroup_free]
+  17479       2 root      0.0  0.0       13:21 kworker/0:1-cgr [kworker/0:1-cgroup_free]
+  18154       2 root      0.0  0.0       12:28 kworker/u8:1-ev [kworker/u8:1-events_power_efficient]
+  18876       2 root      0.0  0.0       06:34 kworker/1:2-eve [kworker/1:2-events]
+  19805       2 root      0.0  0.0       05:41 kworker/u8:0-ev [kworker/u8:0-events_unbound]
+  20049       2 root      0.0  0.0       05:38 psimon          [psimon]
+  20442       2 root      0.0  0.0       00:05 kworker/1:0     [kworker/1:0]
