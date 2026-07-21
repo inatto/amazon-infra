@@ -3,7 +3,7 @@
 
 set -euo pipefail
 
-SSH_KEY="$HOME/amazon.ssh"
+SSH_KEY="/home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/inatto01-sp.pem"
 REMOTE_HOST="ubuntu@52.67.135.170"
 
 ssh \
