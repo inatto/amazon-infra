@@ -26,8 +26,6 @@ for command_name in ssh scp; do
 done
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-LOCAL_NGINX_DIR="$SCRIPT_DIR/../server/etc/nginx"
-LOCAL_SITE="$LOCAL_NGINX_DIR/sites-available/$SITE_NAME"
 REMOTE_AVAILABLE="/etc/nginx/sites-available"
 REMOTE_ENABLED="/etc/nginx/sites-enabled"
 DOMAIN_LIST="${DOMAINS[*]}"
@@ -36,6 +34,7 @@ GENERATED_FILE="$(mktemp)"
 REMOTE_TMP="/tmp/$SITE_NAME.nginx.$$"
 RESTORE_TMP="/tmp/$SITE_NAME.restore.$$"
 CHANGED="false"
+HAD_PREVIOUS="false"
 
 SSH_OPTIONS=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15)
 remote() { ssh "${SSH_OPTIONS[@]}" "$REMOTE_USER@$REMOTE_HOST" "$@"; }
@@ -50,8 +49,7 @@ rollback() {
   trap - ERR
   if [[ "$CHANGED" == "true" ]]; then
     echo "Falha. Restaurando a configuração anterior de $SITE_NAME..." >&2
-    if [[ -f "$LOCAL_SITE" ]]; then
-      scp "${SSH_OPTIONS[@]}" "$LOCAL_SITE" "$REMOTE_USER@$REMOTE_HOST:$RESTORE_TMP" >/dev/null
+    if [[ "$HAD_PREVIOUS" == "true" ]]; then
       remote "sudo install -m 0644 '$RESTORE_TMP' '$REMOTE_AVAILABLE/$SITE_NAME'; sudo ln -sfn '$REMOTE_AVAILABLE/$SITE_NAME' '$REMOTE_ENABLED/$SITE_NAME'; sudo nginx -t; sudo systemctl reload nginx"
     else
       remote "sudo rm -f '$REMOTE_AVAILABLE/$SITE_NAME' '$REMOTE_ENABLED/$SITE_NAME'; sudo nginx -t; sudo systemctl reload nginx"
@@ -63,12 +61,12 @@ rollback() {
 trap rollback ERR
 trap cleanup EXIT
 
-[[ -f "$LOCAL_NGINX_DIR/nginx.conf" ]] || {
-  echo "ERRO: execute antes o passo 02 para copiar o Nginx atual." >&2
-  exit 1
-}
-
 remote "sudo nginx -t && systemctl is-active --quiet nginx"
+
+if remote "sudo test -f '$REMOTE_AVAILABLE/$SITE_NAME'"; then
+  remote "sudo cp -a '$REMOTE_AVAILABLE/$SITE_NAME' '$RESTORE_TMP'; sudo chown '$REMOTE_USER:$REMOTE_USER' '$RESTORE_TMP'"
+  HAD_PREVIOUS="true"
+fi
 
 SSL_ENABLED="false"
 if remote "sudo test -s '/etc/letsencrypt/live/$PRIMARY_DOMAIN/fullchain.pem' && sudo test -s '/etc/letsencrypt/live/$PRIMARY_DOMAIN/privkey.pem'"; then
