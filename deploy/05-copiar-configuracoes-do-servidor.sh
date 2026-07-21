@@ -10,7 +10,6 @@ CONFIG_FILE="${1:-}"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 INFRA_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
-DOMAINS_DIR="$INFRA_DIR/domains"
 
 # shellcheck source=/dev/null
 source "$CONFIG_FILE"
@@ -36,18 +35,17 @@ mapfile -t INSTANCE_DIRS < <(
 }
 
 INSTANCE_DIR="${INSTANCE_DIRS[0]}"
+DOMAINS_DIR="$INSTANCE_DIR/domains"
 LOCAL_SERVER_DIR="$INSTANCE_DIR/server"
 SSH_COMMAND="ssh -i $SSH_KEY -o BatchMode=yes -o ConnectTimeout=15"
 
 mapfile -t RELATED_CONFIGS < <(
-  find "$DOMAINS_DIR" -maxdepth 1 -type f -name '*.conf' -print 2>/dev/null | sort | while IFS= read -r file; do
-    bash -Eeuo pipefail -c '
-      source "$1"
-      [[ "${REMOTE_USER:-}" == "$2" && "${REMOTE_HOST:-}" == "$3" && "${SSH_KEY:-}" == "$4" ]] && printf "%s\n" "$1"
-    ' _ "$file" "$REMOTE_USER" "$REMOTE_HOST" "$SSH_KEY"
-  done
+  find "$DOMAINS_DIR" -maxdepth 1 -type f -name '*.conf' -print 2>/dev/null | sort
 )
-(( ${#RELATED_CONFIGS[@]} > 0 )) || RELATED_CONFIGS=("$CONFIG_FILE")
+(( ${#RELATED_CONFIGS[@]} > 0 )) || {
+  echo "ERRO: nenhum arquivo .conf encontrado em $DOMAINS_DIR" >&2
+  exit 1
+}
 
 mapfile -t SYSTEMD_SERVICES < <(
   for file in "${RELATED_CONFIGS[@]}"; do
@@ -58,14 +56,6 @@ mapfile -t SYSTEMD_SERVICES < <(
   done | sed '/^[[:space:]]*$/d' | sort -u
 )
 
-mapfile -t SITE_NAMES < <(
-  for file in "${RELATED_CONFIGS[@]}"; do
-    bash -Eeuo pipefail -c '
-      source "$1"
-      [[ -n "${SITE_NAME:-}" ]] && printf "%s\n" "$SITE_NAME"
-    ' _ "$file"
-  done | sed '/^[[:space:]]*$/d' | sort -u
-)
 
 for service in "${SYSTEMD_SERVICES[@]}"; do
   [[ "$service" == *.service && "$service" != */* ]] || {
@@ -93,15 +83,11 @@ for service in "${SYSTEMD_SERVICES[@]}"; do
     "$LOCAL_SERVER_DIR/etc/systemd/system/"
 done
 
-printf '\n3/3 Copiando renovações SSL dos domínios deste servidor...\n'
-rm -rf "$LOCAL_SERVER_DIR/etc/letsencrypt/renewal"
+printf '\n3/3 Copiando /etc/letsencrypt/renewal completo...\n'
 mkdir -p "$LOCAL_SERVER_DIR/etc/letsencrypt/renewal"
-for site_name in "${SITE_NAMES[@]}"; do
-  rsync -avz --no-owner --no-group \
-    -e "$SSH_COMMAND" --rsync-path="sudo rsync" \
-    "$REMOTE_USER@$REMOTE_HOST:/etc/letsencrypt/renewal/$site_name.conf" \
-    "$LOCAL_SERVER_DIR/etc/letsencrypt/renewal/" 2>/dev/null || \
-    printf 'AVISO: renovação SSL não encontrada para %s.\n' "$site_name"
-done
+rsync -avz --delete --no-owner --no-group \
+  -e "$SSH_COMMAND" --rsync-path="sudo rsync" \
+  "$REMOTE_USER@$REMOTE_HOST:/etc/letsencrypt/renewal/" \
+  "$LOCAL_SERVER_DIR/etc/letsencrypt/renewal/"
 
 printf '\nOK: configurações copiadas para:\n%s\n' "$LOCAL_SERVER_DIR"
