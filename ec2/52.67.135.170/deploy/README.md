@@ -37,8 +37,8 @@ O último passo não recebe domínio. Ele copia para `server/`:
 
 ```text
 /etc/nginx/                         -> server/etc/nginx/
-/etc/systemd/system/*.service       -> server/etc/systemd/system/
-/etc/letsencrypt/renewal/*.conf     -> server/etc/letsencrypt/renewal/
+serviços de domains/*.conf             -> server/etc/systemd/system/
+renovações dos domínios cadastrados    -> server/etc/letsencrypt/renewal/
 ```
 
 O Nginx é copiado por completo, incluindo `nginx.conf`, `conf.d`, `sites-available`, `sites-enabled` e `snippets`.

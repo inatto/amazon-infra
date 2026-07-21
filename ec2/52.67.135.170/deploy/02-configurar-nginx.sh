@@ -3,8 +3,8 @@
 set -Eeuo pipefail
 
 CONFIG_FILE="${1:-}"
-[[ -n "$CONFIG_FILE" && -f "$CONFIG_FILE" ]] || {
-  echo "Uso: ./02-configurar-nginx.sh ../domains/admin.anpprev.org.conf" >&2
+[[ -f "$CONFIG_FILE" ]] || {
+  echo "Uso: ./02-configurar-nginx.sh ../domains/<dominio>.conf" >&2
   exit 1
 }
 
@@ -17,15 +17,19 @@ source "$CONFIG_FILE"
 : "${APP_NAME:?Defina APP_NAME}"
 : "${WEB_UPSTREAM_HOST:?Defina WEB_UPSTREAM_HOST}"
 : "${WEB_UPSTREAM_PORT:?Defina WEB_UPSTREAM_PORT}"
-: "${SSL_EMAIL:?Defina SSL_EMAIL}"
-[[ ${#DOMAINS[@]} -gt 0 ]] || { echo "ERRO: informe DOMAINS." >&2; exit 1; }
+declare -p DOMAINS >/dev/null 2>&1 && (( ${#DOMAINS[@]} > 0 )) || {
+  echo "ERRO: defina DOMAINS no arquivo do domínio." >&2
+  exit 1
+}
 [[ -f "$SSH_KEY" ]] || { echo "ERRO: chave SSH não encontrada: $SSH_KEY" >&2; exit 1; }
 
 for command_name in ssh scp; do
-  command -v "$command_name" >/dev/null || { echo "ERRO: $command_name não encontrado." >&2; exit 1; }
+  command -v "$command_name" >/dev/null || {
+    echo "ERRO: $command_name não encontrado." >&2
+    exit 1
+  }
 done
 
-SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 REMOTE_AVAILABLE="/etc/nginx/sites-available"
 REMOTE_ENABLED="/etc/nginx/sites-enabled"
 DOMAIN_LIST="${DOMAINS[*]}"
@@ -33,8 +37,8 @@ PRIMARY_DOMAIN="${DOMAINS[0]}"
 GENERATED_FILE="$(mktemp)"
 REMOTE_TMP="/tmp/$SITE_NAME.nginx.$$"
 RESTORE_TMP="/tmp/$SITE_NAME.restore.$$"
-CHANGED="false"
-HAD_PREVIOUS="false"
+CHANGED=false
+HAD_PREVIOUS=false
 
 SSH_OPTIONS=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15)
 remote() { ssh "${SSH_OPTIONS[@]}" "$REMOTE_USER@$REMOTE_HOST" "$@"; }
@@ -45,16 +49,18 @@ cleanup() {
 }
 
 rollback() {
-  status=$?
+  local status=$?
   trap - ERR
-  if [[ "$CHANGED" == "true" ]]; then
+
+  if [[ "$CHANGED" == true ]]; then
     echo "Falha. Restaurando a configuração anterior de $SITE_NAME..." >&2
-    if [[ "$HAD_PREVIOUS" == "true" ]]; then
+    if [[ "$HAD_PREVIOUS" == true ]]; then
       remote "sudo install -m 0644 '$RESTORE_TMP' '$REMOTE_AVAILABLE/$SITE_NAME'; sudo ln -sfn '$REMOTE_AVAILABLE/$SITE_NAME' '$REMOTE_ENABLED/$SITE_NAME'; sudo nginx -t; sudo systemctl reload nginx"
     else
       remote "sudo rm -f '$REMOTE_AVAILABLE/$SITE_NAME' '$REMOTE_ENABLED/$SITE_NAME'; sudo nginx -t; sudo systemctl reload nginx"
     fi
   fi
+
   cleanup
   exit "$status"
 }
@@ -65,15 +71,15 @@ remote "sudo nginx -t && systemctl is-active --quiet nginx"
 
 if remote "sudo test -f '$REMOTE_AVAILABLE/$SITE_NAME'"; then
   remote "sudo cp -a '$REMOTE_AVAILABLE/$SITE_NAME' '$RESTORE_TMP'; sudo chown '$REMOTE_USER:$REMOTE_USER' '$RESTORE_TMP'"
-  HAD_PREVIOUS="true"
+  HAD_PREVIOUS=true
 fi
 
-SSL_ENABLED="false"
+SSL_ENABLED=false
 if remote "sudo test -s '/etc/letsencrypt/live/$PRIMARY_DOMAIN/fullchain.pem' && sudo test -s '/etc/letsencrypt/live/$PRIMARY_DOMAIN/privkey.pem'"; then
-  SSL_ENABLED="true"
+  SSL_ENABLED=true
 fi
 
-if [[ "$SSL_ENABLED" == "true" ]]; then
+if [[ "$SSL_ENABLED" == true ]]; then
   cat > "$GENERATED_FILE" <<NGINX
 server {
     listen 80;
@@ -121,6 +127,8 @@ if [[ -n "${API_UPSTREAM_PORT:-}" ]]; then
         proxy_set_header X-Real-IP \$remote_addr;
         proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_connect_timeout ${API_PROXY_CONNECT_TIMEOUT:-30s};
+        proxy_send_timeout ${API_PROXY_SEND_TIMEOUT:-120s};
         proxy_read_timeout ${API_PROXY_READ_TIMEOUT:-120s};
     }
 NGINX
@@ -142,16 +150,15 @@ cat >> "$GENERATED_FILE" <<NGINX
 }
 NGINX
 
-echo "Configuração que será publicada em $REMOTE_AVAILABLE/$SITE_NAME:"
+printf 'Configuração que será publicada em %s/%s:\n' "$REMOTE_AVAILABLE" "$SITE_NAME"
 sed -n '1,240p' "$GENERATED_FILE"
-echo
+printf '\n'
 read -r -p "Digite PUBLICAR para continuar: " CONFIRMATION
 [[ "$CONFIRMATION" == "PUBLICAR" ]] || { echo "Cancelado."; exit 1; }
 
 scp "${SSH_OPTIONS[@]}" "$GENERATED_FILE" "$REMOTE_USER@$REMOTE_HOST:$REMOTE_TMP" >/dev/null
-CHANGED="true"
+CHANGED=true
 remote "sudo install -m 0644 '$REMOTE_TMP' '$REMOTE_AVAILABLE/$SITE_NAME'; sudo ln -sfn '$REMOTE_AVAILABLE/$SITE_NAME' '$REMOTE_ENABLED/$SITE_NAME'; sudo nginx -t; sudo systemctl reload nginx"
-CHANGED="false"
+CHANGED=false
 
 echo "OK: Nginx configurado para $DOMAIN_LIST"
-

@@ -3,11 +3,10 @@
 set -Eeuo pipefail
 
 CONFIG_FILE="${1:-}"
-[[ -n "$CONFIG_FILE" && -f "$CONFIG_FILE" ]] || {
-  echo "Uso: ./04-instalar-servicos.sh ../domains/admin.anpprev.org.conf" >&2
+[[ -f "$CONFIG_FILE" ]] || {
+  echo "Uso: ./04-instalar-servicos.sh ../domains/<dominio>.conf" >&2
   exit 1
 }
-
 CONFIG_FILE="$(cd -- "$(dirname -- "$CONFIG_FILE")" && pwd)/$(basename -- "$CONFIG_FILE")"
 
 # shellcheck source=/dev/null
@@ -15,53 +14,56 @@ source "$CONFIG_FILE"
 : "${REMOTE_USER:?Defina REMOTE_USER}"
 : "${REMOTE_HOST:?Defina REMOTE_HOST}"
 : "${SSH_KEY:?Defina SSH_KEY}"
+[[ -f "$SSH_KEY" ]] || { echo "ERRO: chave SSH não encontrada: $SSH_KEY" >&2; exit 1; }
 
-if ! declare -p SYSTEMD_SERVICES >/dev/null 2>&1 || [[ ${#SYSTEMD_SERVICES[@]} -eq 0 ]]; then
+if ! declare -p SYSTEMD_SERVICES >/dev/null 2>&1 || (( ${#SYSTEMD_SERVICES[@]} == 0 )); then
   echo "Nenhum serviço systemd configurado para este domínio."
   exit 0
 fi
+
+for command_name in ssh scp; do
+  command -v "$command_name" >/dev/null || {
+    echo "ERRO: $command_name não encontrado." >&2
+    exit 1
+  }
+done
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_SYSTEMD_DIR="$SCRIPT_DIR/../server/etc/systemd/system"
 SSH_OPTIONS=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15)
 remote() { ssh "${SSH_OPTIONS[@]}" "$REMOTE_USER@$REMOTE_HOST" "$@"; }
-
 mkdir -p "$LOCAL_SYSTEMD_DIR"
 
 service_prefix() {
-  local service="$1"
-  printf '%s\n' "${service%.service}" | sed -E 's/-(api|web)$//'
+  printf '%s\n' "${1%.service}" | sed -E 's/-(api|web)$//'
+}
+
+app_directory() {
+  local user="${SYSTEMD_USER:-$REMOTE_USER}"
+  printf '%s\n' "${REMOTE_APP_DIR:-/home/$user/apps/$APP_NAME}"
 }
 
 generate_api_service() {
-  local service="$1"
-  local prefix app_dir working_dir env_file module host port description
-
+  local service="$1" app_dir working_dir
   : "${APP_NAME:?Defina APP_NAME para gerar automaticamente $service}"
   : "${API_UPSTREAM_PORT:?Defina API_UPSTREAM_PORT para gerar automaticamente $service}"
 
-  prefix="$(service_prefix "$service")"
-  app_dir="${REMOTE_APP_DIR:-/home/ubuntu/apps/$APP_NAME}"
+  app_dir="$(app_directory)"
   working_dir="${API_WORKING_DIRECTORY:-$app_dir/apps/api}"
-  env_file="${API_ENVIRONMENT_FILE:-$working_dir/.env}"
-  module="${API_UVICORN_MODULE:-main:app}"
-  host="${API_UPSTREAM_HOST:-127.0.0.1}"
-  port="$API_UPSTREAM_PORT"
-  description="${API_SERVICE_DESCRIPTION:-${APP_NAME} API FastAPI}"
 
   cat > "$LOCAL_SYSTEMD_DIR/$service" <<EOF_API
 [Unit]
-Description=$description
+Description=${API_SERVICE_DESCRIPTION:-${APP_NAME} API FastAPI}
 After=network-online.target
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=${SYSTEMD_USER:-ubuntu}
-Group=${SYSTEMD_GROUP:-ubuntu}
+User=${SYSTEMD_USER:-$REMOTE_USER}
+Group=${SYSTEMD_GROUP:-${SYSTEMD_USER:-$REMOTE_USER}}
 WorkingDirectory=$working_dir
-EnvironmentFile=$env_file
-ExecStart=$working_dir/.venv/bin/uvicorn $module --host $host --port $port --workers ${API_WORKERS:-2}
+EnvironmentFile=${API_ENVIRONMENT_FILE:-$working_dir/.env}
+ExecStart=$working_dir/.venv/bin/uvicorn ${API_UVICORN_MODULE:-main:app} --host ${API_UPSTREAM_HOST:-127.0.0.1} --port $API_UPSTREAM_PORT --workers ${API_WORKERS:-2}
 Restart=always
 RestartSec=5
 
@@ -73,36 +75,29 @@ EOF_API
 }
 
 generate_web_service() {
-  local service="$1"
-  local prefix app_dir working_dir env_file host port description api_service
-
+  local service="$1" prefix app_dir working_dir
   : "${APP_NAME:?Defina APP_NAME para gerar automaticamente $service}"
   : "${WEB_UPSTREAM_PORT:?Defina WEB_UPSTREAM_PORT para gerar automaticamente $service}"
 
   prefix="$(service_prefix "$service")"
-  app_dir="${REMOTE_APP_DIR:-/home/ubuntu/apps/$APP_NAME}"
+  app_dir="$(app_directory)"
   working_dir="${WEB_WORKING_DIRECTORY:-$app_dir/apps/web}"
-  env_file="${WEB_ENVIRONMENT_FILE:-$working_dir/.env}"
-  host="${WEB_UPSTREAM_HOST:-127.0.0.1}"
-  port="$WEB_UPSTREAM_PORT"
-  description="${WEB_SERVICE_DESCRIPTION:-${APP_NAME} Astro Web}"
-  api_service="${WEB_AFTER_SERVICE:-$prefix-api.service}"
 
   cat > "$LOCAL_SYSTEMD_DIR/$service" <<EOF_WEB
 [Unit]
-Description=$description
-After=network-online.target $api_service
+Description=${WEB_SERVICE_DESCRIPTION:-${APP_NAME} Astro Web}
+After=network-online.target ${WEB_AFTER_SERVICE:-$prefix-api.service}
 Wants=network-online.target
 
 [Service]
 Type=simple
-User=${SYSTEMD_USER:-ubuntu}
-Group=${SYSTEMD_GROUP:-ubuntu}
+User=${SYSTEMD_USER:-$REMOTE_USER}
+Group=${SYSTEMD_GROUP:-${SYSTEMD_USER:-$REMOTE_USER}}
 WorkingDirectory=$working_dir
-EnvironmentFile=$env_file
+EnvironmentFile=${WEB_ENVIRONMENT_FILE:-$working_dir/.env}
 Environment=NODE_ENV=production
-Environment=HOST=$host
-Environment=PORT=$port
+Environment=HOST=${WEB_UPSTREAM_HOST:-127.0.0.1}
+Environment=PORT=$WEB_UPSTREAM_PORT
 ExecStart=/usr/bin/node $working_dir/dist/server/entry.mjs
 Restart=always
 RestartSec=5
@@ -116,7 +111,7 @@ EOF_WEB
 
 generate_service_if_missing() {
   local service="$1"
-  [[ -f "$LOCAL_SYSTEMD_DIR/$service" ]] && return 0
+  [[ -f "$LOCAL_SYSTEMD_DIR/$service" ]] && return
 
   case "$service" in
     *-api.service) generate_api_service "$service" ;;
@@ -136,12 +131,12 @@ for service in "${SYSTEMD_SERVICES[@]}"; do
   }
   generate_service_if_missing "$service"
   [[ -s "$LOCAL_SYSTEMD_DIR/$service" ]] || {
-    echo "ERRO: arquivo vazio ou inválido: $LOCAL_SYSTEMD_DIR/$service" >&2
+    echo "ERRO: arquivo vazio: $LOCAL_SYSTEMD_DIR/$service" >&2
     exit 1
   }
 done
 
-echo "Serviços que serão instalados e habilitados: ${SYSTEMD_SERVICES[*]}"
+printf 'Serviços que serão instalados e habilitados: %s\n' "${SYSTEMD_SERVICES[*]}"
 echo "Eles não serão iniciados; isso fica a cargo do deploy da aplicação."
 read -r -p "Digite INSTALAR para continuar: " CONFIRMATION
 [[ "$CONFIRMATION" == "INSTALAR" ]] || { echo "Cancelado."; exit 1; }
