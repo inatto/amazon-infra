@@ -2,6 +2,7 @@ Aplicação                    Tipo       Astro    API
 -------------------------------------------------------------
 orbital-app                  Base       4001        8001
 orbital-app modules          Modules    4100-4199   8100-8199
+orbital-app module report    Module     4101        8101
 -------------------------------------------------------------
 station-app                  Base       4002        8002
 station-app modules          Modules    4200-4299   8200-8299       
