@@ -168,15 +168,32 @@ API_PROXY_READ_TIMEOUT='120s'
 API_PROXY_CONNECT_TIMEOUT='30s'
 API_PROXY_SEND_TIMEOUT='120s'
 if [[ -n "$REFERENCE_CONF" ]]; then
-  # shellcheck disable=SC1090
-  source "$REFERENCE_CONF"
-  REMOTE_USER="${REMOTE_USER:-ubuntu}"
-  SSL_EMAIL="${SSL_EMAIL:-}"
-  CLIENT_MAX_BODY_SIZE="${CLIENT_MAX_BODY_SIZE:-20m}"
-  WEB_PROXY_READ_TIMEOUT="${WEB_PROXY_READ_TIMEOUT:-60s}"
-  API_PROXY_READ_TIMEOUT="${API_PROXY_READ_TIMEOUT:-120s}"
-  API_PROXY_CONNECT_TIMEOUT="${API_PROXY_CONNECT_TIMEOUT:-30s}"
-  API_PROXY_SEND_TIMEOUT="${API_PROXY_SEND_TIMEOUT:-120s}"
+  # Lê o arquivo de referência em um subshell isolado. Assim, variáveis próprias
+  # do domínio antigo (APP_NAME, DOMAINS, portas e serviços) nunca contaminam
+  # a nova configuração.
+  mapfile -t REFERENCE_DEFAULTS < <(
+    REFERENCE_CONF="$REFERENCE_CONF" bash -c '
+      set -Eeuo pipefail
+      # shellcheck disable=SC1090
+      source "$REFERENCE_CONF"
+      printf "%s\n" \
+        "${REMOTE_USER:-ubuntu}" \
+        "${SSL_EMAIL:-}" \
+        "${CLIENT_MAX_BODY_SIZE:-20m}" \
+        "${WEB_PROXY_READ_TIMEOUT:-60s}" \
+        "${API_PROXY_READ_TIMEOUT:-120s}" \
+        "${API_PROXY_CONNECT_TIMEOUT:-30s}" \
+        "${API_PROXY_SEND_TIMEOUT:-120s}"
+    '
+  )
+  (( ${#REFERENCE_DEFAULTS[@]} == 7 )) || die "não foi possível ler defaults de: $REFERENCE_CONF"
+  REMOTE_USER="${REFERENCE_DEFAULTS[0]}"
+  SSL_EMAIL="${REFERENCE_DEFAULTS[1]}"
+  CLIENT_MAX_BODY_SIZE="${REFERENCE_DEFAULTS[2]}"
+  WEB_PROXY_READ_TIMEOUT="${REFERENCE_DEFAULTS[3]}"
+  API_PROXY_READ_TIMEOUT="${REFERENCE_DEFAULTS[4]}"
+  API_PROXY_CONNECT_TIMEOUT="${REFERENCE_DEFAULTS[5]}"
+  API_PROXY_SEND_TIMEOUT="${REFERENCE_DEFAULTS[6]}"
 fi
 [[ -n "$SSL_EMAIL" ]] || SSL_EMAIL="$(prompt_required 'E-mail para o certificado SSL')"
 
