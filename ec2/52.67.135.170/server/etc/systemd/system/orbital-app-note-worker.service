@@ -1,0 +1,18 @@
+[Unit]
+Description=orbital-app Note Worker
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/home/ubuntu/apps/orbital-app/apps/api
+EnvironmentFile=/home/ubuntu/apps/orbital-app/apps/api/.env
+ExecStart=/home/ubuntu/apps/orbital-app/deploy/remote/run-note-worker.sh
+Restart=always
+RestartSec=3
+TimeoutStopSec=30
+
+[Install]
+WantedBy=multi-user.target
