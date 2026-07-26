@@ -21,6 +21,13 @@ if ! declare -p SYSTEMD_SERVICES >/dev/null 2>&1 || [[ ${#SYSTEMD_SERVICES[@]} -
   exit 0
 fi
 
+: "${APP_NAME:?Defina APP_NAME em $CONFIG_FILE}"
+: "${REMOTE_APP_DIR:?Defina REMOTE_APP_DIR em $CONFIG_FILE}"
+[[ "$REMOTE_APP_DIR" == /* && "$REMOTE_APP_DIR" != *'..'* ]] || {
+  echo "ERRO: REMOTE_APP_DIR deve ser um caminho absoluto sem '..': $REMOTE_APP_DIR" >&2
+  exit 1
+}
+
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 LOCAL_SYSTEMD_DIR="$SCRIPT_DIR/../server/etc/systemd/system"
 SSH_OPTIONS=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15)
@@ -37,11 +44,10 @@ generate_api_service() {
   local service="$1"
   local prefix app_dir working_dir env_file module host port description
 
-  : "${APP_NAME:?Defina APP_NAME para gerar automaticamente $service}"
   : "${API_UPSTREAM_PORT:?Defina API_UPSTREAM_PORT para gerar automaticamente $service}"
 
   prefix="$(service_prefix "$service")"
-  app_dir="${REMOTE_APP_DIR:-/home/ubuntu/apps/$APP_NAME}"
+  app_dir="$REMOTE_APP_DIR"
   working_dir="${API_WORKING_DIRECTORY:-$app_dir/apps/api}"
   env_file="${API_ENVIRONMENT_FILE:-$working_dir/.env}"
   module="${API_UVICORN_MODULE:-main:app}"
@@ -57,8 +63,8 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=${SYSTEMD_USER:-ubuntu}
-Group=${SYSTEMD_GROUP:-ubuntu}
+User=${SYSTEMD_USER:-$REMOTE_USER}
+Group=${SYSTEMD_GROUP:-${SYSTEMD_USER:-$REMOTE_USER}}
 WorkingDirectory=$working_dir
 EnvironmentFile=$env_file
 ExecStart=$working_dir/.venv/bin/uvicorn $module --host $host --port $port --workers ${API_WORKERS:-2}
@@ -76,11 +82,10 @@ generate_web_service() {
   local service="$1"
   local prefix app_dir working_dir env_file host port description api_service
 
-  : "${APP_NAME:?Defina APP_NAME para gerar automaticamente $service}"
   : "${WEB_UPSTREAM_PORT:?Defina WEB_UPSTREAM_PORT para gerar automaticamente $service}"
 
   prefix="$(service_prefix "$service")"
-  app_dir="${REMOTE_APP_DIR:-/home/ubuntu/apps/$APP_NAME}"
+  app_dir="$REMOTE_APP_DIR"
   working_dir="${WEB_WORKING_DIRECTORY:-$app_dir/apps/web}"
   env_file="${WEB_ENVIRONMENT_FILE:-$working_dir/.env}"
   host="${WEB_UPSTREAM_HOST:-127.0.0.1}"
@@ -96,8 +101,8 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-User=${SYSTEMD_USER:-ubuntu}
-Group=${SYSTEMD_GROUP:-ubuntu}
+User=${SYSTEMD_USER:-$REMOTE_USER}
+Group=${SYSTEMD_GROUP:-${SYSTEMD_USER:-$REMOTE_USER}}
 WorkingDirectory=$working_dir
 EnvironmentFile=$env_file
 Environment=NODE_ENV=production

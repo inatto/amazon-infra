@@ -21,6 +21,13 @@ if ! declare -p SYSTEMD_SERVICES >/dev/null 2>&1 || (( ${#SYSTEMD_SERVICES[@]} =
   exit 0
 fi
 
+: "${APP_NAME:?Defina APP_NAME em $CONFIG_FILE}"
+: "${REMOTE_APP_DIR:?Defina REMOTE_APP_DIR em $CONFIG_FILE}"
+[[ "$REMOTE_APP_DIR" == /* && "$REMOTE_APP_DIR" != *'..'* ]] || {
+  echo "ERRO: REMOTE_APP_DIR deve ser um caminho absoluto sem '..': $REMOTE_APP_DIR" >&2
+  exit 1
+}
+
 for command_name in ssh scp; do
   command -v "$command_name" >/dev/null || {
     echo "ERRO: $command_name não encontrado." >&2
@@ -38,17 +45,11 @@ service_prefix() {
   printf '%s\n' "${1%.service}" | sed -E 's/-(api|web)$//'
 }
 
-app_directory() {
-  local user="${SYSTEMD_USER:-$REMOTE_USER}"
-  printf '%s\n' "${REMOTE_APP_DIR:-/home/$user/apps/$APP_NAME}"
-}
-
 generate_api_service() {
   local service="$1" app_dir working_dir
-  : "${APP_NAME:?Defina APP_NAME para gerar automaticamente $service}"
   : "${API_UPSTREAM_PORT:?Defina API_UPSTREAM_PORT para gerar automaticamente $service}"
 
-  app_dir="$(app_directory)"
+  app_dir="$REMOTE_APP_DIR"
   working_dir="${API_WORKING_DIRECTORY:-$app_dir/apps/api}"
 
   cat > "$LOCAL_SYSTEMD_DIR/$service" <<EOF_API
@@ -76,11 +77,10 @@ EOF_API
 
 generate_web_service() {
   local service="$1" prefix app_dir working_dir
-  : "${APP_NAME:?Defina APP_NAME para gerar automaticamente $service}"
   : "${WEB_UPSTREAM_PORT:?Defina WEB_UPSTREAM_PORT para gerar automaticamente $service}"
 
   prefix="$(service_prefix "$service")"
-  app_dir="$(app_directory)"
+  app_dir="$REMOTE_APP_DIR"
   working_dir="${WEB_WORKING_DIRECTORY:-$app_dir/apps/web}"
 
   cat > "$LOCAL_SYSTEMD_DIR/$service" <<EOF_WEB
