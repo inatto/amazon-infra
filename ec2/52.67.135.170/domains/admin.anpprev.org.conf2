@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# cd /home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/domains
+
+REMOTE_USER="ubuntu"
+REMOTE_HOST="52.67.135.170"
+SSH_KEY="/home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/core/inatto01-sp.pem"
+
+SITE_NAME="admin.anpprev.org"
+APP_NAME="orbital-app"
+REMOTE_APP_DIR="/home/ubuntu/apps/orbital/orbital-app"
+
+DOMAINS=(
+  "admin.anpprev.org"
+)
+
+# Portas definidas no .env do orbital-app.
+# O sind-infra configura apenas o proxy e não publica a aplicação.
+WEB_UPSTREAM_HOST="127.0.0.1"
+WEB_UPSTREAM_PORT="4001"
+API_UPSTREAM_HOST="127.0.0.1"
+API_UPSTREAM_PORT="8001"
+
+SSL_EMAIL="danielmaiax@gmail.com"
+CLIENT_MAX_BODY_SIZE="20m"
+WEB_PROXY_READ_TIMEOUT="60s"
+API_PROXY_READ_TIMEOUT="120s"
+API_PROXY_CONNECT_TIMEOUT="30s"
+API_PROXY_SEND_TIMEOUT="120s"
+
+SYSTEMD_SERVICES=(
+  "orbital-app-api.service"
+  "orbital-app-web.service"
+  "orbital-app-note-worker.service"
+)
