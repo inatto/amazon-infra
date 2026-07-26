@@ -10,7 +10,7 @@ O domínio e o Nginx podem ser preparados antes da aplicação. Para o teste fin
 o `orbital-app` deverá estar publicado em:
 
 ```text
-/home/ubuntu/apps/orbital-app
+/home/ubuntu/apps/orbital/orbital-app
 ```
 
 | Serviço | Endereço interno remoto |

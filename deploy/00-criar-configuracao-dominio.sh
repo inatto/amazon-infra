@@ -197,6 +197,16 @@ if [[ -n "$REFERENCE_CONF" ]]; then
 fi
 [[ -n "$SSL_EMAIL" ]] || SSL_EMAIL="$(prompt_required 'E-mail para o certificado SSL')"
 
+# Aplicações agrupadas mantêm no servidor a mesma pasta-pai usada no workspace.
+# O padrão orbital-* fica em apps/orbital/, e qualquer aplicação pode sobrescrever
+# o caminho sugerido durante a criação da configuração.
+REMOTE_APP_DIR_DEFAULT="/home/$REMOTE_USER/apps/$APP_NAME"
+if [[ "$APP_NAME" == orbital-* ]]; then
+  REMOTE_APP_DIR_DEFAULT="/home/$REMOTE_USER/apps/orbital/$APP_NAME"
+fi
+REMOTE_APP_DIR="$(prompt_default 'Diretório remoto da aplicação' "$REMOTE_APP_DIR_DEFAULT")"
+[[ "$REMOTE_APP_DIR" == /* && "$REMOTE_APP_DIR" != *'..'* ]] || die "diretório remoto inválido: $REMOTE_APP_DIR"
+
 DOMAINS_DIR="$INSTANCE_DIR/domains"
 CONFIG_FILE="$DOMAINS_DIR/$DOMAIN.conf"
 mkdir -p "$DOMAINS_DIR"
@@ -215,7 +225,8 @@ trap 'rm -f "$TMP_FILE"' EXIT
   printf 'REMOTE_HOST=%q\n' "$REMOTE_HOST"
   printf 'SSH_KEY=%q\n\n' "$SSH_KEY"
   printf 'SITE_NAME=%q\n' "$DOMAIN"
-  printf 'APP_NAME=%q\n\n' "$APP_NAME"
+  printf 'APP_NAME=%q\n' "$APP_NAME"
+  printf 'REMOTE_APP_DIR=%q\n\n' "$REMOTE_APP_DIR"
   printf 'DOMAINS=(\n'
   printf '  %q\n' "${DOMAINS[@]}"
   printf ')\n\n'
