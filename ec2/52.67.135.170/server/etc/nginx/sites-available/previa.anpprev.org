@@ -1,7 +1,7 @@
 server {
     server_name previa.anpprev.org;
 
-    add_header X-Site-App "inst-app-anpprev" always;
+    add_header X-Site-App "inst-app" always;
     client_max_body_size 20m;
 
     location = /api {
@@ -9,7 +9,7 @@ server {
     }
 
     location /api/ {
-        proxy_pass http://127.0.0.1:8100/;
+        proxy_pass http://127.0.0.1:8003/;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;
@@ -19,7 +19,7 @@ server {
     }
 
     location / {
-        proxy_pass http://127.0.0.1:4100;
+        proxy_pass http://127.0.0.1:4003;
         proxy_http_version 1.1;
         proxy_set_header Host $host;
         proxy_set_header X-Real-IP $remote_addr;

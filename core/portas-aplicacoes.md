@@ -19,9 +19,7 @@ station-app modules          Modules    4200-4299   8200-8299
 
 -------------------------------------------------------------
 site-inst                    Base       4003        8003
-site-inst tenants            Tenants    4300-4399   8300-8399     
-site-inst/anpprev            Tenant     4301        8301
-site-inst/sinproprev         Tenant     4302        8302
+[//]: # (site-inst tenants            Tenants    4300-4399   8300-8399)
 
 -------------------------------------------------------------
 conv-app                     Base       4004        8004
