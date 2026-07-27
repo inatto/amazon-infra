@@ -113,6 +113,31 @@ server {
 NGINX
 fi
 
+if declare -p API_PROXY_LOCATIONS >/dev/null 2>&1; then
+  for api_location in "${API_PROXY_LOCATIONS[@]}"; do
+    IFS="|" read -r public_path upstream_host upstream_port <<< "$api_location"
+    [[ -n "$public_path" && -n "$upstream_host" && "$upstream_port" =~ ^[0-9]+$ ]] || {
+      echo "ERRO: API_PROXY_LOCATIONS deve usar /caminho/|host|porta." >&2
+      exit 1
+    }
+
+    cat >> "$GENERATED_FILE" <<NGINX
+
+    location ^~ $public_path {
+        proxy_pass http://$upstream_host:$upstream_port;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_connect_timeout ${API_PROXY_CONNECT_TIMEOUT:-30s};
+        proxy_send_timeout ${API_PROXY_SEND_TIMEOUT:-120s};
+        proxy_read_timeout ${API_PROXY_READ_TIMEOUT:-120s};
+    }
+NGINX
+  done
+fi
+
 if [[ -n "${API_UPSTREAM_PORT:-}" ]]; then
   cat >> "$GENERATED_FILE" <<NGINX
 
