@@ -29,7 +29,23 @@ fi
 }
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-LOCAL_SYSTEMD_DIR="$SCRIPT_DIR/../server/etc/systemd/system"
+INFRA_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
+
+mapfile -t INSTANCE_DIRS < <(
+  find "$INFRA_DIR" -mindepth 2 -maxdepth 2 -type d -name "$REMOTE_HOST" -print | sort
+)
+(( ${#INSTANCE_DIRS[@]} == 1 )) || {
+  if (( ${#INSTANCE_DIRS[@]} == 0 )); then
+    echo "ERRO: pasta da instância não encontrada para REMOTE_HOST=$REMOTE_HOST." >&2
+  else
+    echo "ERRO: mais de uma pasta encontrada para REMOTE_HOST=$REMOTE_HOST:" >&2
+    printf '  - %s\n' "${INSTANCE_DIRS[@]}" >&2
+  fi
+  exit 1
+}
+
+INSTANCE_DIR="${INSTANCE_DIRS[0]}"
+LOCAL_SYSTEMD_DIR="$INSTANCE_DIR/server/etc/systemd/system"
 SSH_OPTIONS=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15)
 remote() { ssh "${SSH_OPTIONS[@]}" "$REMOTE_USER@$REMOTE_HOST" "$@"; }
 
