@@ -134,6 +134,23 @@ if [[ -n "${API_UPSTREAM_PORT:-}" ]]; then
 NGINX
 fi
 
+if declare -p STATIC_LOCATIONS >/dev/null 2>&1; then
+  for static_location in "${STATIC_LOCATIONS[@]}"; do
+    IFS="|" read -r public_path physical_path <<< "$static_location"
+    [[ -n "$public_path" && -n "$physical_path" ]] || {
+      echo "ERRO: STATIC_LOCATIONS deve usar /caminho/|/pasta/fisica/." >&2
+      exit 1
+    }
+
+    cat >> "$GENERATED_FILE" <<NGINX
+
+    location ^~ $public_path {
+        alias $physical_path;
+    }
+NGINX
+  done
+fi
+
 cat >> "$GENERATED_FILE" <<NGINX
 
     location / {
