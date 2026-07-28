@@ -28,3 +28,5 @@ site-murm                    Base       400?
 email-app                    Base       400?        800?
 site-asaclub-2026            Cliente    4???
 site-sinproprev-v2           Cliente    4???     
+-------------------------------------------------------------
+amazon-infra monitor        Base       4005        8005
