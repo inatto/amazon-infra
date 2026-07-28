@@ -1,0 +1,14 @@
+---
+import '../styles/global.css';
+const { title = 'Amazon Infra Monitor' } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="theme-color" content="#05080d" />
+    <title>{title}</title>
+  </head>
+  <body><slot /></body>
+</html>
