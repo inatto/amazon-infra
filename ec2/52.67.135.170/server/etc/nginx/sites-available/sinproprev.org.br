@@ -1,25 +1,5 @@
 server {
-    if ($host = previa.anpprev.org) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    listen 80;
-    listen [::]:80;
-    server_name previa.anpprev.org;
-    return 301 https://$host$request_uri;
-
-
-}
-
-server {
-    listen 443 ssl;
-    listen [::]:443 ssl;
-    server_name previa.anpprev.org;
-    ssl_certificate /etc/letsencrypt/live/previa.anpprev.org/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/previa.anpprev.org/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf;
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    server_name sinproprev.org.br www.sinproprev.org.br;
 
     add_header X-Site-App "inst-app" always;
     client_max_body_size 20m;
@@ -49,5 +29,33 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 60s;
     }
+
+    listen [::]:443 ssl; # managed by Certbot
+    listen 443 ssl; # managed by Certbot
+    ssl_certificate /etc/letsencrypt/live/sinproprev.org.br/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/sinproprev.org.br/privkey.pem; # managed by Certbot
+    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
+
+
+}
+server {
+    if ($host = www.sinproprev.org.br) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    if ($host = sinproprev.org.br) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
+    listen 80;
+    listen [::]:80;
+    server_name sinproprev.org.br www.sinproprev.org.br;
+    return 404; # managed by Certbot
+
+
+
 
 }
