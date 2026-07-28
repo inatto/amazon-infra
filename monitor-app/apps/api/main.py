@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from monitor import collect_checks, system_summary
+from monitor import collect_groups, system_summary
 from oracle import oracle_status
 from settings import get_settings
 
@@ -25,14 +25,14 @@ def health() -> dict:
 
 @app.get("/api/monitor")
 async def monitor() -> dict:
-    checks = await collect_checks(settings)
+    groups = await collect_groups(settings)
     oracle = oracle_status(settings)
-    has_error = any(item["status"] == "error" for item in checks) or oracle["status"] == "error"
+    has_error = any(group["status"] == "error" for group in groups) or oracle["status"] == "error"
     return {
         "status": "error" if has_error else "ok",
         "version": settings.app_version,
         "checked_at": datetime.now(timezone.utc).isoformat(),
         "system": system_summary(),
         "oracle": oracle,
-        "checks": checks,
+        "groups": groups,
     }
