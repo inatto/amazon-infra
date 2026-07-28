@@ -33,6 +33,19 @@ prompt_default() {
   printf '%s' "${value:-$default}"
 }
 
+prompt_overwrite() {
+  local file="$1" answer
+  printf '\nATENÇÃO: a configuração já existe:\n  %s\n' "$file" >&2
+  while :; do
+    read -r -p 'Deseja sobrescrever? [s/N]: ' answer
+    case "${answer,,}" in
+      s|sim) return 0 ;;
+      ''|n|nao|não) return 1 ;;
+      *) echo 'Opção inválida. Responda S ou N.' >&2 ;;
+    esac
+  done
+}
+
 choose_item() {
   local title="$1" default_index="$2"
   shift 2
@@ -97,6 +110,19 @@ done
 INSTANCE_REL="$(choose_item 'Servidor de destino:' 0 "${INSTANCE_OPTIONS[@]}")"
 INSTANCE_DIR="$INFRA_DIR/$INSTANCE_REL"
 REMOTE_HOST="$(basename "$INSTANCE_DIR")"
+
+DOMAINS_DIR="$INSTANCE_DIR/domains"
+CONFIG_FILE="$DOMAINS_DIR/$DOMAIN.conf"
+OVERWRITE_CONFIG=0
+if [[ -e "$CONFIG_FILE" ]]; then
+  if prompt_overwrite "$CONFIG_FILE"; then
+    OVERWRITE_CONFIG=1
+  else
+    printf '\nConfiguração mantida sem alterações.\n'
+    printf 'Arquivo: %s\n' "$CONFIG_FILE"
+    exit 0
+  fi
+fi
 
 mapfile -t PORT_ROWS < <(
   awk '
@@ -276,10 +302,7 @@ fi
 REMOTE_APP_DIR="$(prompt_default 'Diretório remoto completo da aplicação' "$REMOTE_APP_DIR_DEFAULT")"
 [[ "$REMOTE_APP_DIR" == /* && "$REMOTE_APP_DIR" != *'..'* ]] || die "diretório remoto inválido: $REMOTE_APP_DIR"
 
-DOMAINS_DIR="$INSTANCE_DIR/domains"
-CONFIG_FILE="$DOMAINS_DIR/$DOMAIN.conf"
 mkdir -p "$DOMAINS_DIR"
-[[ ! -e "$CONFIG_FILE" ]] || die "a configuração já existe e não será sobrescrita: $CONFIG_FILE"
 
 SERVICE_BASE="${APP_NAME//\//-}"
 WEB_SERVICE="${SERVICE_BASE}-web.service"
@@ -321,9 +344,16 @@ trap 'rm -f "$TMP_FILE"' EXIT
 
 bash -n "$TMP_FILE"
 install -m 0644 "$TMP_FILE" "$CONFIG_FILE"
+if [[ -n "${DOMAIN_CONFIG_RESULT_FILE:-}" ]]; then
+  printf '%s\n' "$CONFIG_FILE" > "$DOMAIN_CONFIG_RESULT_FILE"
+fi
 
 RELATIVE_CONFIG="${CONFIG_FILE#$INFRA_DIR/}"
-printf '\nConfiguração criada com sucesso.\n'
+if (( OVERWRITE_CONFIG )); then
+  printf '\nConfiguração sobrescrita com sucesso.\n'
+else
+  printf '\nConfiguração criada com sucesso.\n'
+fi
 printf 'Arquivo: %s\n' "$CONFIG_FILE"
 printf 'Aplicação: %s\n' "$PORT_APP_NAME"
 printf 'Web: %s\n' "$WEB_PORT"

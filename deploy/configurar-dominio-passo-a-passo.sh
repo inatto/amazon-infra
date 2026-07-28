@@ -98,32 +98,26 @@ if [[ $# -eq 1 ]]; then
   CONFIG_FILE="$(resolve_config_path "$1")"
   info "Configuração existente: $CONFIG_FILE"
 else
-  mapfile -t BEFORE_CONFIGS < <(
-    find "$INFRA_DIR/ec2" "$INFRA_DIR/lightsail" -path '*/domains/*.conf' -type f -print 2>/dev/null | sort
-  )
-
-  if ! confirm_next '00' 'Criar configuração do domínio'; then
+  if ! confirm_next '00' 'Criar ou atualizar configuração do domínio'; then
     warn 'Fluxo encerrado antes do passo 00.'
     exit 0
   fi
-  run_step '00' 'Criar configuração do domínio' "$SCRIPT_DIR/00-criar-configuracao-dominio.sh"
 
-  mapfile -t AFTER_CONFIGS < <(
-    find "$INFRA_DIR/ec2" "$INFRA_DIR/lightsail" -path '*/domains/*.conf' -type f -print 2>/dev/null | sort
-  )
-  mapfile -t NEW_CONFIGS < <(
-    comm -13 <(printf '%s\n' "${BEFORE_CONFIGS[@]}" | sed '/^$/d' | sort) \
-             <(printf '%s\n' "${AFTER_CONFIGS[@]}" | sed '/^$/d' | sort)
-  )
+  RESULT_FILE="$(mktemp)"
+  trap 'rm -f "${RESULT_FILE:-}"' EXIT
+  CURRENT_STEP='00 - Criar ou atualizar configuração do domínio'
+  printf '\n%b━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%b\n' "$BLUE" "$RESET"
+  printf '%bPASSO 00 — Criar ou atualizar configuração do domínio%b\n' "$BLUE" "$RESET"
+  printf '%bComando:%b %s\n' "$DIM" "$RESET" "$SCRIPT_DIR/00-criar-configuracao-dominio.sh"
+  printf '%b━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━%b\n\n' "$BLUE" "$RESET"
+  DOMAIN_CONFIG_RESULT_FILE="$RESULT_FILE" "$SCRIPT_DIR/00-criar-configuracao-dominio.sh"
 
-  (( ${#NEW_CONFIGS[@]} == 1 )) || {
-    if (( ${#NEW_CONFIGS[@]} == 0 )); then
-      die 'o passo 00 terminou, mas nenhuma nova configuração .conf foi identificada.'
-    fi
-    printf '%s\n' "${NEW_CONFIGS[@]}" >&2
-    die 'mais de uma configuração nova foi identificada; execute novamente informando explicitamente o arquivo .conf.'
-  }
-  CONFIG_FILE="${NEW_CONFIGS[0]}"
+  if [[ ! -s "$RESULT_FILE" ]]; then
+    warn 'Fluxo encerrado no passo 00; a configuração existente foi mantida.'
+    exit 0
+  fi
+  CONFIG_FILE="$(realpath "$(head -n 1 "$RESULT_FILE")")"
+  ok "passo 00 concluído: configuração pronta"
   ok "configuração identificada: $CONFIG_FILE"
 fi
 
