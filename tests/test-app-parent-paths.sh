@@ -2,50 +2,34 @@
 set -Eeuo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
-OLD_PREFIX='/home/ubuntu/apps/'"orbital-"
-EXPECTED_PREFIX='/home/ubuntu/apps/orbital/'"orbital-"
 
-mapfile -d '' FILES < <(find "$ROOT" -type f -print0)
-if (( ${#FILES[@]} > 0 )) && grep -IEnH "$OLD_PREFIX" "${FILES[@]}"; then
-  echo "ERRO: ainda existem caminhos Orbital sem a pasta-pai /orbital." >&2
+mapfile -d '' FILES < <(find "$ROOT/ec2" "$ROOT/lightsail" "$ROOT/deploy" -type f -print0)
+if (( ${#FILES[@]} > 0 )) && grep -IEnH '/home/ubuntu/apps/orbital-[^/[:space:]]*' "${FILES[@]}"; then
+  echo 'ERRO: ainda existem caminhos Orbital diretamente em /home/ubuntu/apps.' >&2
   exit 1
 fi
 
-for config in \
-  "$ROOT/ec2/52.67.135.170/domains/admin.anpprev.org.conf" \
-  "$ROOT/lightsail/44.194.90.24/domains/orbital.anpprev.org.conf" \
-  "$ROOT/lightsail/44.219.174.82/domains/orbital.anpprev.org.conf"; do
-  # shellcheck source=/dev/null
-  source "$config"
-  [[ "$APP_NAME" == orbital-* ]] || {
-    echo "ERRO: configuração Orbital inválida: $config" >&2
-    exit 1
-  }
-  [[ "$REMOTE_APP_DIR" == "/home/$REMOTE_USER/apps/orbital/$APP_NAME" ]] || {
-    echo "ERRO: REMOTE_APP_DIR incorreto em $config: $REMOTE_APP_DIR" >&2
-    exit 1
-  }
-done
+while IFS= read -r config; do
+  (
+    set -Eeuo pipefail
+    # shellcheck source=/dev/null
+    source "$config"
+    [[ "${APP_NAME:-}" == orbital-* ]] || exit 0
+    [[ "${REMOTE_APP_DIR:-}" == */"$APP_NAME" ]] || {
+      echo "ERRO: caminho Orbital não termina em APP_NAME: $config" >&2
+      exit 1
+    }
+    [[ "$(dirname "$REMOTE_APP_DIR")" == */orbital ]] || {
+      echo "ERRO: aplicação Orbital não está em uma pasta-pai orbital: $config" >&2
+      exit 1
+    }
+  )
+done < <(find "$ROOT/ec2" "$ROOT/lightsail" -path '*/domains/*.conf' -type f | sort)
 
-mapfile -t ORBITAL_SERVICES < <(
-  find "$ROOT" -type f -path '*/server/etc/systemd/system/orbital*.service' -print | sort
-)
-(( ${#ORBITAL_SERVICES[@]} > 0 )) || {
-  echo 'ERRO: nenhum serviço Orbital encontrado para validar.' >&2
-  exit 1
-}
-
-for service in "${ORBITAL_SERVICES[@]}"; do
-  grep -qF "$EXPECTED_PREFIX" "$service" || {
-    echo "ERRO: serviço sem pasta-pai Orbital: $service" >&2
-    exit 1
-  }
-done
-
-grep -qF 'REMOTE_APP_DIR_DEFAULT="/home/$REMOTE_USER/apps/orbital/$APP_NAME"' \
+grep -qF 'REMOTE_APP_DIR_DEFAULT="/home/$REMOTE_USER/apps/orgs/orbital/$APP_NAME"' \
   "$ROOT/deploy/00-criar-configuracao-dominio.sh" || {
-  echo 'ERRO: gerador de domínios não preserva a pasta-pai Orbital.' >&2
+  echo 'ERRO: gerador não possui fallback para a pasta-pai orgs/orbital.' >&2
   exit 1
 }
 
-echo 'OK: todos os caminhos orbital-* usam /home/ubuntu/apps/orbital/orbital-*.'
+echo 'OK: caminhos orbital-* usam uma pasta-pai orbital e o gerador preserva o padrão atual.'

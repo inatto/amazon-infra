@@ -133,10 +133,44 @@ done
 (( SELECTED_INDEX >= 0 )) || die 'não foi possível identificar a aplicação selecionada.'
 IFS='|' read -r PORT_APP_NAME APP_TYPE WEB_PORT API_PORT <<< "${PORT_ROWS[$SELECTED_INDEX]}"
 
-# Sugestão neutra: remove qualificadores comuns de catálogo, mas sempre permite alteração.
-APP_NAME_DEFAULT="$PORT_APP_NAME"
-APP_NAME_DEFAULT="${APP_NAME_DEFAULT#site-}"
-APP_NAME_DEFAULT="${APP_NAME_DEFAULT%-2026}"
+# Primeiro reaproveita o nome de uma configuração da mesma instância e mesmas
+# portas. Quando ainda não existe domínio para a aplicação, deriva o nome do
+# catálogo de portas seguindo os nomes já usados no servidor.
+APP_NAME_DEFAULT=''
+REFERENCE_APP_CONF=''
+while IFS= read -r candidate; do
+  mapfile -t candidate_values < <(
+    CANDIDATE_CONF="$candidate" bash -c '
+      set -Eeuo pipefail
+      # shellcheck disable=SC1090
+      source "$CANDIDATE_CONF"
+      printf "%s\n%s\n%s\n" \
+        "${APP_NAME:-}" \
+        "${WEB_UPSTREAM_PORT:-}" \
+        "${API_UPSTREAM_PORT:--}"
+    '
+  )
+  if [[ "${candidate_values[1]:-}" == "$WEB_PORT" \
+        && "${candidate_values[2]:--}" == "$API_PORT" \
+        && -n "${candidate_values[0]:-}" ]]; then
+    APP_NAME_DEFAULT="${candidate_values[0]}"
+    REFERENCE_APP_CONF="$candidate"
+    break
+  fi
+done < <(find "$INSTANCE_DIR/domains" -maxdepth 1 -type f -name '*.conf' -print 2>/dev/null | sort)
+
+if [[ -z "$APP_NAME_DEFAULT" ]]; then
+  case "$PORT_APP_NAME" in
+    'orbital-app module '*) APP_NAME_DEFAULT="orbital-${PORT_APP_NAME#orbital-app module }" ;;
+    'site-inst') APP_NAME_DEFAULT='inst-app' ;;
+    'amazon-infra monitor') APP_NAME_DEFAULT='amazon-infra-monitor' ;;
+    *)
+      APP_NAME_DEFAULT="${PORT_APP_NAME// /-}"
+      APP_NAME_DEFAULT="${APP_NAME_DEFAULT%-2026}"
+      ;;
+  esac
+fi
+
 APP_NAME="$(prompt_default 'Nome da aplicação/processo' "$APP_NAME_DEFAULT")"
 [[ "$APP_NAME" =~ ^[A-Za-z0-9][A-Za-z0-9._/-]*$ ]] || die "nome de aplicação inválido: $APP_NAME"
 
@@ -197,9 +231,49 @@ if [[ -n "$REFERENCE_CONF" ]]; then
 fi
 [[ -n "$SSL_EMAIL" ]] || SSL_EMAIL="$(prompt_required 'E-mail para o certificado SSL')"
 
-# O caminho é dado de configuração. O gerador não conhece convenções de
-# projetos, organizações ou pastas-pai.
-REMOTE_APP_DIR="$(prompt_required 'Diretório remoto completo da aplicação')"
+# Reaproveita o caminho exato quando a aplicação já existe. Para uma nova
+# aplicação, infere a pasta-pai a partir das aplicações da mesma família na
+# instância. O valor continua editável antes da gravação.
+REMOTE_APP_DIR_DEFAULT=''
+if [[ -n "$REFERENCE_APP_CONF" ]]; then
+  REMOTE_APP_DIR_DEFAULT="$(
+    REFERENCE_APP_CONF="$REFERENCE_APP_CONF" bash -c '
+      set -Eeuo pipefail
+      # shellcheck disable=SC1090
+      source "$REFERENCE_APP_CONF"
+      printf "%s" "${REMOTE_APP_DIR:-}"
+    '
+  )"
+fi
+
+if [[ -z "$REMOTE_APP_DIR_DEFAULT" && "$APP_NAME" == orbital-* ]]; then
+  while IFS= read -r candidate; do
+    candidate_dir="$(
+      CANDIDATE_CONF="$candidate" bash -c '
+        set -Eeuo pipefail
+        # shellcheck disable=SC1090
+        source "$CANDIDATE_CONF"
+        [[ "${APP_NAME:-}" == orbital-* ]] || exit 0
+        [[ "${APP_NAME:-}" != orbital-app ]] || exit 0
+        printf "%s" "${REMOTE_APP_DIR:-}"
+      '
+    )"
+    if [[ -n "$candidate_dir" ]]; then
+      REMOTE_APP_DIR_DEFAULT="$(dirname "$candidate_dir")/$APP_NAME"
+      break
+    fi
+  done < <(find "$INSTANCE_DIR/domains" -maxdepth 1 -type f -name '*.conf' -print 2>/dev/null | sort)
+fi
+
+if [[ -z "$REMOTE_APP_DIR_DEFAULT" ]]; then
+  case "$APP_NAME" in
+    orbital-*) REMOTE_APP_DIR_DEFAULT="/home/$REMOTE_USER/apps/orgs/orbital/$APP_NAME" ;;
+    inst-app) REMOTE_APP_DIR_DEFAULT="/home/$REMOTE_USER/apps/orgs/inst-app" ;;
+    *) REMOTE_APP_DIR_DEFAULT="/home/$REMOTE_USER/apps/$APP_NAME" ;;
+  esac
+fi
+
+REMOTE_APP_DIR="$(prompt_default 'Diretório remoto completo da aplicação' "$REMOTE_APP_DIR_DEFAULT")"
 [[ "$REMOTE_APP_DIR" == /* && "$REMOTE_APP_DIR" != *'..'* ]] || die "diretório remoto inválido: $REMOTE_APP_DIR"
 
 DOMAINS_DIR="$INSTANCE_DIR/domains"
