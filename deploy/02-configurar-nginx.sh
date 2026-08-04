@@ -115,7 +115,7 @@ if [[ -n "${API_UPSTREAM_PORT:-}" ]]; then
     }
 
     location /api/ {
-        proxy_pass http://${API_UPSTREAM_HOST:-$WEB_UPSTREAM_HOST}:$API_UPSTREAM_PORT;
+        proxy_pass http://${API_UPSTREAM_HOST:-$WEB_UPSTREAM_HOST}:$API_UPSTREAM_PORT/;
         proxy_http_version 1.1;
         proxy_set_header Host \$host;
         proxy_set_header X-Real-IP \$remote_addr;
