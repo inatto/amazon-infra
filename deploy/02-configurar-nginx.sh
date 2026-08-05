@@ -126,6 +126,36 @@ if [[ -n "${API_UPSTREAM_PORT:-}" ]]; then
 NGINX
 fi
 
+if declare -p PROXY_LOCATIONS >/dev/null 2>&1; then
+  for proxy_location in "${PROXY_LOCATIONS[@]}"; do
+    IFS="|" read -r public_path upstream_host upstream_port <<< "$proxy_location"
+    [[ "$public_path" == /*/ && -n "$upstream_host" && "$upstream_port" =~ ^[0-9]+$ ]] || {
+      echo "ERRO: PROXY_LOCATIONS deve usar /caminho/|host|porta." >&2
+      exit 1
+    }
+
+    path_without_trailing_slash="${public_path%/}"
+    cat >> "$GENERATED_FILE" <<NGINX
+
+    location = $path_without_trailing_slash {
+        return 308 $public_path;
+    }
+
+    location ^~ $public_path {
+        proxy_pass http://$upstream_host:$upstream_port;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout ${WEB_PROXY_READ_TIMEOUT:-60s};
+    }
+NGINX
+  done
+fi
+
 if declare -p STATIC_LOCATIONS >/dev/null 2>&1; then
   for static_location in "${STATIC_LOCATIONS[@]}"; do
     IFS="|" read -r public_path physical_path <<< "$static_location"
