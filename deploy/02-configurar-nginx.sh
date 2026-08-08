@@ -126,20 +126,40 @@ if [[ -n "${API_UPSTREAM_PORT:-}" ]]; then
 NGINX
 fi
 
-if declare -p PROXY_LOCATIONS >/dev/null 2>&1; then
-  for proxy_location in "${PROXY_LOCATIONS[@]}"; do
-    IFS="|" read -r public_path upstream_host upstream_port <<< "$proxy_location"
-    [[ "$public_path" == /*/ && -n "$upstream_host" && "$upstream_port" =~ ^[0-9]+$ ]] || {
-      echo "ERRO: PROXY_LOCATIONS deve usar /caminho/|host|porta." >&2
+if declare -p API_PROXY_LOCATIONS >/dev/null 2>&1; then
+  for proxy_location in "${API_PROXY_LOCATIONS[@]}"; do
+    IFS="|" read -r public_path upstream_host upstream_port upstream_path <<< "$proxy_location"
+    [[ -n "$public_path" && -n "$upstream_host" && -n "$upstream_port" && -n "$upstream_path" ]] || {
+      echo "ERRO: API_PROXY_LOCATIONS deve usar /publico/|host|porta|/upstream/." >&2
       exit 1
     }
 
-    path_without_trailing_slash="${public_path%/}"
     cat >> "$GENERATED_FILE" <<NGINX
 
-    location = $path_without_trailing_slash {
-        return 308 $public_path;
+    location ^~ $public_path {
+        proxy_pass http://$upstream_host:$upstream_port$upstream_path;
+        proxy_http_version 1.1;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_read_timeout ${API_PROXY_READ_TIMEOUT:-120s};
+        proxy_connect_timeout ${API_PROXY_CONNECT_TIMEOUT:-30s};
+        proxy_send_timeout ${API_PROXY_SEND_TIMEOUT:-120s};
     }
+NGINX
+  done
+fi
+
+if declare -p WEB_PROXY_LOCATIONS >/dev/null 2>&1; then
+  for proxy_location in "${WEB_PROXY_LOCATIONS[@]}"; do
+    IFS="|" read -r public_path upstream_host upstream_port <<< "$proxy_location"
+    [[ -n "$public_path" && -n "$upstream_host" && -n "$upstream_port" ]] || {
+      echo "ERRO: WEB_PROXY_LOCATIONS deve usar /publico/|host|porta." >&2
+      exit 1
+    }
+
+    cat >> "$GENERATED_FILE" <<NGINX
 
     location ^~ $public_path {
         proxy_pass http://$upstream_host:$upstream_port;

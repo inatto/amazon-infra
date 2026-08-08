@@ -36,7 +36,7 @@ mapfile -t INSTANCE_DIRS < <(
 
 INSTANCE_DIR="${INSTANCE_DIRS[0]}"
 DOMAINS_DIR="$INSTANCE_DIR/domains"
-LOCAL_SERVER_DIR="$INSTANCE_DIR/server"
+LOCAL_SERVER_DIR="$INSTANCE_DIR/server_backup"
 SSH_COMMAND="ssh -i $SSH_KEY -o BatchMode=yes -o ConnectTimeout=15"
 
 mapfile -t RELATED_CONFIGS < <(

@@ -45,7 +45,7 @@ mapfile -t INSTANCE_DIRS < <(
 }
 
 INSTANCE_DIR="${INSTANCE_DIRS[0]}"
-LOCAL_SYSTEMD_DIR="$INSTANCE_DIR/server/etc/systemd/system"
+LOCAL_SYSTEMD_DIR="$INSTANCE_DIR/server_backup/etc/systemd/system"
 SSH_OPTIONS=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15)
 remote() { ssh "${SSH_OPTIONS[@]}" "$REMOTE_USER@$REMOTE_HOST" "$@"; }
 
@@ -91,7 +91,7 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF_API
 
-  echo "GERADO: server/etc/systemd/system/$service"
+  echo "GERADO: server_backup/etc/systemd/system/$service"
 }
 
 generate_web_service() {
@@ -132,7 +132,7 @@ RestartSec=5
 WantedBy=multi-user.target
 EOF_WEB
 
-  echo "GERADO: server/etc/systemd/system/$service"
+  echo "GERADO: server_backup/etc/systemd/system/$service"
 }
 
 generate_service_if_missing() {

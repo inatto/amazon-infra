@@ -10,7 +10,6 @@ CONFIG_FILE="${1:-}"
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 INFRA_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
-DOMAINS_DIR="$INFRA_DIR/domains"
 
 # shellcheck source=/dev/null
 source "$CONFIG_FILE"
@@ -36,7 +35,8 @@ mapfile -t INSTANCE_DIRS < <(
 }
 
 INSTANCE_DIR="${INSTANCE_DIRS[0]}"
-OUTPUT_FILE="$INSTANCE_DIR/server/server-info.md"
+DOMAINS_DIR="$INSTANCE_DIR/domains"
+OUTPUT_FILE="$INSTANCE_DIR/server_backup/server-info.md"
 TEMP_FILE="${OUTPUT_FILE}.tmp"
 
 mapfile -t RELATED_CONFIGS < <(

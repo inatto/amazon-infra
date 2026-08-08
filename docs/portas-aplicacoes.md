@@ -12,6 +12,7 @@ orbital-app module marketing Module     4107        8107
 orbital-app module reports   Module     4108        8108
 orbital-app module ui        Module     4109        8109
 orbital-app module vouchers  Module     4110        8110
+orbital-app module legal     Module     4111        8111
 
 -------------------------------------------------------------
 station-app                  Base       4002        8002
