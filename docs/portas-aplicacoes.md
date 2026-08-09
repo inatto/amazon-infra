@@ -7,12 +7,12 @@ orbital-app module content   Module     4102        8102
 orbital-app module crm       Module     4103        8103
 orbital-app module events    Module     4104        8104
 orbital-app module fin       Module     4105        8105
+orbital-app module legal     Module     4111        8111
 orbital-app module mail      Module     4106        8106
 orbital-app module marketing Module     4107        8107
 orbital-app module reports   Module     4108        8108
 orbital-app module ui        Module     4109        8109
 orbital-app module vouchers  Module     4110        8110
-orbital-app module legal     Module     4111        8111
 
 -------------------------------------------------------------
 station-app                  Base       4002        8002
