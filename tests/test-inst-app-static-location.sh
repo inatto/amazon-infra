@@ -14,6 +14,7 @@ for config in \
   "$ROOT/ec2/52.67.135.170/domains/previa.anpprev.org.conf" \
   "$ROOT/ec2/52.67.135.170/domains/sinproprev.org.br.conf"; do
   bash -n "$config"
+  grep -Fq '"/tenants/|/home/ubuntu/storage/tenants/"' "$config"
   grep -Fq '"/static/inst-app/|/home/ubuntu/storage/static/inst-app/"' "$config"
 done
 

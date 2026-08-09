@@ -24,6 +24,7 @@ site-inst                    Base       4003        8003
 
 -------------------------------------------------------------
 conv-app                     Base       4004        8004
+asaclub-app                  Base       4004        8004            chama asaclub num futuro podera chamar conv-app ser generico
 -------------------------------------------------------------
 site-murm                    Base       400?
 email-app                    Base       400?        800?
