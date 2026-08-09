@@ -14,11 +14,17 @@ source "$CONFIG_FILE"
 : "${REMOTE_HOST:?Defina REMOTE_HOST}"
 : "${SSH_KEY:?Defina SSH_KEY}"
 : "${SITE_NAME:?Defina SITE_NAME}"
-: "${APP_NAME:?Defina APP_NAME}"
-: "${WEB_UPSTREAM_HOST:?Defina WEB_UPSTREAM_HOST}"
-: "${WEB_UPSTREAM_PORT:?Defina WEB_UPSTREAM_PORT}"
 : "${SSL_EMAIL:?Defina SSL_EMAIL}"
 [[ ${#DOMAINS[@]} -gt 0 ]] || { echo "ERRO: informe DOMAINS." >&2; exit 1; }
+
+REDIRECT_URL="${REDIRECT_URL:-}"
+if [[ -n "$REDIRECT_URL" ]]; then
+  [[ "$REDIRECT_URL" =~ ^https?://[^[:space:]\;\{\}]+$ ]] || { echo "ERRO: REDIRECT_URL inválida: $REDIRECT_URL" >&2; exit 1; }
+else
+  : "${APP_NAME:?Defina APP_NAME}"
+  : "${WEB_UPSTREAM_HOST:?Defina WEB_UPSTREAM_HOST}"
+  : "${WEB_UPSTREAM_PORT:?Defina WEB_UPSTREAM_PORT}"
+fi
 [[ -f "$SSH_KEY" ]] || { echo "ERRO: chave SSH não encontrada: $SSH_KEY" >&2; exit 1; }
 
 for command_name in ssh scp; do
@@ -73,6 +79,42 @@ if remote "sudo test -s '/etc/letsencrypt/live/$PRIMARY_DOMAIN/fullchain.pem' &&
   SSL_ENABLED="true"
 fi
 
+if [[ -n "$REDIRECT_URL" ]]; then
+  if [[ "$SSL_ENABLED" == "true" ]]; then
+    cat > "$GENERATED_FILE" <<NGINX
+server {
+    listen 80;
+    listen [::]:80;
+    server_name $DOMAIN_LIST;
+
+    return 301 $REDIRECT_URL;
+}
+
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name $DOMAIN_LIST;
+
+    ssl_certificate /etc/letsencrypt/live/$PRIMARY_DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$PRIMARY_DOMAIN/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+    return 301 $REDIRECT_URL;
+}
+NGINX
+  else
+    cat > "$GENERATED_FILE" <<NGINX
+server {
+    listen 80;
+    listen [::]:80;
+    server_name $DOMAIN_LIST;
+
+    return 301 $REDIRECT_URL;
+}
+NGINX
+  fi
+else
 if [[ "$SSL_ENABLED" == "true" ]]; then
   cat > "$GENERATED_FILE" <<NGINX
 server {
@@ -208,6 +250,7 @@ cat >> "$GENERATED_FILE" <<NGINX
     }
 }
 NGINX
+fi
 
 echo "Configuração que será publicada em $REMOTE_AVAILABLE/$SITE_NAME:"
 sed -n '1,240p' "$GENERATED_FILE"
