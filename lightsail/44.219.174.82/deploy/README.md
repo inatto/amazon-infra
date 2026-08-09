@@ -1,6 +1,6 @@
 # Publicação de domínio
 
-Os scripts deste diretório cuidam somente de DNS, Nginx, SSL e instalação dos serviços systemd. O envio e a inicialização da aplicação pertencem ao deploy da própria aplicação.
+Os scripts deste diretório cuidam somente de DNS, Nginx e SSL. O deploy e os serviços systemd pertencem à própria aplicação.
 
 ## Preparar `station.anpprev.org`
 
@@ -26,12 +26,9 @@ cd /home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/deploy
 ./02-copiar-nginx-do-servidor.sh ../domains/station.anpprev.org.conf
 ./03-configurar-nginx.sh ../domains/station.anpprev.org.conf
 ./04-instalar-ssl.sh ../domains/station.anpprev.org.conf
-./05-instalar-servicos.sh ../domains/station.anpprev.org.conf
 ```
 
-O passo 03 solicita a confirmação `PUBLICAR`. No passo 05, digite `INSTALAR`. Ele instala e habilita `station-api.service` e `station-web.service`, mas não inicia a aplicação.
-
-Depois do passo 05, execute:
+O passo 03 solicita a confirmação `PUBLICAR`. Depois, execute o deploy da própria aplicação:
 
 ```bash
 cd /home/daniel/Code/station-app
@@ -89,10 +86,9 @@ cd /home/daniel/Code/sind-infra/sind-amazon/lightsail/44.219.174.82/deploy
 ./02-copiar-nginx-do-servidor.sh ../domains/previa.anpprev.org.conf
 ./03-configurar-nginx.sh ../domains/previa.anpprev.org.conf
 ./04-instalar-ssl.sh ../domains/previa.anpprev.org.conf
-./05-instalar-servicos.sh ../domains/previa.anpprev.org.conf
 ```
 
-O passo 03 solicita a confirmação `PUBLICAR`. O passo 05 instala e habilita os serviços `site-inst-api.service` e `site-inst-anpprev-web.service`, mas não inicia a aplicação. O primeiro início continua sendo feito pelo deploy remoto do próprio `site-inst`, depois que os arquivos, dependências, `.env` e builds estiverem prontos no servidor.
+O passo 03 solicita a confirmação `PUBLICAR`. Os serviços e o primeiro início pertencem ao deploy remoto do próprio `site-inst`, depois que os arquivos, dependências, `.env` e builds estiverem prontos no servidor.
 
 Enquanto a aplicação não estiver rodando, o domínio pode responder `502 Bad Gateway`. Isso é esperado e não significa erro no DNS, Nginx ou SSL.
 

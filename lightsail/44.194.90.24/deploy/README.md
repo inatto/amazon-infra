@@ -20,12 +20,10 @@ cd /home/daniel/Code/infra/amazon-infra/lightsail/44.194.90.24/deploy
 
 ./03-configurar-nginx.sh ../domains/orbital.anpprev.org.conf
 
-./05-instalar-servicos.sh ../domains/orbital.anpprev.org.conf
 ```
 
 No passo 03, digite `PUBLICAR`.
 
-No passo 05, digite `INSTALAR`.
 
 ## Aplicação
 

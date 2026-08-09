@@ -85,7 +85,7 @@ O assistente pergunta somente dados que variam e deriva o restante de:
   - pastas ec2/* e lightsail/*
   - configurações existentes em domains/*.conf
 
-Não possui domínio, aplicação, caminho remoto, porta, IP, chave SSH ou serviço fixados.
+Não possui domínio, aplicação, caminho remoto, porta, IP ou chave SSH fixados.
 USAGE
 }
 
@@ -229,7 +229,7 @@ API_PROXY_CONNECT_TIMEOUT='30s'
 API_PROXY_SEND_TIMEOUT='120s'
 if [[ -n "$REFERENCE_CONF" ]]; then
   # Lê o arquivo de referência em um subshell isolado. Assim, variáveis próprias
-  # do domínio antigo (APP_NAME, DOMAINS, portas e serviços) nunca contaminam
+  # do domínio antigo (APP_NAME, DOMAINS e portas) nunca contaminam
   # a nova configuração.
   mapfile -t REFERENCE_DEFAULTS < <(
     REFERENCE_CONF="$REFERENCE_CONF" bash -c '
@@ -304,10 +304,6 @@ REMOTE_APP_DIR="$(prompt_default 'Diretório remoto completo da aplicação' "$R
 
 mkdir -p "$DOMAINS_DIR"
 
-SERVICE_BASE="${APP_NAME//\//-}"
-WEB_SERVICE="${SERVICE_BASE}-web.service"
-API_SERVICE="${SERVICE_BASE}-api.service"
-
 TMP_FILE="$(mktemp)"
 trap 'rm -f "$TMP_FILE"' EXIT
 {
@@ -336,10 +332,6 @@ trap 'rm -f "$TMP_FILE"' EXIT
     printf 'API_PROXY_CONNECT_TIMEOUT=%q\n' "$API_PROXY_CONNECT_TIMEOUT"
     printf 'API_PROXY_SEND_TIMEOUT=%q\n' "$API_PROXY_SEND_TIMEOUT"
   fi
-  printf '\nSYSTEMD_SERVICES=(\n'
-  if [[ "$API_PORT" != '-' ]]; then printf '  %q\n' "$API_SERVICE"; fi
-  printf '  %q\n' "$WEB_SERVICE"
-  printf ')\n'
 } > "$TMP_FILE"
 
 bash -n "$TMP_FILE"

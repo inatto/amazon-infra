@@ -17,7 +17,6 @@ source "$CONFIG_FILE"
 : "${REMOTE_HOST:?Defina REMOTE_HOST}"
 : "${SSH_KEY:?Defina SSH_KEY}"
 : "${SITE_NAME:?Defina SITE_NAME}"
-: "${SYSTEMD_SERVICES:?Defina SYSTEMD_SERVICES}"
 
 [[ -f "$SSH_KEY" ]] || {
   echo "ERRO: chave SSH não encontrada: $SSH_KEY" >&2
@@ -39,21 +38,17 @@ SSH_OPTIONS=(
   -o ConnectTimeout=15
 )
 
-SERVICES_TEXT="$(printf '%s\n' "${SYSTEMD_SERVICES[@]}")"
-
 printf '\nCopiando somente as configurações criadas para %s...\n\n' "$SITE_NAME"
 
 ssh \
   "${SSH_OPTIONS[@]}" \
   "$REMOTE_USER@$REMOTE_HOST" \
-  "SITE_NAME='$SITE_NAME' REMOTE_TEMP_DIR='$REMOTE_TEMP_DIR' SERVICES_TEXT='$SERVICES_TEXT' bash -s" <<'REMOTE'
+  "SITE_NAME='$SITE_NAME' REMOTE_TEMP_DIR='$REMOTE_TEMP_DIR' bash -s" <<'REMOTE'
 
 set -Eeuo pipefail
 
 sudo rm -rf "$REMOTE_TEMP_DIR"
-sudo mkdir -p \
-  "$REMOTE_TEMP_DIR/etc/nginx/sites-available" \
-  "$REMOTE_TEMP_DIR/etc/systemd/system"
+sudo mkdir -p "$REMOTE_TEMP_DIR/etc/nginx/sites-available"
 
 NGINX_SITE="/etc/nginx/sites-available/$SITE_NAME"
 
@@ -65,21 +60,6 @@ else
   echo "ERRO: configuração Nginx não encontrada: $NGINX_SITE" >&2
   exit 1
 fi
-
-while IFS= read -r service; do
-  [[ -n "$service" ]] || continue
-
-  SERVICE_FILE="/etc/systemd/system/$service"
-
-  if [[ -f "$SERVICE_FILE" ]]; then
-    sudo cp -a \
-      "$SERVICE_FILE" \
-      "$REMOTE_TEMP_DIR/etc/systemd/system/"
-  else
-    echo "ERRO: serviço não encontrado: $SERVICE_FILE" >&2
-    exit 1
-  fi
-done <<< "$SERVICES_TEXT"
 
 RENEWAL_FILE="/etc/letsencrypt/renewal/$SITE_NAME.conf"
 

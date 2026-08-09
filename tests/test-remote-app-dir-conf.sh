@@ -33,13 +33,6 @@ source "$CONFIG"
   || fail "REMOTE_APP_DIR inesperado: $REMOTE_APP_DIR"
 [[ "$WEB_UPSTREAM_PORT" == '4102' ]] || fail "porta web inesperada: $WEB_UPSTREAM_PORT"
 [[ "$API_UPSTREAM_PORT" == '8102' ]] || fail "porta API inesperada: $API_UPSTREAM_PORT"
-[[ "${SYSTEMD_SERVICES[*]}" == 'orbital-content-api.service orbital-content-web.service' ]] \
-  || fail "serviços inesperados: ${SYSTEMD_SERVICES[*]}"
+! grep -q '^SYSTEMD_SERVICES=' "$CONFIG" || fail 'configuração ainda declara SYSTEMD_SERVICES'
 
-# Instaladores apenas consomem o valor final gravado na configuração.
-while IFS= read -r installer; do
-  grep -qF ': "${REMOTE_APP_DIR:?Defina REMOTE_APP_DIR em $CONFIG_FILE}"' "$installer" \
-    || fail "REMOTE_APP_DIR não é obrigatório em ${installer#$ROOT_DIR/}"
-done < <(find "$ROOT_DIR" -path '*/deploy/*instalar-servicos.sh' -type f | sort)
-
-echo 'OK: nome, caminho, portas e serviços do módulo content são inferidos corretamente.'
+echo 'OK: nome, caminho e portas do módulo content são inferidos sem acoplamento a systemd.'

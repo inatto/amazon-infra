@@ -35,55 +35,20 @@ mapfile -t INSTANCE_DIRS < <(
 }
 
 INSTANCE_DIR="${INSTANCE_DIRS[0]}"
-DOMAINS_DIR="$INSTANCE_DIR/domains"
 LOCAL_SERVER_DIR="$INSTANCE_DIR/server_backup"
 SSH_COMMAND="ssh -i $SSH_KEY -o BatchMode=yes -o ConnectTimeout=15"
 
-mapfile -t RELATED_CONFIGS < <(
-  find "$DOMAINS_DIR" -maxdepth 1 -type f -name '*.conf' -print 2>/dev/null | sort
-)
-(( ${#RELATED_CONFIGS[@]} > 0 )) || {
-  echo "ERRO: nenhum arquivo .conf encontrado em $DOMAINS_DIR" >&2
-  exit 1
-}
-
-mapfile -t SYSTEMD_SERVICES < <(
-  for file in "${RELATED_CONFIGS[@]}"; do
-    bash -Eeuo pipefail -c '
-      source "$1"
-      declare -p SYSTEMD_SERVICES >/dev/null 2>&1 && printf "%s\n" "${SYSTEMD_SERVICES[@]}"
-    ' _ "$file"
-  done | sed '/^[[:space:]]*$/d' | sort -u
-)
-
-
-for service in "${SYSTEMD_SERVICES[@]}"; do
-  [[ "$service" == *.service && "$service" != */* ]] || {
-    echo "ERRO: nome de serviço inválido: $service" >&2
-    exit 1
-  }
-done
-
 printf '\nServidor: %s@%s\nDestino local: %s\n\n' "$REMOTE_USER" "$REMOTE_HOST" "$LOCAL_SERVER_DIR"
-mkdir -p "$LOCAL_SERVER_DIR/etc/nginx" "$LOCAL_SERVER_DIR/etc/systemd/system" "$LOCAL_SERVER_DIR/etc/letsencrypt/renewal"
+rm -rf "$LOCAL_SERVER_DIR/etc/systemd/system"
+mkdir -p "$LOCAL_SERVER_DIR/etc/nginx" "$LOCAL_SERVER_DIR/etc/letsencrypt/renewal"
 
-printf '1/3 Copiando /etc/nginx completo...\n'
+printf '1/2 Copiando /etc/nginx completo...\n'
 rsync -avz --delete --no-owner --no-group \
   -e "$SSH_COMMAND" --rsync-path="sudo rsync" \
   "$REMOTE_USER@$REMOTE_HOST:/etc/nginx/" \
   "$LOCAL_SERVER_DIR/etc/nginx/"
 
-printf '\n2/3 Copiando serviços declarados pelos domínios deste servidor...\n'
-rm -rf "$LOCAL_SERVER_DIR/etc/systemd/system"
-mkdir -p "$LOCAL_SERVER_DIR/etc/systemd/system"
-for service in "${SYSTEMD_SERVICES[@]}"; do
-  rsync -avz --no-owner --no-group \
-    -e "$SSH_COMMAND" --rsync-path="sudo rsync" \
-    "$REMOTE_USER@$REMOTE_HOST:/etc/systemd/system/$service" \
-    "$LOCAL_SERVER_DIR/etc/systemd/system/"
-done
-
-printf '\n3/3 Copiando /etc/letsencrypt/renewal completo...\n'
+printf '\n2/2 Copiando /etc/letsencrypt/renewal completo...\n'
 mkdir -p "$LOCAL_SERVER_DIR/etc/letsencrypt/renewal"
 rsync -avz --delete --no-owner --no-group \
   -e "$SSH_COMMAND" --rsync-path="sudo rsync" \

@@ -39,10 +39,10 @@ Uso:
   ./configurar-dominio-passo-a-passo.sh ../ec2/<servidor>/domains/<dominio>.conf
 
 Sem parâmetro:
-  executa o passo 00, identifica a nova configuração criada e conduz os passos 01 a 06.
+  executa o passo 00, identifica a nova configuração criada e conduz os passos 01, 02, 03, 05 e 06.
 
 Com parâmetro:
-  usa uma configuração já existente e conduz os passos 01 a 06.
+  usa uma configuração já existente e conduz os passos 01, 02, 03, 05 e 06.
 
 Antes de cada passo seguinte, pede confirmação. Em qualquer erro, para imediatamente.
 USAGE
@@ -91,7 +91,7 @@ resolve_config_path() {
 [[ $# -le 1 ]] || die 'informe no máximo um arquivo .conf.'
 
 printf '%bCONFIGURAÇÃO DE DOMÍNIO — FLUXO GUIADO%b\n' "$BOLD" "$RESET"
-printf 'O fluxo executa claramente os passos 00 a 06, confirma antes do próximo e para no primeiro erro.\n'
+printf 'O fluxo executa os passos de infraestrutura, confirma antes do próximo e para no primeiro erro.\n'
 
 CONFIG_FILE=''
 if [[ $# -eq 1 ]]; then
@@ -125,7 +125,6 @@ STEPS=(
   '01|Testar DNS|01-testar-dns.sh'
   '02|Configurar Nginx|02-configurar-nginx.sh'
   '03|Instalar certificado SSL|03-instalar-ssl.sh'
-  '04|Instalar serviços systemd|04-instalar-servicos.sh'
   '05|Copiar configurações do servidor|05-copiar-configuracoes-do-servidor.sh'
   '06|Coletar informações do servidor|06-coletar-informacoes-do-servidor.sh'
 )

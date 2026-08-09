@@ -18,5 +18,9 @@ rsync -az --delete \
   "$ROOT/" "$DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST:$DEPLOY_REMOTE_DIR/"
 echo "Código remoto sincronizado."
 
+ssh "${SSH[@]}" "$DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST" \
+  "cd '$DEPLOY_REMOTE_DIR/deploy/remote' && ./setup-services.sh"
+echo "Serviços systemd do monitor garantidos."
+
 "$DIR/setup-api.sh"
 "$DIR/setup-web.sh"

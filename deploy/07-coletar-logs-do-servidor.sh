@@ -34,43 +34,15 @@ mapfile -t INSTANCE_DIRS < <(
 }
 
 INSTANCE_DIR="${INSTANCE_DIRS[0]}"
-DOMAINS_DIR="$INSTANCE_DIR/domains"
 OUTPUT_FILE="$INSTANCE_DIR/server_backup/server.log"
 TEMP_FILE="${OUTPUT_FILE}.tmp"
 
-mapfile -t RELATED_CONFIGS < <(
-  find "$DOMAINS_DIR" -maxdepth 1 -type f -name '*.conf' -print 2>/dev/null | sort | while IFS= read -r file; do
-    bash -Eeuo pipefail -c '
-      source "$1"
-      [[ "${REMOTE_USER:-}" == "$2" && "${REMOTE_HOST:-}" == "$3" && "${SSH_KEY:-}" == "$4" ]] && printf "%s\n" "$1"
-    ' _ "$file" "$REMOTE_USER" "$REMOTE_HOST" "$SSH_KEY"
-  done
-)
-(( ${#RELATED_CONFIGS[@]} > 0 )) || RELATED_CONFIGS=("$CONFIG_FILE")
-
-mapfile -t SYSTEMD_SERVICES < <(
-  for file in "${RELATED_CONFIGS[@]}"; do
-    bash -Eeuo pipefail -c '
-      source "$1"
-      declare -p SYSTEMD_SERVICES >/dev/null 2>&1 && printf "%s\n" "${SYSTEMD_SERVICES[@]}"
-    ' _ "$file"
-  done | sed '/^[[:space:]]*$/d' | sort -u
-)
-
-for service in "${SYSTEMD_SERVICES[@]}"; do
-  [[ "$service" == *.service && "$service" != */* ]] || {
-    echo "ERRO: nome de serviço inválido: $service" >&2
-    exit 1
-  }
-done
-
 mkdir -p "$(dirname -- "$OUTPUT_FILE")"
-SERVICES_TEXT="$(printf '%s\n' "${SYSTEMD_SERVICES[@]}")"
 printf 'Coletando logs de %s@%s...\n' "$REMOTE_USER" "$REMOTE_HOST"
 
 if ! ssh -i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15 \
   "$REMOTE_USER@$REMOTE_HOST" \
-  "SERVICES_TEXT=$(printf '%q' "$SERVICES_TEXT") bash -s" >"$TEMP_FILE" <<'REMOTE'
+  "bash -s" >"$TEMP_FILE" <<'REMOTE'
 set -Eeuo pipefail
 
 section() {
@@ -113,19 +85,6 @@ sanitize() {
     run tail -n 300 /var/log/nginx/error.log
   else
     run sudo tail -n 300 /var/log/nginx/error.log
-  fi
-
-  section 'APPLICATION SERVICES'
-  if [[ -z "${SERVICES_TEXT:-}" ]]; then
-    printf 'No application services declared.\n'
-  else
-    while IFS= read -r service; do
-      [[ -n "$service" ]] || continue
-      section "SERVICE STATUS — $service"
-      run systemctl status "$service" --no-pager --full
-      section "SERVICE JOURNAL — $service — LAST 24 HOURS"
-      run journalctl -u "$service" --since '24 hours ago' -n 200 --no-pager -o short-iso
-    done <<< "$SERVICES_TEXT"
   fi
 
   section 'SYSTEM ERRORS — LAST 24 HOURS'
