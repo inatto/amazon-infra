@@ -4,7 +4,7 @@ set -Eeuo pipefail
 
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 INFRA_DIR="$(cd -- "$SCRIPT_DIR/.." && pwd)"
-PORTS_FILE="$INFRA_DIR/core/portas-aplicacoes.md"
+PORTS_FILE="$INFRA_DIR/docs/portas-aplicacoes.md"
 
 log() { printf '[dominio] %s\n' "$*"; }
 die() { printf 'ERRO: %s\n' "$*" >&2; exit 1; }
@@ -81,8 +81,8 @@ Uso:
   ./00-criar-configuracao-dominio.sh
 
 O assistente pergunta somente dados que variam e deriva o restante de:
-  - core/portas-aplicacoes.md
-  - pastas ec2/* e lightsail/*
+  - docs/portas-aplicacoes.md
+  - pastas ec2/*
   - configurações existentes em domains/*.conf
 
 Não possui domínio, aplicação, caminho remoto, porta, IP ou chave SSH fixados.
@@ -98,10 +98,10 @@ DOMAIN="${DOMAIN,,}"
 [[ "$DOMAIN" =~ ^[a-z0-9]([a-z0-9.-]*[a-z0-9])?$ && "$DOMAIN" == *.* ]] || die "domínio inválido: $DOMAIN"
 
 mapfile -t INSTANCE_DIRS < <(
-  find "$INFRA_DIR/ec2" "$INFRA_DIR/lightsail" \
+  find "$INFRA_DIR/ec2" \
     -mindepth 1 -maxdepth 1 -type d 2>/dev/null | sort
 )
-(( ${#INSTANCE_DIRS[@]} > 0 )) || die 'nenhuma instância encontrada em ec2/ ou lightsail/.'
+(( ${#INSTANCE_DIRS[@]} > 0 )) || die 'nenhuma instância encontrada em ec2/.'
 
 INSTANCE_OPTIONS=()
 for path in "${INSTANCE_DIRS[@]}"; do

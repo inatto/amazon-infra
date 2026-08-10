@@ -21,7 +21,7 @@ grep -qF "REMOTE_APP_DIR=\"\$(prompt_default 'Diretório remoto completo da apli
 cp -a "$ROOT_DIR/." "$TMP_ROOT/amazon-infra"
 TEST_ROOT="$TMP_ROOT/amazon-infra"
 rm -f "$TEST_ROOT/ec2/52.67.135.170/domains/content.anpprev.org.conf"
-printf 'content.anpprev.org\n1\n3\n\n\n\n' \
+printf 'content.anpprev.org\n3\n\n\n\n' \
   | "$TEST_ROOT/deploy/00-criar-configuracao-dominio.sh" >/dev/null
 
 CONFIG="$TEST_ROOT/ec2/52.67.135.170/domains/content.anpprev.org.conf"
