@@ -1,6 +1,0 @@
-$ORIGIN anpprev.org.
-$TTL 300
-
-@               IN      A       44.219.174.82
-www             IN      CNAME   anpprev.org.
-orbital         IN      A       44.219.174.82
