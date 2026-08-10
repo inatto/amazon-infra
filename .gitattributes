@@ -1,0 +1,2 @@
+config/** filter=git-crypt diff=git-crypt
+ec2/52.67.135.170/core/** filter=git-crypt diff=git-crypt

@@ -1,0 +1,7 @@
+apps/temp
+docs/
+exports/
+imports/
+ords/
+var/
+*.pem
