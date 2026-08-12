@@ -12,6 +12,7 @@ from pathlib import Path
 
 import httpx
 
+from config_loader import CONFIG_CONTEXT
 from settings import Settings
 
 INVENTORY_FILE = Path(__file__).with_name("inventory.json")
@@ -114,7 +115,8 @@ async def collect_groups(settings: Settings) -> list[dict]:
     groups = []
     async with httpx.AsyncClient(timeout=settings.monitor_timeout_seconds, follow_redirects=True) as client:
         for group in inventory["groups"]:
-            services = await asyncio.to_thread(lambda items=group["services"]: [check_service(item) for item in items])
+            service_items = group["services"] if CONFIG_CONTEXT == "production" or group["type"] == "infra" else []
+            services = await asyncio.to_thread(lambda items=service_items: [check_service(item) for item in items])
             ports = await asyncio.to_thread(lambda items=group["ports"]: [check_port(item["port"], item["role"], listeners) for item in items])
             urls = await asyncio.gather(*(check_url(client, item) for item in group["urls"]))
             checks = [*services, *ports, *urls]

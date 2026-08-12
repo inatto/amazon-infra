@@ -10,11 +10,11 @@ load_config_environment()
 
 class Settings(BaseSettings):
     app_name: str = "amazon-infra-monitor-app"
-    app_version: str = "0.0.3"
+    app_version: str = "0.0.4"
     app_host: str = "127.0.0.1"
     app_port: int = 8005
     cors_origins: str = Field(
-        "https://monitor.amazon.infra", validation_alias="APP_CORS_ORIGINS"
+        "https://monitor.amazon-infra.localhost", validation_alias="APP_CORS_ORIGINS"
     )
     monitor_services: str = "nginx.service"
     monitor_ports: str = "80:Nginx HTTP,443:Nginx HTTPS,4005:Monitor App Web,8005:Monitor App API"

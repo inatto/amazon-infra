@@ -6,7 +6,7 @@
       "name": "Nginx",
       "type": "infra",
       "domains": [
-        "admin.anpprev.org",
+        "admin.sindicatto.com",
         "monitor.inatto.com",
         "painel.anpprev.org",
         "previa.anpprev.org",
@@ -34,11 +34,12 @@
       "name": "Orbital App",
       "type": "app",
       "domains": [
-        "admin.anpprev.org"
+        "admin.sindicatto.com"
       ],
       "services": [
         "orbital-app-api.service",
         "orbital-app-web.service",
+        "orbital-app-system-email-worker.service",
         "orbital-app-note-worker.service"
       ],
       "ports": [
@@ -63,9 +64,27 @@
       "name": "Orbital App Modules",
       "type": "modules",
       "domains": [
-        "admin.anpprev.org"
+        "admin.sindicatto.com"
       ],
-      "services": [],
+      "services": [
+        "orbital-assets-api.service",
+        "orbital-assets-web.service",
+        "orbital-content-api.service",
+        "orbital-content-web.service",
+        "orbital-events-api.service",
+        "orbital-events-web.service",
+        "orbital-fin-api.service",
+        "orbital-fin-web.service",
+        "orbital-mail-api.service",
+        "orbital-mail-web.service",
+        "orbital-mail-send-worker.service",
+        "orbital-reports-api.service",
+        "orbital-reports-web.service",
+        "orbital-legal-api.service",
+        "orbital-legal-web.service",
+        "orbital-ai-api.service",
+        "orbital-ai-web.service"
+      ],
       "ports": [
         {
           "port": 4101,
@@ -132,23 +151,64 @@
           "role": "Reports API"
         },
         {
-          "port": 4109,
-          "role": "UI Web"
-        },
-        {
-          "port": 8109,
-          "role": "UI API"
-        },
-        {
           "port": 4110,
           "role": "Vouchers Web"
         },
         {
           "port": 8110,
           "role": "Vouchers API"
+        },
+        {
+          "port": 4111,
+          "role": "Legal Web"
+        },
+        {
+          "port": 8111,
+          "role": "Legal API"
+        },
+        {
+          "port": 4112,
+          "role": "AI Web"
+        },
+        {
+          "port": 8112,
+          "role": "AI API"
         }
       ],
-      "urls": []
+      "urls": [
+        {
+          "url": "http://127.0.0.1:8101/api/health",
+          "role": "Assets Health"
+        },
+        {
+          "url": "http://127.0.0.1:8102/api/health",
+          "role": "Content Health"
+        },
+        {
+          "url": "http://127.0.0.1:8104/api/health",
+          "role": "Events Health"
+        },
+        {
+          "url": "http://127.0.0.1:8105/api/health",
+          "role": "Fin Health"
+        },
+        {
+          "url": "http://127.0.0.1:8106/api/health",
+          "role": "Mail Health"
+        },
+        {
+          "url": "http://127.0.0.1:8108/api/health",
+          "role": "Reports Health"
+        },
+        {
+          "url": "http://127.0.0.1:8111/api/health",
+          "role": "Legal Health"
+        },
+        {
+          "url": "http://127.0.0.1:8112/api/health",
+          "role": "AI Health"
+        }
+      ]
     },
     {
       "id": "station-app",
@@ -173,7 +233,7 @@
       ],
       "urls": [
         {
-          "url": "http://127.0.0.1:8002/api/health",
+          "url": "http://127.0.0.1:8002/health",
           "role": "API Health"
         }
       ]
@@ -203,7 +263,7 @@
       ],
       "urls": [
         {
-          "url": "http://127.0.0.1:8003/api/health",
+          "url": "http://127.0.0.1:8003/health",
           "role": "API Health"
         }
       ]
@@ -216,6 +276,7 @@
         "previa.asaclub.org.br"
       ],
       "services": [
+        "asaclub-app-api.service",
         "asaclub-app-web.service"
       ],
       "ports": [
@@ -228,7 +289,12 @@
           "role": "API"
         }
       ],
-      "urls": []
+      "urls": [
+        {
+          "url": "http://127.0.0.1:8004/health",
+          "role": "API Health"
+        }
+      ]
     },
     {
       "id": "amazon-infra-monitor-app",
