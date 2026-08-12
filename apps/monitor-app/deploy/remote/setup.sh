@@ -1,38 +1,53 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
-DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-source "$DIR/target.conf"
-ROOT="$(cd -- "$DIR/../.." && pwd)"
-SSH=(-i "$DEPLOY_SSH_KEY" -o BatchMode=yes)
+set -euo pipefail
 
-echo "Sincronizando código com $DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST:$DEPLOY_REMOTE_DIR."
-ssh "${SSH[@]}" "$DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST" "mkdir -p '$DEPLOY_REMOTE_DIR'"
-rsync -az --delete \
-  --exclude '.env' \
-  --exclude '.venv' \
-  --exclude 'node_modules' \
-  --exclude 'dist' \
-  --exclude '.astro' \
-  --exclude '__pycache__' \
-  -e "ssh -i $DEPLOY_SSH_KEY -o BatchMode=yes" \
-  "$ROOT/" "$DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST:$DEPLOY_REMOTE_DIR/"
-echo "Código remoto sincronizado."
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+REPO_ROOT="$(cd "$ROOT_DIR/../.." && pwd)"
+TARGET_FILE="${DEPLOY_TARGET_FILE:-$SCRIPT_DIR/target.conf}"
+[[ -f "$TARGET_FILE" ]] || { echo "Destino não encontrado: $TARGET_FILE" >&2; exit 1; }
+source "$TARGET_FILE"
 
-REPO_ROOT="$(cd -- "$ROOT/../.." && pwd)"
-REMOTE_INFRA_DIR="/home/ubuntu/apps/infra/amazon-infra"
-echo "Sincronizando pasta fonte de domínios da EC2."
-ssh "${SSH[@]}" "$DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST" "mkdir -p '$REMOTE_INFRA_DIR/ec2/$DEPLOY_REMOTE_HOST/domains'"
-rsync -az --delete \
-  -e "ssh -i $DEPLOY_SSH_KEY -o BatchMode=yes" \
-  "$REPO_ROOT/ec2/$DEPLOY_REMOTE_HOST/domains/" \
-  "$DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST:$REMOTE_INFRA_DIR/ec2/$DEPLOY_REMOTE_HOST/domains/"
-echo "Pasta fonte de domínios sincronizada."
+SSH_KEY="${DEPLOY_SSH_KEY:?Defina DEPLOY_SSH_KEY em $TARGET_FILE}"
+REMOTE_HOST="${DEPLOY_REMOTE_HOST:?Defina DEPLOY_REMOTE_HOST em $TARGET_FILE}"
+REMOTE_ROOT="${DEPLOY_REMOTE_ROOT:?Defina DEPLOY_REMOTE_ROOT em $TARGET_FILE}"
+REMOTE_INFRA_ROOT="${DEPLOY_REMOTE_INFRA_ROOT:?Defina DEPLOY_REMOTE_INFRA_ROOT em $TARGET_FILE}"
+SERVER_IP="${REMOTE_HOST##*@}"
+SSH=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=30 -o ServerAliveCountMax=120)
+[[ -f "$SSH_KEY" ]] || { echo "Chave SSH não encontrada: $SSH_KEY" >&2; exit 1; }
+command -v rsync >/dev/null || { echo "rsync não encontrado localmente." >&2; exit 1; }
 
-ssh "${SSH[@]}" "$DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST" \
-  "cd '$DEPLOY_REMOTE_DIR/deploy/remote' && ./setup-services.sh"
-echo "Serviços systemd do monitor garantidos."
+echo "Enviando Monitor App para $REMOTE_HOST:$REMOTE_ROOT..."
+ssh "${SSH[@]}" "$REMOTE_HOST" "mkdir -p $(printf '%q' "$REMOTE_ROOT")"
+rsync -az --delete --itemize-changes \
+    -e "ssh ${SSH[*]}" \
+    --exclude='.git/' \
+    --exclude='.idea/' \
+    --exclude='.vscode/' \
+    --exclude='.pytest_cache/' \
+    --exclude='*.pyc' \
+    --exclude='__pycache__/' \
+    --exclude='*.remover' \
+    --exclude='apps/api/.venv/' \
+    --exclude='apps/api/.env' \
+    --exclude='apps/api/config/*/services.env.external' \
+    --exclude='apps/web/node_modules/' \
+    --exclude='apps/web/.astro/' \
+    --exclude='apps/web/dist/' \
+    "$ROOT_DIR/" "$REMOTE_HOST:$REMOTE_ROOT/"
+echo "Código enviado."
 
-"$DIR/setup-admin-helper.sh"
+echo "Sincronizando a pasta fonte de domínios da EC2..."
+LOCAL_DOMAINS="$REPO_ROOT/ec2/$SERVER_IP/domains"
+REMOTE_DOMAINS="$REMOTE_INFRA_ROOT/ec2/$SERVER_IP/domains"
+[[ -d "$LOCAL_DOMAINS" ]] || { echo "Pasta de domínios não encontrada: $LOCAL_DOMAINS" >&2; exit 1; }
+ssh "${SSH[@]}" "$REMOTE_HOST" "mkdir -p $(printf '%q' "$REMOTE_DOMAINS")"
+rsync -az -e "ssh ${SSH[*]}" "$LOCAL_DOMAINS/" "$REMOTE_HOST:$REMOTE_DOMAINS/"
+echo "Domínios sincronizados."
 
-"$DIR/setup-api.sh"
-"$DIR/setup-web.sh"
+echo "Instalando helper administrativo remoto..."
+ssh "${SSH[@]}" "$REMOTE_HOST" "cd $(printf '%q' "$REMOTE_ROOT/deploy/remote") && ./setup-admin-helper.sh"
+
+"$SCRIPT_DIR/setup-api.sh"
+"$SCRIPT_DIR/setup-web.sh"
+echo "Deploy remoto concluído."

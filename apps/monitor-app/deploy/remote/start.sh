@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
-DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-"$DIR/start-api.sh"
-"$DIR/start-web.sh"
+set -euo pipefail
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"$SCRIPT_DIR/start-api.sh"
+"$SCRIPT_DIR/start-web.sh"
+echo "Monitor App remoto iniciado e validado."

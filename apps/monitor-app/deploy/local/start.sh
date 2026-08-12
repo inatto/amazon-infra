@@ -1,7 +1,15 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
-DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-trap 'kill 0 2>/dev/null || true' INT TERM EXIT
-"$DIR/start-api.sh" &
-"$DIR/start-web.sh" &
-wait
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PIDS=()
+cleanup() {
+  ((${#PIDS[@]})) && kill "${PIDS[@]}" 2>/dev/null || true
+  wait 2>/dev/null || true
+}
+trap cleanup INT TERM EXIT
+
+echo "Iniciando Web e API locais. Pressione Ctrl+C para encerrar."
+"$SCRIPT_DIR/start-api.sh" & PIDS+=("$!")
+"$SCRIPT_DIR/start-web.sh" & PIDS+=("$!")
+wait -n "${PIDS[@]}"

@@ -67,11 +67,11 @@
       "urls": []
     },
     {
-      "id": "amazon-infra-monitor",
-      "name": "Amazon Infra Monitor",
+      "id": "monitor-app",
+      "name": "Monitor App",
       "type": "app",
       "domains": ["monitor.inatto.com"],
-      "services": ["amazon-infra-monitor-api.service", "amazon-infra-monitor-web.service"],
+      "services": ["monitor-app-api.service", "monitor-app-web.service"],
       "ports": [{"port": 4005, "role": "Web"}, {"port": 8005, "role": "API"}],
       "urls": [{"url": "http://127.0.0.1:8005/api/health", "role": "API Health"}]
     }

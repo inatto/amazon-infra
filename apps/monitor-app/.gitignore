@@ -1,0 +1,10 @@
+apps/api/.env
+apps/api/config/*/services.env.external
+apps/web/.env
+apps/web/config/*/services.env.external
+apps/api/.venv/
+apps/web/node_modules/
+apps/web/.astro/
+apps/web/dist/
+__pycache__/
+*.pyc

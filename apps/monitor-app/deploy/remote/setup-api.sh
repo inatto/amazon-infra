@@ -1,47 +1,56 @@
 #!/usr/bin/env bash
-set -Eeuo pipefail
-DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-source "$DIR/target.conf"
-ROOT="$(cd -- "$DIR/../.." && pwd)"
-SSH=(-i "$DEPLOY_SSH_KEY" -o BatchMode=yes)
-REMOTE="$DEPLOY_REMOTE_USER@$DEPLOY_REMOTE_HOST"
-TMP="$(mktemp)"
-trap 'rm -f "$TMP"' EXIT
+set -euo pipefail
 
-echo "Preparando .env remoto da API."
-python3 "$ROOT/deploy/core/env_tools.py" "$ROOT/apps/api/.env" "$TMP" \
-  --set APP_HOST=127.0.0.1 \
-  --set APP_PORT=8005 \
-  --set CORS_ORIGINS=https://monitor.inatto.com \
-  --set INFRA_DOMAINS_DIR=/home/ubuntu/apps/infra/amazon-infra/ec2/52.67.135.170/domains \
-  --set INFRA_PUBLIC_IP=52.67.135.170
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+TARGET_FILE="${DEPLOY_TARGET_FILE:-$SCRIPT_DIR/target.conf}"
+[[ -f "$TARGET_FILE" ]] || { echo "Destino não encontrado: $TARGET_FILE" >&2; exit 1; }
+source "$TARGET_FILE"
+SSH_KEY="${DEPLOY_SSH_KEY:?Defina DEPLOY_SSH_KEY em $TARGET_FILE}"
+REMOTE_HOST="${DEPLOY_REMOTE_HOST:?Defina DEPLOY_REMOTE_HOST em $TARGET_FILE}"
+REMOTE_ROOT="${DEPLOY_REMOTE_ROOT:?Defina DEPLOY_REMOTE_ROOT em $TARGET_FILE}"
+SSH=(-i "$SSH_KEY" -o BatchMode=yes -o ConnectTimeout=15 -o ServerAliveInterval=30 -o ServerAliveCountMax=120)
 
-ADMIN_TOKEN="$(awk -F= '$1=="INFRA_ADMIN_TOKEN"{sub(/^[^=]*=/,""); print; exit}' "$TMP")"
-if [[ -z "$ADMIN_TOKEN" ]]; then
-  ADMIN_TOKEN="$(ssh "${SSH[@]}" "$REMOTE" "awk -F= '\$1==\"INFRA_ADMIN_TOKEN\"{sub(/^[^=]*=/,\"\"); print; exit}' '$DEPLOY_REMOTE_DIR/apps/api/.env' 2>/dev/null || true")"
+echo "Parando e preparando API remota..."
+ssh "${SSH[@]}" "$REMOTE_HOST" 'bash -s' -- "$REMOTE_ROOT" <<'REMOTE'
+set -euo pipefail
+ROOT_DIR="$1"
+API_DIR="$ROOT_DIR/apps/api"
+APP_CONFIG="$API_DIR/config/production/app.env"
+[[ -f "$APP_CONFIG" ]] || { echo "Configuração da API não encontrada: $APP_CONFIG" >&2; exit 1; }
+API_HOST="$(sed -n 's/^APP_HOST=//p' "$APP_CONFIG")"
+API_PORT="$(sed -n 's/^APP_PORT=//p' "$APP_CONFIG")"
+API_SERVICE="$(sed -n 's/^API_SYSTEMD_SERVICE=//p' "$APP_CONFIG")"
+[[ "$API_HOST" == "127.0.0.1" ]] || { echo "APP_HOST inválido: $API_HOST" >&2; exit 1; }
+[[ "$API_PORT" =~ ^[0-9]+$ ]] && ((API_PORT >= 1 && API_PORT <= 65535)) || { echo "APP_PORT inválido." >&2; exit 1; }
+[[ "$API_SERVICE" =~ ^[A-Za-z0-9_.@:-]+\.service$ ]] || { echo "API_SYSTEMD_SERVICE inválido." >&2; exit 1; }
+
+sudo systemctl stop "$API_SERVICE" 2>/dev/null || true
+sudo fuser -k "${API_PORT}/tcp" >/dev/null 2>&1 || true
+
+EXTERNAL="$API_DIR/config/production/services.env.external"
+LEGACY="$API_DIR/.env"
+if [[ ! -f "$EXTERNAL" && -f "$LEGACY" ]]; then
+    token="$(sed -n 's/^INFRA_ADMIN_TOKEN=//p' "$LEGACY" | head -1)"
+    if [[ -n "$token" ]]; then
+        printf 'INFRA_ADMIN_TOKEN=%s\n' "$token" > "$EXTERNAL"
+        chmod 0600 "$EXTERNAL"
+        echo "INFRA_ADMIN_TOKEN legado preservado em services.env.external."
+    fi
 fi
-if [[ -z "$ADMIN_TOKEN" ]]; then
-  ADMIN_TOKEN="$(openssl rand -hex 24)"
-  echo "Novo INFRA_ADMIN_TOKEN gerado para o painel."
+rm -f "$LEGACY"
+if [[ -f "$EXTERNAL" ]]; then
+    chmod 0600 "$EXTERNAL"
 fi
-python3 "$ROOT/deploy/core/env_tools.py" "$TMP" "$TMP.next" --set "INFRA_ADMIN_TOKEN=$ADMIN_TOKEN"
-mv "$TMP.next" "$TMP"
+if ! grep -Eq '^INFRA_ADMIN_TOKEN=.+$' "$EXTERNAL" 2>/dev/null; then
+    echo "Aviso: INFRA_ADMIN_TOKEN não configurado; administração web ficará somente leitura." >&2
+fi
 
-scp "${SSH[@]}" "$TMP" "$REMOTE:$DEPLOY_REMOTE_DIR/apps/api/.env" >/dev/null
-echo ".env remoto da API enviado."
-
-ssh "${SSH[@]}" "$REMOTE" "bash -s" <<SH_REMOTE
-set -Eeuo pipefail
-cd '$DEPLOY_REMOTE_DIR/apps/api'
-echo 'Parando serviço da API.'
-sudo systemctl stop amazon-infra-monitor-api.service 2>/dev/null || true
-rm -rf .venv __pycache__
+cd "$API_DIR"
+rm -rf .venv
 python3 -m venv .venv
-.venv/bin/pip install -q -r requirements.txt
-cd '$DEPLOY_REMOTE_DIR/deploy/remote'
-./start-api.sh
-SH_REMOTE
+.venv/bin/pip install -r requirements.txt
+"$ROOT_DIR/deploy/remote/systemd/install.sh" "$ROOT_DIR" "$API_SERVICE"
+REMOTE
 
-echo
-echo "INFRA_ADMIN_TOKEN=$ADMIN_TOKEN"
-echo "Use este token no campo administrativo de https://monitor.inatto.com"
+echo "API remota preparada."
+exec "$SCRIPT_DIR/start-api.sh"
