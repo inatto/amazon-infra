@@ -5,37 +5,148 @@
       "id": "nginx",
       "name": "Nginx",
       "type": "infra",
-      "domains": ["admin.anpprev.org", "monitor.inatto.com", "painel.anpprev.org", "previa.anpprev.org", "previa.asaclub.org.br", "sinproprev.org.br", "www.sinproprev.org.br"],
-      "services": ["nginx"],
-      "ports": [{"port": 80, "role": "HTTP"}, {"port": 443, "role": "HTTPS"}],
+      "domains": [
+        "admin.anpprev.org",
+        "monitor.inatto.com",
+        "painel.anpprev.org",
+        "previa.anpprev.org",
+        "previa.asaclub.org.br",
+        "sinproprev.org.br",
+        "www.sinproprev.org.br"
+      ],
+      "services": [
+        "nginx"
+      ],
+      "ports": [
+        {
+          "port": 80,
+          "role": "HTTP"
+        },
+        {
+          "port": 443,
+          "role": "HTTPS"
+        }
+      ],
       "urls": []
     },
     {
       "id": "orbital-app",
       "name": "Orbital App",
       "type": "app",
-      "domains": ["admin.anpprev.org"],
-      "services": ["orbital-app-api.service", "orbital-app-web.service", "orbital-app-note-worker.service"],
-      "ports": [{"port": 4001, "role": "Web"}, {"port": 8001, "role": "API"}],
-      "urls": [{"url": "http://127.0.0.1:8001/api/health", "role": "API Health"}]
+      "domains": [
+        "admin.anpprev.org"
+      ],
+      "services": [
+        "orbital-app-api.service",
+        "orbital-app-web.service",
+        "orbital-app-note-worker.service"
+      ],
+      "ports": [
+        {
+          "port": 4001,
+          "role": "Web"
+        },
+        {
+          "port": 8001,
+          "role": "API"
+        }
+      ],
+      "urls": [
+        {
+          "url": "http://127.0.0.1:8001/api/health",
+          "role": "API Health"
+        }
+      ]
     },
     {
       "id": "orbital-modules",
       "name": "Orbital App Modules",
       "type": "modules",
-      "domains": ["admin.anpprev.org"],
+      "domains": [
+        "admin.anpprev.org"
+      ],
       "services": [],
       "ports": [
-        {"port": 4101, "role": "Assets Web"}, {"port": 8101, "role": "Assets API"},
-        {"port": 4102, "role": "Content Web"}, {"port": 8102, "role": "Content API"},
-        {"port": 4103, "role": "CRM Web"}, {"port": 8103, "role": "CRM API"},
-        {"port": 4104, "role": "Events Web"}, {"port": 8104, "role": "Events API"},
-        {"port": 4105, "role": "Fin Web"}, {"port": 8105, "role": "Fin API"},
-        {"port": 4106, "role": "Mail Web"}, {"port": 8106, "role": "Mail API"},
-        {"port": 4107, "role": "Marketing Web"}, {"port": 8107, "role": "Marketing API"},
-        {"port": 4108, "role": "Reports Web"}, {"port": 8108, "role": "Reports API"},
-        {"port": 4109, "role": "UI Web"}, {"port": 8109, "role": "UI API"},
-        {"port": 4110, "role": "Vouchers Web"}, {"port": 8110, "role": "Vouchers API"}
+        {
+          "port": 4101,
+          "role": "Assets Web"
+        },
+        {
+          "port": 8101,
+          "role": "Assets API"
+        },
+        {
+          "port": 4102,
+          "role": "Content Web"
+        },
+        {
+          "port": 8102,
+          "role": "Content API"
+        },
+        {
+          "port": 4103,
+          "role": "CRM Web"
+        },
+        {
+          "port": 8103,
+          "role": "CRM API"
+        },
+        {
+          "port": 4104,
+          "role": "Events Web"
+        },
+        {
+          "port": 8104,
+          "role": "Events API"
+        },
+        {
+          "port": 4105,
+          "role": "Fin Web"
+        },
+        {
+          "port": 8105,
+          "role": "Fin API"
+        },
+        {
+          "port": 4106,
+          "role": "Mail Web"
+        },
+        {
+          "port": 8106,
+          "role": "Mail API"
+        },
+        {
+          "port": 4107,
+          "role": "Marketing Web"
+        },
+        {
+          "port": 8107,
+          "role": "Marketing API"
+        },
+        {
+          "port": 4108,
+          "role": "Reports Web"
+        },
+        {
+          "port": 8108,
+          "role": "Reports API"
+        },
+        {
+          "port": 4109,
+          "role": "UI Web"
+        },
+        {
+          "port": 8109,
+          "role": "UI API"
+        },
+        {
+          "port": 4110,
+          "role": "Vouchers Web"
+        },
+        {
+          "port": 8110,
+          "role": "Vouchers API"
+        }
       ],
       "urls": []
     },
@@ -43,37 +154,109 @@
       "id": "station-app",
       "name": "Station App",
       "type": "app",
-      "domains": ["painel.anpprev.org"],
-      "services": ["station-api.service", "station-web.service"],
-      "ports": [{"port": 4002, "role": "Web"}, {"port": 8002, "role": "API"}],
-      "urls": [{"url": "http://127.0.0.1:8002/api/health", "role": "API Health"}]
+      "domains": [
+        "painel.anpprev.org"
+      ],
+      "services": [
+        "station-api.service",
+        "station-web.service"
+      ],
+      "ports": [
+        {
+          "port": 4002,
+          "role": "Web"
+        },
+        {
+          "port": 8002,
+          "role": "API"
+        }
+      ],
+      "urls": [
+        {
+          "url": "http://127.0.0.1:8002/api/health",
+          "role": "API Health"
+        }
+      ]
     },
     {
       "id": "inst-app",
       "name": "Inst App",
       "type": "app",
-      "domains": ["previa.anpprev.org", "sinproprev.org.br", "www.sinproprev.org.br"],
-      "services": ["inst-app-api.service", "inst-app-web.service"],
-      "ports": [{"port": 4003, "role": "Web"}, {"port": 8003, "role": "API"}],
-      "urls": [{"url": "http://127.0.0.1:8003/api/health", "role": "API Health"}]
+      "domains": [
+        "previa.anpprev.org",
+        "sinproprev.org.br",
+        "www.sinproprev.org.br"
+      ],
+      "services": [
+        "inst-app-api.service",
+        "inst-app-web.service"
+      ],
+      "ports": [
+        {
+          "port": 4003,
+          "role": "Web"
+        },
+        {
+          "port": 8003,
+          "role": "API"
+        }
+      ],
+      "urls": [
+        {
+          "url": "http://127.0.0.1:8003/api/health",
+          "role": "API Health"
+        }
+      ]
     },
     {
       "id": "asaclub-app",
       "name": "Asaclub App",
       "type": "app",
-      "domains": ["previa.asaclub.org.br"],
-      "services": ["asaclub-app-web.service"],
-      "ports": [{"port": 4004, "role": "Web"}, {"port": 8004, "role": "API"}],
+      "domains": [
+        "previa.asaclub.org.br"
+      ],
+      "services": [
+        "asaclub-app-web.service"
+      ],
+      "ports": [
+        {
+          "port": 4004,
+          "role": "Web"
+        },
+        {
+          "port": 8004,
+          "role": "API"
+        }
+      ],
       "urls": []
     },
     {
-      "id": "monitor-app",
+      "id": "amazon-infra-monitor-app",
       "name": "Monitor App",
       "type": "app",
-      "domains": ["monitor.inatto.com"],
-      "services": ["monitor-app-api.service", "monitor-app-web.service"],
-      "ports": [{"port": 4005, "role": "Web"}, {"port": 8005, "role": "API"}],
-      "urls": [{"url": "http://127.0.0.1:8005/api/health", "role": "API Health"}]
+      "domains": [
+        "monitor.inatto.com"
+      ],
+      "services": [
+        "amazon-infra-monitor-app-api.service",
+        "amazon-infra-monitor-app-web.service"
+      ],
+      "ports": [
+        {
+          "port": 4005,
+          "role": "Web"
+        },
+        {
+          "port": 8005,
+          "role": "API"
+        }
+      ],
+      "urls": [
+        {
+          "url": "http://127.0.0.1:8005/api/health",
+          "role": "API Health"
+        }
+      ]
     }
   ]
 }

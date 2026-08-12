@@ -1,5 +1,5 @@
 {
-  "name": "monitor-app-web",
+  "name": "amazon-infra-monitor-app-web",
   "version": "0.0.3",
   "private": true,
   "type": "module",

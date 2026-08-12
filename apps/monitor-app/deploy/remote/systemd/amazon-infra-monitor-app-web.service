@@ -1,6 +1,6 @@
 [Unit]
-Description=monitor-app Astro Web
-After=network-online.target monitor-app-api.service
+Description=amazon-infra-monitor-app Astro Web
+After=network-online.target amazon-infra-monitor-app-api.service
 Wants=network-online.target
 
 [Service]

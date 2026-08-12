@@ -199,7 +199,7 @@ def systemd_services() -> list[dict]:
         if len(parts) < 4:
             continue
         name, load, active, sub = parts[:4]
-        if not any(token in name for token in ("orbital", "inst-app", "station-app", "asaclub-app", "monitor-app", "amazon-infra", "nginx")):
+        if not any(token in name for token in ("orbital", "inst-app", "station-app", "asaclub-app", "amazon-infra-monitor-app", "amazon-infra", "nginx")):
             continue
         services.append({"name": name, "load": load, "active": active, "sub": sub})
     return services

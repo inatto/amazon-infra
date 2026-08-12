@@ -29,7 +29,7 @@ done
 if [[ "$CHANGED" == true ]]; then sudo systemctl daemon-reload; fi
 for service in "${SERVICES[@]}"; do sudo systemctl enable "$service" >/dev/null; done
 
-for old in amazon-infra-monitor-api.service amazon-infra-monitor-web.service; do
+for old in amazon-infra-monitor-api.service amazon-infra-monitor-web.service monitor-app-api.service monitor-app-web.service; do
   if [[ -e "/etc/systemd/system/$old" ]]; then
     sudo systemctl disable --now "$old" >/dev/null 2>&1 || true
     sudo rm -f "/etc/systemd/system/$old"

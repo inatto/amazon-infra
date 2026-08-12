@@ -1,5 +1,5 @@
 [Unit]
-Description=monitor-app API FastAPI
+Description=amazon-infra-monitor-app API FastAPI
 After=network-online.target
 Wants=network-online.target
 
