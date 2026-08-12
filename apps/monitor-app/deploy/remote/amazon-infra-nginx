@@ -1,0 +1,142 @@
+#!/usr/bin/env bash
+set -Eeuo pipefail
+
+ACTION="${1:-}"
+DOMAIN="${2:-}"
+VALUE="${3:-}"
+SSL_EMAIL="${4:-}"
+SSL_FLAG="${5:-}"
+DOMAINS_DIR="/home/ubuntu/apps/infra/amazon-infra/ec2/52.67.135.170/domains"
+AVAILABLE_DIR="/etc/nginx/sites-available"
+ENABLED_DIR="/etc/nginx/sites-enabled"
+
+fail() { echo "ERRO: $*" >&2; exit 1; }
+valid_domain() { [[ "$1" =~ ^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$ ]]; }
+valid_domain "$DOMAIN" || fail "domínio inválido"
+mkdir -p "$DOMAINS_DIR"
+
+if [[ "$ACTION" == "set-enabled" ]]; then
+  [[ "$VALUE" == "on" || "$VALUE" == "off" ]] || fail "estado inválido"
+  AVAILABLE="$AVAILABLE_DIR/$DOMAIN"
+  ENABLED="$ENABLED_DIR/$DOMAIN"
+  [[ -f "$DOMAINS_DIR/$DOMAIN.conf" ]] || fail "domínio não existe na pasta de configuração"
+  [[ -f "$AVAILABLE" ]] || fail "domínio ainda não foi aplicado ao Nginx"
+  if [[ "$VALUE" == "on" ]]; then
+    ln -sfn "$AVAILABLE" "$ENABLED"
+  else
+    rm -f "$ENABLED"
+  fi
+  if ! nginx -t; then
+    [[ "$VALUE" == "on" ]] && rm -f "$ENABLED" || ln -sfn "$AVAILABLE" "$ENABLED"
+    nginx -t >/dev/null 2>&1 || true
+    fail "nginx -t falhou; estado anterior restaurado"
+  fi
+  systemctl reload nginx
+  echo "OK: $DOMAIN $( [[ "$VALUE" == "on" ]] && echo habilitado || echo desabilitado )"
+  exit 0
+fi
+
+[[ "$ACTION" == "apply-redirect" ]] || fail "ação não permitida"
+TARGET="$VALUE"
+[[ "$TARGET" =~ ^https?://[^[:space:]\;\{\}]+$ ]] || fail "destino inválido"
+[[ "$SSL_EMAIL" =~ ^[^[:space:]@]+@[^[:space:]@]+\.[^[:space:]@]+$ ]] || fail "e-mail SSL inválido"
+[[ -z "$SSL_FLAG" || "$SSL_FLAG" == "--ssl" ]] || fail "flag inválida"
+
+AVAILABLE="$AVAILABLE_DIR/$DOMAIN"
+ENABLED="$ENABLED_DIR/$DOMAIN"
+SOURCE="$DOMAINS_DIR/$DOMAIN.conf"
+TMP="$(mktemp)"
+BACKUP="$(mktemp)"
+SOURCE_BACKUP="$(mktemp)"
+HAD_PREVIOUS=false
+HAD_SOURCE=false
+
+cleanup() { rm -f "$TMP" "$BACKUP" "$SOURCE_BACKUP"; }
+rollback() {
+  status=$?
+  trap - ERR
+  if [[ "$HAD_PREVIOUS" == true ]]; then
+    install -m 0644 "$BACKUP" "$AVAILABLE"
+    ln -sfn "$AVAILABLE" "$ENABLED"
+  else
+    rm -f "$AVAILABLE" "$ENABLED"
+  fi
+  if [[ "$HAD_SOURCE" == true ]]; then
+    install -o ubuntu -g ubuntu -m 0644 "$SOURCE_BACKUP" "$SOURCE"
+  else
+    rm -f "$SOURCE"
+  fi
+  nginx -t >/dev/null 2>&1 && systemctl reload nginx || true
+  cleanup
+  exit "$status"
+}
+trap rollback ERR
+trap cleanup EXIT
+
+nginx -t
+systemctl is-active --quiet nginx
+if [[ -f "$AVAILABLE" ]]; then cp -a "$AVAILABLE" "$BACKUP"; HAD_PREVIOUS=true; fi
+if [[ -f "$SOURCE" ]]; then cp -a "$SOURCE" "$SOURCE_BACKUP"; HAD_SOURCE=true; fi
+
+cat > "$SOURCE" <<EOF
+#!/usr/bin/env bash
+REMOTE_USER="ubuntu"
+REMOTE_HOST="52.67.135.170"
+SSH_KEY="/home/daniel/Code/infra/amazon-infra/ec2/52.67.135.170/core/inatto01-sp.pem"
+SITE_NAME="$DOMAIN"
+DOMAINS=(
+  "$DOMAIN"
+)
+REDIRECT_URL="$TARGET"
+SSL_EMAIL="$SSL_EMAIL"
+EOF
+chown ubuntu:ubuntu "$SOURCE"
+chmod 0644 "$SOURCE"
+
+write_http() {
+cat > "$TMP" <<EOF
+server {
+    listen 80;
+    listen [::]:80;
+    server_name $DOMAIN;
+    return 301 $TARGET;
+}
+EOF
+}
+write_https() {
+cat > "$TMP" <<EOF
+server {
+    listen 80;
+    listen [::]:80;
+    server_name $DOMAIN;
+    return 301 $TARGET;
+}
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name $DOMAIN;
+    ssl_certificate /etc/letsencrypt/live/$DOMAIN/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/$DOMAIN/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+    return 301 $TARGET;
+}
+EOF
+}
+
+if [[ -s "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" && -s "/etc/letsencrypt/live/$DOMAIN/privkey.pem" ]]; then write_https; else write_http; fi
+install -m 0644 "$TMP" "$AVAILABLE"
+ln -sfn "$AVAILABLE" "$ENABLED"
+nginx -t
+systemctl reload nginx
+if [[ "$SSL_FLAG" == "--ssl" && ! -s "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]]; then
+  command -v certbot >/dev/null || fail "certbot não instalado"
+  certbot certonly --nginx --non-interactive --agree-tos --email "$SSL_EMAIL" -d "$DOMAIN"
+  write_https
+  install -m 0644 "$TMP" "$AVAILABLE"
+  nginx -t
+  systemctl reload nginx
+fi
+
+echo "OK: $DOMAIN -> $TARGET"
+[[ -s "/etc/letsencrypt/live/$DOMAIN/fullchain.pem" ]] && echo "SSL: ativo" || echo "SSL: não emitido"

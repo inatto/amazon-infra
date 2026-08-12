@@ -1,0 +1,121 @@
+<section class="console" aria-live="polite">
+  <div class="console-head">
+    <div>
+      <p class="eyebrow">ORBITAL INFRASTRUCTURE CONTROL</p>
+      <h1>EC2 <span id="hostname">carregando</span></h1>
+    </div>
+    <div class="master-status"><span id="master-led" class="led warning"></span><strong id="master-label">SINCRONIZANDO</strong></div>
+  </div>
+
+  <nav class="control-tabs" aria-label="Infra sections">
+    <button class="tab active" data-tab="overview">Visão geral</button>
+    <button class="tab" data-tab="domains">Domínios & rotas</button>
+    <button class="tab" data-tab="services">Serviços</button>
+  </nav>
+
+  <section id="panel-overview" class="tab-panel active">
+    <div class="telemetry">
+      <article><span>CPU LOAD</span><strong id="load">—</strong></article>
+      <article><span>MEMÓRIA</span><strong id="memory">—</strong></article>
+      <article><span>DISCO</span><strong id="disk">—</strong></article>
+      <article><span>UPTIME</span><strong id="uptime">—</strong></article>
+    </div>
+    <div class="radar-shell">
+      <div class="radar"><span></span><i></i></div>
+      <div class="radar-copy"><span>VARREDURA ATIVA</span><strong id="checked-at">aguardando telemetria</strong><small>systemd, sockets, endpoints e Nginx reais da EC2</small></div>
+    </div>
+    <div id="systems" class="systems"></div>
+  </section>
+
+  <section id="panel-domains" class="tab-panel">
+    <div class="section-title"><div><p class="eyebrow">NGINX CONTROL</p><h2>Domínios e rotas</h2></div><div class="infra-counters"><span><b id="site-count">—</b> sites</span><span><b id="ssl-count">—</b> SSL</span></div></div>
+    <form id="redirect-form" class="route-form">
+      <label><span>Subdomínio / domínio</span><input id="route-domain" autocomplete="off" placeholder="aniversario.anpprev.org" required /></label>
+      <label><span>Destino</span><input id="route-target" type="url" autocomplete="off" placeholder="https://admin.sindicatto.com/orbital-events/evento/1" required /></label>
+      <label><span>Token administrativo</span><input id="admin-token" type="password" autocomplete="current-password" placeholder="INFRA_ADMIN_TOKEN" required /></label>
+      <label class="ssl-check"><input id="route-ssl" type="checkbox" checked /><span>Emitir/usar SSL automaticamente</span></label>
+      <button type="submit" id="apply-route">VALIDAR E APLICAR</button>
+      <small id="route-result" class="form-result">A alteração só é publicada depois de passar por nginx -t. Em falha, o helper restaura a configuração anterior.</small>
+    </form>
+    <div id="domains-grid" class="domains-grid"><div class="empty-state">Carregando sites Nginx…</div></div>
+  </section>
+
+  <section id="panel-services" class="tab-panel">
+    <div class="section-title"><div><p class="eyebrow">SYSTEMD</p><h2>Serviços da EC2</h2></div><strong id="service-count">—</strong></div>
+    <div id="services-grid" class="services-grid"><div class="empty-state">Carregando serviços…</div></div>
+  </section>
+</section>
+
+<script define:vars={{ apiUrl: import.meta.env.PUBLIC_API_URL ?? 'http://127.0.0.1:8005' }}>
+  const systems = document.querySelector('#systems');
+  const masterLed = document.querySelector('#master-led');
+  const masterLabel = document.querySelector('#master-label');
+  const domainsGrid = document.querySelector('#domains-grid');
+  const servicesGrid = document.querySelector('#services-grid');
+  const routeForm = document.querySelector('#redirect-form');
+  const routeResult = document.querySelector('#route-result');
+  const adminToken = document.querySelector('#admin-token');
+
+  const formatUptime = (seconds) => `${Math.floor(seconds / 86400)}d ${Math.floor((seconds % 86400) / 3600)}h`;
+  const escapeHtml = (value) => String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
+
+  const checkHtml = (item) => `<article class="check ${escapeHtml(item.status)}"><span class="led ${escapeHtml(item.status)}"></span><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.kind)} · ${escapeHtml(item.detail)}</small></div><b>${item.latency_ms == null ? item.status.toUpperCase() : `${item.latency_ms} ms`}</b></article>`;
+  const groupHtml = (group) => `<section class="system-group ${escapeHtml(group.status)}"><header class="system-head"><div><p>${escapeHtml(group.type)}</p><h2><span class="led ${escapeHtml(group.status)}"></span>${escapeHtml(group.name)}</h2><small>${group.domains.map(escapeHtml).join(' · ') || 'sem domínio publicado'}</small></div><strong>${escapeHtml(group.status.toUpperCase())}</strong></header><div class="checks">${group.checks.map(checkHtml).join('')}</div></section>`;
+
+  const renderMonitor = (data) => {
+    document.querySelector('#hostname').textContent = data.system.hostname;
+    document.querySelector('#load').textContent = data.system.load.join(' / ');
+    document.querySelector('#memory').textContent = `${data.system.memory.used_percent}%`;
+    document.querySelector('#disk').textContent = `${data.system.disk.used_percent}%`;
+    document.querySelector('#uptime').textContent = formatUptime(data.system.uptime_seconds);
+    document.querySelector('#checked-at').textContent = new Date(data.checked_at).toLocaleString('pt-BR');
+    const isOk = data.status === 'ok';
+    masterLed.className = `led ${isOk ? 'ok' : 'error'}`;
+    masterLabel.textContent = isOk ? 'SISTEMAS NOMINAIS' : 'ALERTA DETECTADO';
+    const oracle = { id:'oracle', name:'Oracle Database', type:'database', domains:[], status:data.oracle.status === 'disabled' ? 'disabled' : data.oracle.status, checks:[{ name:'Oracle Database', kind:'database', status:data.oracle.status, detail:data.oracle.detail, latency_ms:null }] };
+    systems.innerHTML = [...data.groups, oracle].map(groupHtml).join('');
+  };
+
+  const routeRows = (routes) => routes.length ? routes.map(route => `<div class="route-row"><code>${escapeHtml(route.location)}</code><span>→</span><code>${escapeHtml(route.target)}</code></div>`).join('') : '<small class="muted">sem proxy_pass detectado</small>';
+  const renderInfra = (data) => {
+    document.querySelector('#site-count').textContent = data.nginx.site_count;
+    document.querySelector('#ssl-count').textContent = data.nginx.ssl_count;
+    document.querySelector('#service-count').textContent = `${data.service_count} serviços`;
+    domainsGrid.innerHTML = data.nginx.sites.map(site => `<article class="domain-card"><header><div><span class="led ${site.enabled ? 'ok' : 'disabled'}"></span><strong>${escapeHtml(site.site)}</strong></div><div class="badges"><b>${site.enabled ? 'ATIVO' : 'OFF'}</b><b class="${site.ssl ? 'ssl-on' : ''}">${site.ssl ? 'SSL' : 'HTTP'}</b></div></header><p>${site.domains.map(escapeHtml).join(' · ') || 'server_name não identificado'}</p>${site.redirect_url ? `<div class="redirect-row"><span>REDIRECT</span><code>${escapeHtml(site.redirect_url)}</code></div>` : `<div class="route-list">${routeRows(site.routes)}</div>`}</article>`).join('') || '<div class="empty-state">Nenhum site encontrado.</div>';
+    servicesGrid.innerHTML = data.services.map(service => `<article class="service-row"><span class="led ${service.active === 'active' ? 'ok' : 'error'}"></span><strong>${escapeHtml(service.name)}</strong><small>${escapeHtml(service.active)} / ${escapeHtml(service.sub)}</small></article>`).join('') || '<div class="empty-state">Nenhum serviço Orbital/infra encontrado.</div>';
+  };
+
+  const loadMonitor = async () => { try { const r = await fetch(`${apiUrl}/api/monitor`, {cache:'no-store'}); if(!r.ok) throw new Error(`HTTP ${r.status}`); renderMonitor(await r.json()); } catch(error) { masterLed.className='led error'; masterLabel.textContent='API INDISPONÍVEL'; } };
+  const loadInfra = async () => { try { const r = await fetch(`${apiUrl}/api/infra`, {cache:'no-store'}); if(!r.ok) throw new Error(`HTTP ${r.status}`); renderInfra(await r.json()); } catch(error) { domainsGrid.innerHTML=`<div class="empty-state error-text">Falha ao ler Nginx: ${escapeHtml(error.message)}</div>`; } };
+
+  document.querySelectorAll('.tab').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(item => item.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(item => item.classList.remove('active'));
+    button.classList.add('active');
+    document.querySelector(`#panel-${button.dataset.tab}`).classList.add('active');
+  }));
+
+  adminToken.value = sessionStorage.getItem('infra_admin_token') || '';
+  routeForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const button = document.querySelector('#apply-route');
+    const token = adminToken.value.trim();
+    sessionStorage.setItem('infra_admin_token', token);
+    button.disabled = true;
+    routeResult.className = 'form-result pending';
+    routeResult.textContent = 'Validando e aplicando no Nginx…';
+    try {
+      const response = await fetch(`${apiUrl}/api/infra/redirects`, { method:'POST', headers:{'Content-Type':'application/json','X-Infra-Admin-Token':token}, body:JSON.stringify({domain:document.querySelector('#route-domain').value,target_url:document.querySelector('#route-target').value,enable_ssl:document.querySelector('#route-ssl').checked}) });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.detail || `HTTP ${response.status}`);
+      routeResult.className = 'form-result success';
+      routeResult.textContent = `${data.domain} → ${data.target_url} aplicado com sucesso.`;
+      await loadInfra();
+    } catch(error) {
+      routeResult.className = 'form-result error';
+      routeResult.textContent = error.message;
+    } finally { button.disabled = false; }
+  });
+
+  loadMonitor(); loadInfra(); setInterval(loadMonitor, 10000); setInterval(loadInfra, 30000);
+</script>

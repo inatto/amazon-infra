@@ -36,7 +36,7 @@ done
 
 echo 'OK: amazon-infra não declara, instala, copia ou gerencia lifecycle dos services das aplicações.'
 
-MONITOR_REMOTE="$ROOT_DIR/monitor-app/deploy/remote"
+MONITOR_REMOTE="$ROOT_DIR/apps/monitor-app/deploy/remote"
 [[ -s "$MONITOR_REMOTE/systemd/amazon-infra-monitor-api.service" ]] || fail 'unit da API do monitor não pertence ao próprio app'
 [[ -s "$MONITOR_REMOTE/systemd/amazon-infra-monitor-web.service" ]] || fail 'unit Web do monitor não pertence ao próprio app'
 [[ -x "$MONITOR_REMOTE/setup-services.sh" ]] || fail 'setup-services.sh do monitor ausente ou não executável'
