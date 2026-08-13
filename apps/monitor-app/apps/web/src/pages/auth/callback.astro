@@ -1,0 +1,10 @@
+---
+const code = Astro.url.searchParams.get('code') ?? '';
+const state = Astro.url.searchParams.get('state') ?? '';
+const apiUrl = import.meta.env.PUBLIC_API_URL ?? '/api';
+if (!code || !state) {
+  return Astro.redirect('/?auth_error=callback');
+}
+const query = new URLSearchParams({ code, state });
+return Astro.redirect(`${apiUrl}/api/auth/callback?${query.toString()}`);
+---

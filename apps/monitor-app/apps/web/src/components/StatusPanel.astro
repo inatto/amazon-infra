@@ -1,6 +1,10 @@
 <section class="console" aria-live="polite">
   <div class="console-head">
-    <div><p class="eyebrow">ORBITAL INFRASTRUCTURE CONTROL</p><h1>EC2 <span id="hostname">carregando</span></h1></div>
+    <div class="console-title">
+      <p class="eyebrow">ORBITAL INFRASTRUCTURE CONTROL</p>
+      <h1>EC2 <span id="hostname">carregando</span></h1>
+      <small>visão operacional · projetos → módulos → componentes</small>
+    </div>
     <div class="master-status"><span id="master-led" class="led warning"></span><strong id="master-label">SINCRONIZANDO</strong></div>
   </div>
 
@@ -12,9 +16,20 @@
 
   <section id="panel-overview" class="tab-panel active">
     <div class="telemetry">
-      <article><span>CPU LOAD</span><strong id="load">—</strong></article><article><span>MEMÓRIA</span><strong id="memory">—</strong></article><article><span>DISCO</span><strong id="disk">—</strong></article><article><span>UPTIME</span><strong id="uptime">—</strong></article>
+      <article><span>CPU LOAD</span><strong id="load">—</strong></article>
+      <article><span>MEMÓRIA</span><strong id="memory">—</strong></article>
+      <article><span>DISCO</span><strong id="disk">—</strong></article>
+      <article><span>UPTIME</span><strong id="uptime">—</strong></article>
+      <article><span>TARGETS</span><strong id="target-count">—</strong></article>
+      <article><span>ALERTAS</span><strong id="alert-count">—</strong></article>
     </div>
-    <div class="radar-shell"><div class="radar"><span></span><i></i></div><div class="radar-copy"><span>VARREDURA ATIVA</span><strong id="checked-at">aguardando telemetria</strong><small>systemd, sockets, endpoints, domínios e Nginx reais da EC2</small></div></div>
+
+    <div class="scan-strip">
+      <div class="scan-mark"><span></span><i></i></div>
+      <div class="scan-copy"><span>VARREDURA ATIVA</span><strong id="checked-at">aguardando telemetria</strong><small>systemd remoto · sockets · endpoints · Nginx</small></div>
+      <div class="scan-rule" aria-hidden="true"><span></span></div>
+    </div>
+
     <div id="systems" class="systems"></div>
   </section>
 
@@ -59,13 +74,79 @@
   const formatUptime = (seconds) => `${Math.floor(seconds / 86400)}d ${Math.floor((seconds % 86400) / 3600)}h`;
   const escapeHtml = (value) => String(value ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#039;');
 
-  const checkHtml = (item) => `<article class="check ${escapeHtml(item.status)}"><span class="led ${escapeHtml(item.status)}"></span><div><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.kind)} · ${escapeHtml(item.detail)}</small></div><b>${item.latency_ms == null ? item.status.toUpperCase() : `${item.latency_ms} ms`}</b></article>`;
-  const groupHtml = (group) => `<section class="system-group ${escapeHtml(group.status)}"><header class="system-head"><div><p>${escapeHtml(group.type)}</p><h2><span class="led ${escapeHtml(group.status)}"></span>${escapeHtml(group.name)}</h2><small>${group.domains.map(escapeHtml).join(' · ') || 'sem domínio publicado'}</small></div><strong>${escapeHtml(group.status.toUpperCase())}</strong></header><div class="checks">${group.checks.map(checkHtml).join('')}</div></section>`;
+  const componentOrder = ['web', 'api', 'worker', 'gateway', 'core'];
+  const componentLabels = { web: 'WEB', api: 'API', worker: 'WORKERS', gateway: 'GATEWAY', core: 'CORE' };
+  const normalizeComponent = (item) => item.component || (String(item.name).toLowerCase().includes('worker') ? 'worker' : item.kind === 'http' ? 'api' : 'core');
+  const statusText = (status) => status === 'ok' ? 'OK' : status === 'disabled' ? 'OFF' : status === 'unknown' ? 'N/A' : 'ERROR';
+
+  const checkHtml = (item) => `<div class="check-line ${escapeHtml(item.status)}">
+    <span class="led ${escapeHtml(item.status)}"></span>
+    <div class="check-copy"><strong>${escapeHtml(item.name)}</strong><small>${escapeHtml(item.kind)} · ${escapeHtml(item.detail)}</small></div>
+    <b>${item.latency_ms == null ? statusText(item.status) : `${item.latency_ms} ms`}</b>
+  </div>`;
+
+  const componentsHtml = (checks) => {
+    const buckets = new Map();
+    checks.forEach((item) => {
+      const key = normalizeComponent(item);
+      if (!buckets.has(key)) buckets.set(key, []);
+      buckets.get(key).push(item);
+    });
+    const ordered = [...buckets.entries()].sort(([a], [b]) => {
+      const ia = componentOrder.indexOf(a); const ib = componentOrder.indexOf(b);
+      return (ia < 0 ? 99 : ia) - (ib < 0 ? 99 : ib);
+    });
+    return ordered.map(([key, items]) => `<section class="component-block ${escapeHtml(key)}">
+      <div class="component-title"><span>${escapeHtml(componentLabels[key] || key.toUpperCase())}</span><b>${items.every(item => item.status === 'ok') ? 'NOMINAL' : 'CHECK'}</b></div>
+      <div class="component-checks">${items.map(checkHtml).join('')}</div>
+    </section>`).join('');
+  };
+
+  const moduleHtml = (module) => `<article class="module-card ${escapeHtml(module.status)}">
+    <header class="module-head">
+      <div><span class="module-type">${escapeHtml(module.type)}</span><h3><span class="led ${escapeHtml(module.status)}"></span>${escapeHtml(module.name)}</h3></div>
+      <strong>${statusText(module.status)}</strong>
+    </header>
+    <div class="module-components">${componentsHtml(module.checks || [])}</div>
+  </article>`;
+
+  const groupHtml = (group) => {
+    const modules = group.modules || [];
+    const domains = (group.domains || []).map(escapeHtml).join(' · ') || 'sem domínio publicado';
+    if (modules.length) {
+      return `<section class="system-group has-modules ${escapeHtml(group.status)}">
+        <header class="system-head cluster-head"><div><p>${escapeHtml(group.type)}</p><h2><span class="led ${escapeHtml(group.status)}"></span>${escapeHtml(group.name)}</h2><small>${domains}</small></div><div class="cluster-meta"><span>${modules.length} ${modules.length === 1 ? 'APP' : 'MÓDULOS'}</span><strong>${statusText(group.status)}</strong></div></header>
+        ${group.checks?.length ? `<div class="group-components">${componentsHtml(group.checks)}</div>` : ''}
+        <div class="module-grid">${modules.map(moduleHtml).join('')}</div>
+      </section>`;
+    }
+    return `<section class="system-group standalone ${escapeHtml(group.status)}">
+      <header class="system-head"><div><p>${escapeHtml(group.type)}</p><h2><span class="led ${escapeHtml(group.status)}"></span>${escapeHtml(group.name)}</h2><small>${domains}</small></div><strong>${statusText(group.status)}</strong></header>
+      <div class="group-components">${componentsHtml(group.checks || [])}</div>
+    </section>`;
+  };
+
+  const leafTargets = (group) => (group.modules?.length ? group.modules.flatMap(leafTargets) : [group]);
   const renderMonitor = (data) => {
-    document.querySelector('#hostname').textContent = data.system.hostname; document.querySelector('#load').textContent = data.system.load.join(' / '); document.querySelector('#memory').textContent = `${data.system.memory.used_percent}%`; document.querySelector('#disk').textContent = `${data.system.disk.used_percent}%`; document.querySelector('#uptime').textContent = formatUptime(data.system.uptime_seconds); document.querySelector('#checked-at').textContent = new Date(data.checked_at).toLocaleString('pt-BR');
-    const isOk = data.status === 'ok'; masterLed.className = `led ${isOk ? 'ok' : 'error'}`; masterLabel.textContent = isOk ? 'SISTEMAS NOMINAIS' : 'ALERTA DETECTADO';
-    const oracle = {id:'oracle',name:'Oracle Database',type:'database',domains:[],status:data.oracle.status === 'disabled' ? 'disabled' : data.oracle.status,checks:[{name:'Oracle Database',kind:'database',status:data.oracle.status,detail:data.oracle.detail,latency_ms:null}]};
-    systems.innerHTML = [...data.groups, oracle].map(groupHtml).join('');
+    document.querySelector('#hostname').textContent = data.system.hostname;
+    document.querySelector('#load').textContent = data.system.load.join(' / ');
+    document.querySelector('#memory').textContent = `${data.system.memory.used_percent}%`;
+    document.querySelector('#disk').textContent = `${data.system.disk.used_percent}%`;
+    document.querySelector('#uptime').textContent = formatUptime(data.system.uptime_seconds);
+    document.querySelector('#checked-at').textContent = new Date(data.checked_at).toLocaleString('pt-BR');
+
+    const oracle = {id:'oracle',name:'Oracle Database',type:'database',domains:[],status:data.oracle.status === 'disabled' ? 'disabled' : data.oracle.status,checks:[{name:'Oracle Database',kind:'database',status:data.oracle.status,detail:data.oracle.detail,latency_ms:null,component:'core'}]};
+    const groups = [...data.groups, oracle];
+    const leaves = groups.flatMap(leafTargets);
+    const alerts = leaves.filter(item => item.status === 'error').length;
+    document.querySelector('#target-count').textContent = leaves.length;
+    document.querySelector('#alert-count').textContent = alerts;
+    document.querySelector('#alert-count').classList.toggle('danger-value', alerts > 0);
+
+    const isOk = data.status === 'ok';
+    masterLed.className = `led ${isOk ? 'ok' : 'error'}`;
+    masterLabel.textContent = isOk ? 'SISTEMAS NOMINAIS' : 'ALERTA DETECTADO';
+    systems.innerHTML = groups.map(groupHtml).join('');
   };
 
   const routeRows = (routes) => routes.length ? routes.slice(0, 8).map(route => `<div class="route-row"><code>${escapeHtml(route.location)}</code><span>→</span><code>${escapeHtml(route.target)}</code></div>`).join('') : '<small class="muted">sem rota/proxy detectado</small>';
@@ -78,27 +159,79 @@
     <div class="domain-actions"><button class="toggle-domain ${item.enabled ? 'danger' : ''}" data-domain="${escapeHtml(item.domain)}" data-enabled="${item.enabled ? 'false' : 'true'}" ${item.applied ? '' : 'disabled'}>${item.enabled ? 'DESABILITAR' : 'HABILITAR'}</button><span>${item.enabled ? 'publicado no Nginx' : 'config preservada; site desligado'}</span></div>
   </article>`;
   const renderInfra = (data) => {
-    document.querySelector('#site-count').textContent = data.nginx.site_count; document.querySelector('#ssl-count').textContent = data.nginx.ssl_count; document.querySelector('#configured-count').textContent = data.domain_source.configured_count; document.querySelector('#domain-source-path').textContent = data.domain_source.path; document.querySelector('#service-count').textContent = `${data.service_count} serviços`;
+    document.querySelector('#site-count').textContent = data.nginx.site_count;
+    document.querySelector('#ssl-count').textContent = data.nginx.ssl_count;
+    document.querySelector('#configured-count').textContent = data.domain_source.configured_count;
+    document.querySelector('#domain-source-path').textContent = data.domain_source.path;
+    document.querySelector('#service-count').textContent = `${data.service_count} serviços`;
     domainGroups.innerHTML = data.domain_source.groups.map(group => `<section class="root-domain-group"><header><div><p>DOMÍNIO RAIZ</p><h3>${escapeHtml(group.root_domain)}</h3></div><strong>${group.count} ${group.count === 1 ? 'configuração' : 'configurações'}</strong></header><div class="domains-grid">${group.domains.map(domainCard).join('')}</div></section>`).join('') || '<div class="empty-state">Nenhum arquivo .conf encontrado na pasta fonte.</div>';
     servicesGrid.innerHTML = data.services.map(service => `<article class="service-row"><span class="led ${service.active === 'active' ? 'ok' : 'error'}"></span><strong>${escapeHtml(service.name)}</strong><small>${escapeHtml(service.active)} / ${escapeHtml(service.sub)}</small></article>`).join('') || '<div class="empty-state">Nenhum serviço Orbital/infra encontrado.</div>';
   };
 
-  const loadMonitor = async () => { try { const r=await fetch(`${apiUrl}/api/monitor`,{cache:'no-store'}); if(!r.ok) throw new Error(`HTTP ${r.status}`); renderMonitor(await r.json()); } catch { masterLed.className='led error'; masterLabel.textContent='API INDISPONÍVEL'; } };
-  const loadInfra = async () => { try { const r=await fetch(`${apiUrl}/api/infra`,{cache:'no-store'}); if(!r.ok) throw new Error(`HTTP ${r.status}`); renderInfra(await r.json()); } catch(error) { domainGroups.innerHTML=`<div class="empty-state error-text">Falha ao ler infra: ${escapeHtml(error.message)}</div>`; } };
+  let authRedirecting = false;
+  const protectedFetch = async (url, options = {}) => {
+    const response = await fetch(url, { ...options, credentials: 'same-origin' });
+    if (response.status === 401 && !authRedirecting) {
+      authRedirecting = true;
+      window.location.replace(`${apiUrl}/api/auth/login`);
+      throw new Error('AUTH_REDIRECT');
+    }
+    if (response.status === 403) throw new Error('Acesso restrito ao Dev do Orbital.');
+    return response;
+  };
 
-  document.querySelectorAll('.tab').forEach(button => button.addEventListener('click', () => { document.querySelectorAll('.tab').forEach(item=>item.classList.remove('active')); document.querySelectorAll('.tab-panel').forEach(item=>item.classList.remove('active')); button.classList.add('active'); document.querySelector(`#panel-${button.dataset.tab}`).classList.add('active'); }));
+  const loadMonitor = async () => { try { const r=await protectedFetch(`${apiUrl}/api/monitor`,{cache:'no-store'}); if(!r.ok) throw new Error(`HTTP ${r.status}`); renderMonitor(await r.json()); } catch(error) { if(error.message==='AUTH_REDIRECT') return; masterLed.className='led error'; masterLabel.textContent=error.message==='Acesso restrito ao Dev do Orbital.'?'ACESSO NEGADO':'API INDISPONÍVEL'; } };
+  const loadInfra = async () => { try { const r=await protectedFetch(`${apiUrl}/api/infra`,{cache:'no-store'}); if(!r.ok) throw new Error(`HTTP ${r.status}`); renderInfra(await r.json()); } catch(error) { if(error.message==='AUTH_REDIRECT') return; domainGroups.innerHTML=`<div class="empty-state error-text">Falha ao ler infra: ${escapeHtml(error.message)}</div>`; } };
+
+  document.querySelectorAll('.tab').forEach(button => button.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(item=>item.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(item=>item.classList.remove('active'));
+    button.classList.add('active');
+    document.querySelector(`#panel-${button.dataset.tab}`).classList.add('active');
+  }));
   adminToken.value = sessionStorage.getItem('infra_admin_token') || '';
   const token = () => { const value=adminToken.value.trim(); sessionStorage.setItem('infra_admin_token', value); return value; };
 
   routeForm.addEventListener('submit', async (event) => {
-    event.preventDefault(); const button=document.querySelector('#apply-route'); button.disabled=true; routeResult.className='form-result pending'; routeResult.textContent='Criando configuração, validando Nginx e verificando SSL…';
-    try { const response=await fetch(`${apiUrl}/api/infra/redirects`,{method:'POST',headers:{'Content-Type':'application/json','X-Infra-Admin-Token':token()},body:JSON.stringify({domain:document.querySelector('#route-domain').value,target_url:document.querySelector('#route-target').value,enable_ssl:document.querySelector('#route-ssl').checked})}); const data=await response.json(); if(!response.ok) throw new Error(data.detail||`HTTP ${response.status}`); routeResult.className='form-result success'; routeResult.textContent=`${data.domain} criado e aplicado. Verificando DNS…`; await loadInfra(); } catch(error) { routeResult.className='form-result error'; routeResult.textContent=error.message; } finally { button.disabled=false; }
+    event.preventDefault();
+    const button=document.querySelector('#apply-route');
+    button.disabled=true;
+    routeResult.className='form-result pending';
+    routeResult.textContent='Criando configuração, validando Nginx e verificando SSL…';
+    try {
+      const response=await protectedFetch(`${apiUrl}/api/infra/redirects`,{method:'POST',headers:{'Content-Type':'application/json','X-Infra-Admin-Token':token()},body:JSON.stringify({domain:document.querySelector('#route-domain').value,target_url:document.querySelector('#route-target').value,enable_ssl:document.querySelector('#route-ssl').checked})});
+      const data=await response.json();
+      if(!response.ok) throw new Error(data.detail||`HTTP ${response.status}`);
+      routeResult.className='form-result success';
+      routeResult.textContent=`${data.domain} criado e aplicado. Verificando DNS…`;
+      await loadInfra();
+    } catch(error) {
+      routeResult.className='form-result error';
+      routeResult.textContent=error.message;
+    } finally { button.disabled=false; }
   });
 
   domainGroups.addEventListener('click', async (event) => {
-    const button=event.target.closest('.toggle-domain'); if(!button) return; const domain=button.dataset.domain; const enabled=button.dataset.enabled==='true'; button.disabled=true; button.textContent='APLICANDO…';
-    try { const response=await fetch(`${apiUrl}/api/infra/domains/${encodeURIComponent(domain)}/enabled`,{method:'POST',headers:{'Content-Type':'application/json','X-Infra-Admin-Token':token()},body:JSON.stringify({enabled})}); const data=await response.json(); if(!response.ok) throw new Error(data.detail||`HTTP ${response.status}`); await loadInfra(); } catch(error) { alert(error.message); button.disabled=false; button.textContent=enabled?'HABILITAR':'DESABILITAR'; }
+    const button=event.target.closest('.toggle-domain');
+    if(!button) return;
+    const domain=button.dataset.domain;
+    const enabled=button.dataset.enabled==='true';
+    button.disabled=true;
+    button.textContent='APLICANDO…';
+    try {
+      const response=await protectedFetch(`${apiUrl}/api/infra/domains/${encodeURIComponent(domain)}/enabled`,{method:'POST',headers:{'Content-Type':'application/json','X-Infra-Admin-Token':token()},body:JSON.stringify({enabled})});
+      const data=await response.json();
+      if(!response.ok) throw new Error(data.detail||`HTTP ${response.status}`);
+      await loadInfra();
+    } catch(error) {
+      alert(error.message);
+      button.disabled=false;
+      button.textContent=enabled?'HABILITAR':'DESABILITAR';
+    }
   });
 
-  loadMonitor(); loadInfra(); setInterval(loadMonitor,10000); setInterval(loadInfra,30000);
+  loadMonitor();
+  loadInfra();
+  setInterval(loadMonitor,10000);
+  setInterval(loadInfra,30000);
 </script>

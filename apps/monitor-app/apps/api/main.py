@@ -1,9 +1,10 @@
 from datetime import datetime, timezone
 
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException, Request
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
+from auth import begin_login, current_identity, end_session, finish_login, require_sso_user
 from monitor import collect_groups, system_summary
 from infra_admin import apply_redirect, infra_summary, set_domain_enabled
 from oracle import oracle_status
@@ -25,8 +26,33 @@ def health() -> dict:
     return {"status": "ok", "name": settings.app_name, "version": settings.app_version}
 
 
+@app.get("/api/auth/login")
+def auth_login():
+    return begin_login(settings)
+
+
+@app.get("/api/auth/callback")
+async def auth_callback(request: Request, code: str = "", state: str = ""):
+    return await finish_login(request, code, state, settings)
+
+
+@app.get("/api/auth/session")
+def auth_session(request: Request) -> dict:
+    identity = current_identity(request, settings)
+    if not identity:
+        raise HTTPException(status_code=401, detail="Sessão ausente.")
+    if settings.sso_require_dev and not bool(identity.get("is_dev")):
+        raise HTTPException(status_code=403, detail="Acesso restrito ao ambiente de desenvolvimento.")
+    return {"authenticated": True, "identity": identity}
+
+
+@app.post("/api/auth/logout")
+def auth_logout():
+    return end_session(settings)
+
+
 @app.get("/api/monitor")
-async def monitor() -> dict:
+async def monitor(_identity: dict = Depends(require_sso_user)) -> dict:
     groups = await collect_groups(settings)
     oracle = oracle_status(settings)
     has_error = any(group["status"] == "error" for group in groups) or oracle["status"] == "error"
@@ -59,12 +85,16 @@ def _require_admin_token(token: str | None) -> None:
 
 
 @app.get("/api/infra")
-def infra() -> dict:
+def infra(_identity: dict = Depends(require_sso_user)) -> dict:
     return infra_summary(settings)
 
 
 @app.post("/api/infra/redirects")
-def create_redirect(payload: RedirectRequest, x_infra_admin_token: str | None = Header(default=None)) -> dict:
+def create_redirect(
+    payload: RedirectRequest,
+    x_infra_admin_token: str | None = Header(default=None),
+    _identity: dict = Depends(require_sso_user),
+) -> dict:
     _require_admin_token(x_infra_admin_token)
     try:
         return apply_redirect(settings, payload.domain, payload.target_url, payload.enable_ssl)
@@ -75,7 +105,12 @@ def create_redirect(payload: RedirectRequest, x_infra_admin_token: str | None = 
 
 
 @app.post("/api/infra/domains/{domain}/enabled")
-def update_domain_enabled(domain: str, payload: DomainEnabledRequest, x_infra_admin_token: str | None = Header(default=None)) -> dict:
+def update_domain_enabled(
+    domain: str,
+    payload: DomainEnabledRequest,
+    x_infra_admin_token: str | None = Header(default=None),
+    _identity: dict = Depends(require_sso_user),
+) -> dict:
     _require_admin_token(x_infra_admin_token)
     try:
         return set_domain_enabled(settings, domain, payload.enabled)

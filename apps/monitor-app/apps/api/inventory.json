@@ -3,7 +3,7 @@
   "groups": [
     {
       "id": "nginx",
-      "name": "Nginx",
+      "name": "Nginx Gateway",
       "type": "infra",
       "domains": [
         "admin.sindicatto.com",
@@ -15,198 +15,171 @@
         "www.sinproprev.org.br"
       ],
       "services": [
-        "nginx"
+        {"name": "nginx", "component": "gateway"}
       ],
       "ports": [
-        {
-          "port": 80,
-          "role": "HTTP"
-        },
-        {
-          "port": 443,
-          "role": "HTTPS"
-        }
+        {"port": 80, "role": "HTTP", "component": "gateway"},
+        {"port": 443, "role": "HTTPS", "component": "gateway"}
       ],
       "urls": []
     },
     {
-      "id": "orbital-app",
-      "name": "Orbital App",
-      "type": "app",
-      "domains": [
-        "admin.sindicatto.com"
-      ],
-      "services": [
-        "orbital-app-api.service",
-        "orbital-app-web.service",
-        "orbital-app-system-email-worker.service",
-        "orbital-app-note-worker.service"
-      ],
-      "ports": [
+      "id": "orbital",
+      "name": "Orbital",
+      "type": "platform",
+      "domains": ["admin.sindicatto.com"],
+      "services": [],
+      "ports": [],
+      "urls": [],
+      "modules": [
         {
-          "port": 4001,
-          "role": "Web"
+          "id": "orbital-app",
+          "name": "Core App",
+          "type": "app",
+          "services": [
+            {"name": "orbital-app-web.service", "component": "web"},
+            {"name": "orbital-app-api.service", "component": "api"},
+            {"name": "orbital-app-system-email-worker.service", "component": "worker"},
+            {"name": "orbital-app-note-worker.service", "component": "worker"}
+          ],
+          "ports": [
+            {"port": 4001, "role": "Web", "component": "web"},
+            {"port": 8001, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8001/api/health", "role": "Health", "component": "api"},
+            {"url": "http://127.0.0.1:8001/api/health/worker", "role": "Worker Health", "component": "worker"}
+          ]
         },
         {
-          "port": 8001,
-          "role": "API"
-        }
-      ],
-      "urls": [
-        {
-          "url": "http://127.0.0.1:8001/api/health",
-          "role": "API Health"
-        }
-      ]
-    },
-    {
-      "id": "orbital-modules",
-      "name": "Orbital App Modules",
-      "type": "modules",
-      "domains": [
-        "admin.sindicatto.com"
-      ],
-      "services": [
-        "orbital-assets-api.service",
-        "orbital-assets-web.service",
-        "orbital-content-api.service",
-        "orbital-content-web.service",
-        "orbital-events-api.service",
-        "orbital-events-web.service",
-        "orbital-fin-api.service",
-        "orbital-fin-web.service",
-        "orbital-mail-api.service",
-        "orbital-mail-web.service",
-        "orbital-mail-send-worker.service",
-        "orbital-reports-api.service",
-        "orbital-reports-web.service",
-        "orbital-legal-api.service",
-        "orbital-legal-web.service",
-        "orbital-ai-api.service",
-        "orbital-ai-web.service"
-      ],
-      "ports": [
-        {
-          "port": 4101,
-          "role": "Assets Web"
+          "id": "orbital-assets",
+          "name": "Assets",
+          "type": "module",
+          "services": [
+            {"name": "orbital-assets-web.service", "component": "web"},
+            {"name": "orbital-assets-api.service", "component": "api"}
+          ],
+          "ports": [
+            {"port": 4101, "role": "Web", "component": "web"},
+            {"port": 8101, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8101/api/health", "role": "Health", "component": "api"}
+          ]
         },
         {
-          "port": 8101,
-          "role": "Assets API"
+          "id": "orbital-content",
+          "name": "Content",
+          "type": "module",
+          "services": [
+            {"name": "orbital-content-web.service", "component": "web"},
+            {"name": "orbital-content-api.service", "component": "api"}
+          ],
+          "ports": [
+            {"port": 4102, "role": "Web", "component": "web"},
+            {"port": 8102, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8102/api/health", "role": "Health", "component": "api"}
+          ]
         },
         {
-          "port": 4102,
-          "role": "Content Web"
+          "id": "orbital-events",
+          "name": "Events",
+          "type": "module",
+          "services": [
+            {"name": "orbital-events-web.service", "component": "web"},
+            {"name": "orbital-events-api.service", "component": "api"}
+          ],
+          "ports": [
+            {"port": 4104, "role": "Web", "component": "web"},
+            {"port": 8104, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8104/api/health", "role": "Health", "component": "api"}
+          ]
         },
         {
-          "port": 8102,
-          "role": "Content API"
+          "id": "orbital-fin",
+          "name": "Finance",
+          "type": "module",
+          "services": [
+            {"name": "orbital-fin-web.service", "component": "web"},
+            {"name": "orbital-fin-api.service", "component": "api"}
+          ],
+          "ports": [
+            {"port": 4105, "role": "Web", "component": "web"},
+            {"port": 8105, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8105/api/health", "role": "Health", "component": "api"}
+          ]
         },
         {
-          "port": 4103,
-          "role": "CRM Web"
+          "id": "orbital-mail",
+          "name": "Mail",
+          "type": "module",
+          "services": [
+            {"name": "orbital-mail-web.service", "component": "web"},
+            {"name": "orbital-mail-api.service", "component": "api"},
+            {"name": "orbital-mail-send-worker.service", "component": "worker"}
+          ],
+          "ports": [
+            {"port": 4106, "role": "Web", "component": "web"},
+            {"port": 8106, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8106/api/health", "role": "Health", "component": "api"},
+            {"url": "http://127.0.0.1:8106/api/health/worker", "role": "Worker Health", "component": "worker"}
+          ]
         },
         {
-          "port": 8103,
-          "role": "CRM API"
+          "id": "orbital-reports",
+          "name": "Reports",
+          "type": "module",
+          "services": [
+            {"name": "orbital-reports-web.service", "component": "web"},
+            {"name": "orbital-reports-api.service", "component": "api"}
+          ],
+          "ports": [
+            {"port": 4108, "role": "Web", "component": "web"},
+            {"port": 8108, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8108/api/health", "role": "Health", "component": "api"}
+          ]
         },
         {
-          "port": 4104,
-          "role": "Events Web"
+          "id": "orbital-legal",
+          "name": "Legal",
+          "type": "module",
+          "services": [
+            {"name": "orbital-legal-web.service", "component": "web"},
+            {"name": "orbital-legal-api.service", "component": "api"}
+          ],
+          "ports": [
+            {"port": 4111, "role": "Web", "component": "web"},
+            {"port": 8111, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8111/api/health", "role": "Health", "component": "api"}
+          ]
         },
         {
-          "port": 8104,
-          "role": "Events API"
-        },
-        {
-          "port": 4105,
-          "role": "Fin Web"
-        },
-        {
-          "port": 8105,
-          "role": "Fin API"
-        },
-        {
-          "port": 4106,
-          "role": "Mail Web"
-        },
-        {
-          "port": 8106,
-          "role": "Mail API"
-        },
-        {
-          "port": 4107,
-          "role": "Marketing Web"
-        },
-        {
-          "port": 8107,
-          "role": "Marketing API"
-        },
-        {
-          "port": 4108,
-          "role": "Reports Web"
-        },
-        {
-          "port": 8108,
-          "role": "Reports API"
-        },
-        {
-          "port": 4110,
-          "role": "Vouchers Web"
-        },
-        {
-          "port": 8110,
-          "role": "Vouchers API"
-        },
-        {
-          "port": 4111,
-          "role": "Legal Web"
-        },
-        {
-          "port": 8111,
-          "role": "Legal API"
-        },
-        {
-          "port": 4112,
-          "role": "AI Web"
-        },
-        {
-          "port": 8112,
-          "role": "AI API"
-        }
-      ],
-      "urls": [
-        {
-          "url": "http://127.0.0.1:8101/api/health",
-          "role": "Assets Health"
-        },
-        {
-          "url": "http://127.0.0.1:8102/api/health",
-          "role": "Content Health"
-        },
-        {
-          "url": "http://127.0.0.1:8104/api/health",
-          "role": "Events Health"
-        },
-        {
-          "url": "http://127.0.0.1:8105/api/health",
-          "role": "Fin Health"
-        },
-        {
-          "url": "http://127.0.0.1:8106/api/health",
-          "role": "Mail Health"
-        },
-        {
-          "url": "http://127.0.0.1:8108/api/health",
-          "role": "Reports Health"
-        },
-        {
-          "url": "http://127.0.0.1:8111/api/health",
-          "role": "Legal Health"
-        },
-        {
-          "url": "http://127.0.0.1:8112/api/health",
-          "role": "AI Health"
+          "id": "orbital-ai",
+          "name": "AI",
+          "type": "module",
+          "services": [
+            {"name": "orbital-ai-web.service", "component": "web"},
+            {"name": "orbital-ai-api.service", "component": "api"}
+          ],
+          "ports": [
+            {"port": 4112, "role": "Web", "component": "web"},
+            {"port": 8112, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8112/api/health", "role": "Health", "component": "api"}
+          ]
         }
       ]
     },
@@ -214,113 +187,77 @@
       "id": "station-app",
       "name": "Station App",
       "type": "app",
-      "domains": [
-        "painel.anpprev.org"
-      ],
+      "domains": ["painel.anpprev.org"],
       "services": [
-        "station-api.service",
-        "station-web.service"
+        {"name": "station-web.service", "component": "web"},
+        {"name": "station-api.service", "component": "api"}
       ],
       "ports": [
-        {
-          "port": 4002,
-          "role": "Web"
-        },
-        {
-          "port": 8002,
-          "role": "API"
-        }
+        {"port": 4002, "role": "Web", "component": "web"},
+        {"port": 8002, "role": "API", "component": "api"}
       ],
       "urls": [
-        {
-          "url": "http://127.0.0.1:8002/health",
-          "role": "API Health"
-        }
+        {"url": "http://127.0.0.1:8002/health", "role": "Health", "component": "api"}
       ]
     },
     {
       "id": "inst-app",
       "name": "Inst App",
       "type": "app",
-      "domains": [
-        "previa.anpprev.org",
-        "sinproprev.org.br",
-        "www.sinproprev.org.br"
-      ],
+      "domains": ["previa.anpprev.org", "sinproprev.org.br", "www.sinproprev.org.br"],
       "services": [
-        "inst-app-api.service",
-        "inst-app-web.service"
+        {"name": "inst-app-web.service", "component": "web"},
+        {"name": "inst-app-api.service", "component": "api"}
       ],
       "ports": [
-        {
-          "port": 4003,
-          "role": "Web"
-        },
-        {
-          "port": 8003,
-          "role": "API"
-        }
+        {"port": 4003, "role": "Web", "component": "web"},
+        {"port": 8003, "role": "API", "component": "api"}
       ],
       "urls": [
-        {
-          "url": "http://127.0.0.1:8003/health",
-          "role": "API Health"
-        }
+        {"url": "http://127.0.0.1:8003/health", "role": "Health", "component": "api"}
       ]
     },
     {
       "id": "asaclub-app",
       "name": "Asaclub App",
       "type": "app",
-      "domains": [
-        "previa.asaclub.org.br"
-      ],
+      "domains": ["previa.asaclub.org.br"],
       "services": [
-        "asaclub-app-api.service",
-        "asaclub-app-web.service"
+        {"name": "asaclub-app-web.service", "component": "web"},
+        {"name": "asaclub-app-api.service", "component": "api"}
       ],
       "ports": [
-        {
-          "port": 4004,
-          "role": "Web"
-        },
-        {
-          "port": 8004,
-          "role": "API"
-        }
+        {"port": 4004, "role": "Web", "component": "web"},
+        {"port": 8004, "role": "API", "component": "api"}
       ],
       "urls": [
-        {
-          "url": "http://127.0.0.1:8004/health",
-          "role": "API Health"
-        }
+        {"url": "http://127.0.0.1:8004/health", "role": "Health", "component": "api"}
       ]
     },
     {
-      "id": "amazon-infra-monitor-app",
-      "name": "Monitor App",
-      "type": "app",
-      "domains": [
-        "monitor.inatto.com"
-      ],
-      "services": [
-        "amazon-infra-monitor-app-api.service",
-        "amazon-infra-monitor-app-web.service"
-      ],
-      "ports": [
+      "id": "amazon-infra",
+      "name": "Amazon Infra",
+      "type": "project",
+      "domains": ["monitor.inatto.com"],
+      "services": [],
+      "ports": [],
+      "urls": [],
+      "modules": [
         {
-          "port": 4005,
-          "role": "Web"
-        },
-        {
-          "port": 8005,
-          "role": "API"
-        }
-      ],
-      "urls": [
-        {
-          "url": "http://127.0.0.1:8005/api/health",
-          "role": "API Health"
+          "id": "amazon-infra-monitor-app",
+          "name": "Monitor App",
+          "type": "app",
+          "services": [
+            {"name": "amazon-infra-monitor-app-web.service", "component": "web"},
+            {"name": "amazon-infra-monitor-app-api.service", "component": "api"}
+          ],
+          "ports": [
+            {"port": 4005, "role": "Web", "component": "web"},
+            {"port": 8005, "role": "API", "component": "api"}
+          ],
+          "urls": [
+            {"url": "http://127.0.0.1:8005/api/health", "role": "Health", "component": "api"}
+          ]
         }
       ]
     }

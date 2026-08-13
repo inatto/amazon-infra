@@ -38,9 +38,15 @@ if [[ ! -f "$EXTERNAL" && -f "$LEGACY" ]]; then
     fi
 fi
 rm -f "$LEGACY"
-if [[ -f "$EXTERNAL" ]]; then
-    chmod 0600 "$EXTERNAL"
+if [[ ! -f "$EXTERNAL" ]]; then
+    touch "$EXTERNAL"
 fi
+if ! grep -Eq '^SSO_SESSION_SECRET=.+$' "$EXTERNAL" 2>/dev/null; then
+    session_secret="$(python3 -c 'import secrets; print(secrets.token_urlsafe(48))')"
+    printf 'SSO_SESSION_SECRET=%s\n' "$session_secret" >> "$EXTERNAL"
+    echo "SSO_SESSION_SECRET gerado e preservado em services.env.external."
+fi
+chmod 0600 "$EXTERNAL"
 if ! grep -Eq '^INFRA_ADMIN_TOKEN=.+$' "$EXTERNAL" 2>/dev/null; then
     echo "Aviso: INFRA_ADMIN_TOKEN não configurado; administração web ficará somente leitura." >&2
 fi

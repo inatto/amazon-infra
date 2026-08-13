@@ -9,6 +9,7 @@ import socket
 import subprocess
 import time
 from pathlib import Path
+from typing import Any
 
 import httpx
 
@@ -78,48 +79,79 @@ def _listeners() -> dict[int, str]:
     return listeners
 
 
-def check_service(service: str) -> dict:
+def _item_name(item: str | dict[str, Any]) -> str:
+    return item if isinstance(item, str) else str(item["name"])
+
+
+def _component(item: str | dict[str, Any]) -> str | None:
+    return None if isinstance(item, str) else item.get("component")
+
+
+def check_service(item: str | dict[str, Any]) -> dict:
+    service = _item_name(item)
+    component = _component(item)
     if not shutil.which("systemctl"):
-        return {"name": service, "kind": "service", "status": "unknown", "detail": "systemctl indisponível"}
-    code, output = _run("systemctl", "is-active", service)
-    state = output.splitlines()[0] if output else "unknown"
-    return {"name": service, "kind": "service", "status": "ok" if code == 0 and state == "active" else "error", "detail": state}
+        result = {"name": service, "kind": "service", "status": "unknown", "detail": "systemctl indisponível"}
+    else:
+        code, output = _run("systemctl", "is-active", service)
+        state = output.splitlines()[0] if output else "unknown"
+        result = {"name": service, "kind": "service", "status": "ok" if code == 0 and state == "active" else "error", "detail": state}
+    if component:
+        result["component"] = component
+    return result
 
 
-def check_port(port: int, role: str, listeners: dict[int, str]) -> dict:
+def check_port(item: dict[str, Any], listeners: dict[int, str]) -> dict:
+    port = int(item["port"])
+    role = str(item["role"])
     started = time.perf_counter()
     try:
         with socket.create_connection(("127.0.0.1", port), timeout=1):
             latency = int((time.perf_counter() - started) * 1000)
             process = listeners.get(port, "processo não identificado")
-            return {"name": f"{role} · Porta {port}", "kind": "port", "status": "ok", "detail": process, "latency_ms": latency}
+            result = {"name": f"{role} · {port}", "kind": "port", "status": "ok", "detail": process, "latency_ms": latency}
     except OSError as exc:
-        return {"name": f"{role} · Porta {port}", "kind": "port", "status": "error", "detail": str(exc), "latency_ms": None}
+        result = {"name": f"{role} · {port}", "kind": "port", "status": "error", "detail": str(exc), "latency_ms": None}
+    if item.get("component"):
+        result["component"] = item["component"]
+    return result
 
 
-async def check_url(client: httpx.AsyncClient, item: dict) -> dict:
+async def check_url(client: httpx.AsyncClient, item: dict[str, Any]) -> dict:
     url = item["url"]
     started = time.perf_counter()
     try:
         response = await client.get(url)
         latency = int((time.perf_counter() - started) * 1000)
         status = "ok" if 200 <= response.status_code < 400 else "error"
-        return {"name": item.get("role", "HTTP"), "kind": "http", "status": status, "detail": f"HTTP {response.status_code}", "url": url, "latency_ms": latency}
+        result = {"name": item.get("role", "HTTP"), "kind": "http", "status": status, "detail": f"HTTP {response.status_code}", "url": url, "latency_ms": latency}
     except httpx.HTTPError as exc:
-        return {"name": item.get("role", "HTTP"), "kind": "http", "status": "error", "detail": str(exc), "url": url, "latency_ms": None}
+        result = {"name": item.get("role", "HTTP"), "kind": "http", "status": "error", "detail": str(exc), "url": url, "latency_ms": None}
+    if item.get("component"):
+        result["component"] = item["component"]
+    return result
+
+
+async def _collect_target(target: dict[str, Any], settings: Settings, client: httpx.AsyncClient, listeners: dict[int, str]) -> dict:
+    service_items = target.get("services", []) if CONFIG_CONTEXT == "production" or target.get("type") == "infra" else []
+    services = await asyncio.to_thread(lambda: [check_service(item) for item in service_items])
+    ports = await asyncio.to_thread(lambda: [check_port(item, listeners) for item in target.get("ports", [])])
+    urls = await asyncio.gather(*(check_url(client, item) for item in target.get("urls", [])))
+    modules = await asyncio.gather(*(
+        _collect_target(module, settings, client, listeners) for module in target.get("modules", [])
+    ))
+    checks = [*services, *ports, *urls]
+    has_error = any(item["status"] == "error" for item in checks) or any(module["status"] == "error" for module in modules)
+    result = {**target, "status": "error" if has_error else "ok", "checks": checks}
+    if modules:
+        result["modules"] = modules
+    return result
 
 
 async def collect_groups(settings: Settings) -> list[dict]:
     inventory = json.loads(INVENTORY_FILE.read_text(encoding="utf-8"))
     listeners = await asyncio.to_thread(_listeners)
-    groups = []
     async with httpx.AsyncClient(timeout=settings.monitor_timeout_seconds, follow_redirects=True) as client:
-        for group in inventory["groups"]:
-            service_items = group["services"] if CONFIG_CONTEXT == "production" or group["type"] == "infra" else []
-            services = await asyncio.to_thread(lambda items=service_items: [check_service(item) for item in items])
-            ports = await asyncio.to_thread(lambda items=group["ports"]: [check_port(item["port"], item["role"], listeners) for item in items])
-            urls = await asyncio.gather(*(check_url(client, item) for item in group["urls"]))
-            checks = [*services, *ports, *urls]
-            status = "error" if any(item["status"] == "error" for item in checks) else "ok"
-            groups.append({**group, "status": status, "checks": checks})
-    return groups
+        return list(await asyncio.gather(*(
+            _collect_target(group, settings, client, listeners) for group in inventory["groups"]
+        )))

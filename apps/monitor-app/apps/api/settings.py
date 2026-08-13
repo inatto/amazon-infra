@@ -10,7 +10,7 @@ load_config_environment()
 
 class Settings(BaseSettings):
     app_name: str = "amazon-infra-monitor-app"
-    app_version: str = "0.0.4"
+    app_version: str = "0.0.7"
     app_host: str = "127.0.0.1"
     app_port: int = 8005
     cors_origins: str = Field(
@@ -31,6 +31,15 @@ class Settings(BaseSettings):
     infra_domains_dir: str = "/home/ubuntu/apps/infra/amazon-infra/ec2/52.67.135.170/domains"
     infra_public_ip: str = "52.67.135.170"
     infra_ssl_email: str = "danielmaiax@gmail.com"
+    sso_enabled: bool = False
+    sso_authorize_url: str = ""
+    sso_token_url: str = ""
+    sso_client_id: str = "orbital-modules"
+    sso_client_secret: str = ""
+    sso_redirect_uri: str = ""
+    sso_session_secret: str = ""
+    sso_session_ttl_seconds: int = 28800
+    sso_require_dev: bool = True
 
     model_config = SettingsConfigDict(extra="ignore", populate_by_name=True)
 
