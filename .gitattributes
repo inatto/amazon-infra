@@ -1,0 +1,10 @@
+# BEGIN dev-manager: config folders git-crypt
+apps/monitor-app/apps/api/config/** filter=git-crypt diff=git-crypt
+apps/monitor-app/apps/web/config/** filter=git-crypt diff=git-crypt
+.gitattributes !filter !diff
+.gitignore !filter !diff
+.gitmodules !filter !diff
+**/.gitattributes !filter !diff
+**/.gitignore !filter !diff
+**/.gitmodules !filter !diff
+# END dev-manager: config folders git-crypt
