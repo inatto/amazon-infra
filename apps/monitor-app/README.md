@@ -12,7 +12,7 @@ Painel Web/API para observar e administrar a EC2 principal.
 
 ## Segurança
 
-Alterações exigem `INFRA_ADMIN_TOKEN` em `apps/api/config/production/services.env.external` no servidor. O deploy não gera nem sobrescreve segredos. A API roda sem root; somente o helper Nginx restrito possui autorização sudo.
+Alterações exigem `INFRA_ADMIN_TOKEN` em `.config/api/production/services.env.external` na raiz da Amazon Infra no servidor. O deploy não gera nem sobrescreve segredos. A API roda sem root; somente o helper Nginx restrito possui autorização sudo.
 
 ## Caminhos canônicos
 

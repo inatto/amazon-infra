@@ -3,8 +3,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+INFRA_ROOT="$(cd "$ROOT_DIR/../.." && pwd)"
 WEB_DIR="$ROOT_DIR/apps/web"
-APP_CONFIG="$WEB_DIR/config/local/app.env"
+APP_CONFIG="$INFRA_ROOT/.config/web/local/app.env"
 WEB_HOST="$(sed -n 's/^APP_HOST=//p' "$APP_CONFIG")"
 WEB_PORT="$(sed -n 's/^APP_PORT=//p' "$APP_CONFIG")"
 [[ "$WEB_HOST" == "127.0.0.1" ]] || { echo "APP_HOST inválido: $WEB_HOST" >&2; exit 1; }

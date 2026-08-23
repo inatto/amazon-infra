@@ -14,8 +14,9 @@ echo "Parando e preparando Web remota..."
 ssh "${SSH[@]}" "$REMOTE_HOST" 'bash -s' -- "$REMOTE_ROOT" <<'REMOTE'
 set -euo pipefail
 ROOT_DIR="$1"
+INFRA_ROOT="$(cd "$ROOT_DIR/../.." && pwd)"
 WEB_DIR="$ROOT_DIR/apps/web"
-APP_CONFIG="$WEB_DIR/config/production/app.env"
+APP_CONFIG="$INFRA_ROOT/.config/web/production/app.env"
 [[ -f "$APP_CONFIG" ]] || { echo "Configuração da Web não encontrada: $APP_CONFIG" >&2; exit 1; }
 WEB_HOST="$(sed -n 's/^APP_HOST=//p' "$APP_CONFIG")"
 WEB_PORT="$(sed -n 's/^APP_PORT=//p' "$APP_CONFIG")"

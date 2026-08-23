@@ -3,3 +3,5 @@
 .astro/
 dist/
 node_modules/
+.config/api/*/services.env.external
+.config/web/*/services.env.external

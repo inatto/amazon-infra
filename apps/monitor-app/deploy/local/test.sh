@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
+INFRA_ROOT="$(cd "$ROOT/../.." && pwd)"
 cd "$ROOT"
 apps/api/.venv/bin/python -m compileall -q apps/api
 (cd apps/api && .venv/bin/python -c 'from main import app')
@@ -39,12 +40,13 @@ assert groups["asaclub-app"]["urls"][0]["url"] == "http://127.0.0.1:8004/health"
 assert groups["amazon-infra"]["modules"][0]["id"] == "amazon-infra-monitor-app"
 PYTEST
 )
-grep -Fxq 'APP_CORS_ORIGINS=https://monitor.amazon-infra.localhost' apps/api/config/local/app.env
-grep -Fxq 'APP_VERSION=0.0.7' apps/api/config/local/app.env
-grep -Fxq 'SSO_REDIRECT_URI=https://monitor.inatto.com/auth/callback' apps/api/config/production/app.env
-grep -Fxq 'APP_CORS_ORIGINS=https://monitor.inatto.com' apps/api/config/production/app.env
+grep -Fxq 'APP_CORS_ORIGINS=https://monitor.amazon-infra.localhost' "$INFRA_ROOT/.config/api/local/app.env"
+grep -Fxq 'APP_VERSION=0.0.7' "$INFRA_ROOT/.config/api/local/app.env"
+grep -Fxq 'SSO_REDIRECT_URI=https://monitor.inatto.com/auth/callback' "$INFRA_ROOT/.config/api/production/app.env"
+grep -Fxq 'APP_CORS_ORIGINS=https://monitor.inatto.com' "$INFRA_ROOT/.config/api/production/app.env"
 grep -Fq "return Astro.redirect(`${apiUrl}/api/auth/login`, 302);" apps/web/src/pages/index.astro
 grep -Fq 'SESSION_COOKIE = "monitor_session_v2"' apps/api/auth.py
+[[ "$(cat "$INFRA_ROOT/.gitattributes")" == '.config/** filter=git-crypt diff=git-crypt' ]]
 (cd apps/api && .venv/bin/python - <<'PYAUTH'
 from auth import _decode_session, _encode_session
 from settings import get_settings

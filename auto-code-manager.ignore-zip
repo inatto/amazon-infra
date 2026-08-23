@@ -5,3 +5,4 @@ imports/
 ords/
 var/
 *.pem
+.config/

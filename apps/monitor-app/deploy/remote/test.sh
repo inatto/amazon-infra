@@ -8,8 +8,9 @@ SSH=(-i "$DEPLOY_SSH_KEY" -o BatchMode=yes)
 ssh "${SSH[@]}" "$DEPLOY_REMOTE_HOST" 'bash -s' -- "$DEPLOY_REMOTE_ROOT" <<'REMOTE'
 set -euo pipefail
 ROOT_DIR="$1"
-API_PORT="$(sed -n 's/^APP_PORT=//p' "$ROOT_DIR/apps/api/config/production/app.env")"
-WEB_PORT="$(sed -n 's/^APP_PORT=//p' "$ROOT_DIR/apps/web/config/production/app.env")"
+INFRA_ROOT="$(cd "$ROOT_DIR/../.." && pwd)"
+API_PORT="$(sed -n 's/^APP_PORT=//p' "$INFRA_ROOT/.config/api/production/app.env")"
+WEB_PORT="$(sed -n 's/^APP_PORT=//p' "$INFRA_ROOT/.config/web/production/app.env")"
 curl -fsS --max-time 2 "http://127.0.0.1:${API_PORT}/api/health" >/dev/null
 AUTH_STATUS="$(curl -sS --max-time 2 -o /dev/null -w '%{http_code}' "http://127.0.0.1:${API_PORT}/api/monitor")"
 [[ "$AUTH_STATUS" == "401" ]] || { echo "Proteção SSO inválida: /api/monitor retornou HTTP $AUTH_STATUS sem sessão." >&2; exit 1; }

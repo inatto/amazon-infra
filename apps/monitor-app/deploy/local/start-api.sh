@@ -3,8 +3,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
+INFRA_ROOT="$(cd "$ROOT_DIR/../.." && pwd)"
 API_DIR="$ROOT_DIR/apps/api"
-APP_CONFIG="$API_DIR/config/local/app.env"
+APP_CONFIG="$INFRA_ROOT/.config/api/local/app.env"
 PYTHON="$API_DIR/.venv/bin/python"
 UVICORN="$API_DIR/.venv/bin/uvicorn"
 [[ -x "$PYTHON" && -x "$UVICORN" ]] || { echo "API não preparada." >&2; exit 1; }

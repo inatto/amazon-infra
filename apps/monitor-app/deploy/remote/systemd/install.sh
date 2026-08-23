@@ -7,6 +7,7 @@ shift
 [[ "$ROOT_DIR" == /* && "$ROOT_DIR" != *'..'* && "$ROOT_DIR" =~ ^/[A-Za-z0-9._/-]+$ ]] || { echo "Diretório remoto inválido: $ROOT_DIR" >&2; exit 1; }
 
 SYSTEMD_DIR="$ROOT_DIR/deploy/remote/systemd"
+REMOTE_INFRA_ROOT="$(cd "$ROOT_DIR/../.." && pwd)"
 REMOTE_USER="$(id -un)"
 REMOTE_GROUP="$(id -gn)"
 CHANGED=false
@@ -18,7 +19,7 @@ for service in "${SERVICES[@]}"; do
   target_file="/etc/systemd/system/$service"
   [[ -s "$source_file" ]] || { echo "Unit não encontrada: $source_file" >&2; exit 1; }
   rendered="$(mktemp)"
-  sed -e "s|__REMOTE_ROOT__|$ROOT_DIR|g" -e "s|__REMOTE_USER__|$REMOTE_USER|g" -e "s|__REMOTE_GROUP__|$REMOTE_GROUP|g" "$source_file" > "$rendered"
+  sed -e "s|__REMOTE_ROOT__|$ROOT_DIR|g" -e "s|__REMOTE_INFRA_ROOT__|$REMOTE_INFRA_ROOT|g" -e "s|__REMOTE_USER__|$REMOTE_USER|g" -e "s|__REMOTE_GROUP__|$REMOTE_GROUP|g" "$source_file" > "$rendered"
   if ! cmp -s "$rendered" "$target_file"; then
     sudo install -m 0644 "$rendered" "$target_file"
     CHANGED=true

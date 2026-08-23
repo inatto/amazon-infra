@@ -8,7 +8,7 @@ Type=simple
 User=__REMOTE_USER__
 Group=__REMOTE_GROUP__
 WorkingDirectory=__REMOTE_ROOT__/apps/web
-EnvironmentFile=__REMOTE_ROOT__/apps/web/config/production/app.env
+EnvironmentFile=__REMOTE_INFRA_ROOT__/.config/web/production/app.env
 Environment=NODE_ENV=production
 ExecStart=/usr/bin/node __REMOTE_ROOT__/apps/web/dist/server/entry.mjs
 Restart=always
