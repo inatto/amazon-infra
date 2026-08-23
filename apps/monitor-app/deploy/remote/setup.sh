@@ -37,15 +37,6 @@ rsync -az --delete --itemize-changes \
     "$ROOT_DIR/" "$REMOTE_HOST:$REMOTE_ROOT/"
 echo "Código enviado."
 
-echo "Enviando .config da Amazon Infra..."
-ssh "${SSH[@]}" "$REMOTE_HOST" "mkdir -p $(printf '%q' "$REMOTE_INFRA_ROOT/.config")"
-rsync -az --delete --itemize-changes \
-    -e "ssh ${SSH[*]}" \
-    --exclude='api/*/services.env.external' \
-    --exclude='web/*/services.env.external' \
-    "$REPO_ROOT/.config/" "$REMOTE_HOST:$REMOTE_INFRA_ROOT/.config/"
-echo ".config enviada."
-
 echo "Sincronizando a pasta fonte de domínios da EC2..."
 LOCAL_DOMAINS="$REPO_ROOT/ec2/$SERVER_IP/domains"
 REMOTE_DOMAINS="$REMOTE_INFRA_ROOT/ec2/$SERVER_IP/domains"

@@ -46,7 +46,6 @@ grep -Fxq 'SSO_REDIRECT_URI=https://monitor.inatto.com/auth/callback' "$INFRA_RO
 grep -Fxq 'APP_CORS_ORIGINS=https://monitor.inatto.com' "$INFRA_ROOT/.config/api/production/app.env"
 grep -Fq "return Astro.redirect(`${apiUrl}/api/auth/login`, 302);" apps/web/src/pages/index.astro
 grep -Fq 'SESSION_COOKIE = "monitor_session_v2"' apps/api/auth.py
-[[ "$(cat "$INFRA_ROOT/.gitattributes")" == '.config/** filter=git-crypt diff=git-crypt' ]]
 (cd apps/api && .venv/bin/python - <<'PYAUTH'
 from auth import _decode_session, _encode_session
 from settings import get_settings

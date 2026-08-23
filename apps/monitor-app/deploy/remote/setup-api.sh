@@ -29,9 +29,7 @@ sudo systemctl stop "$API_SERVICE" 2>/dev/null || true
 sudo fuser -k "${API_PORT}/tcp" >/dev/null 2>&1 || true
 
 EXTERNAL="$INFRA_ROOT/.config/api/production/services.env.external"
-LEGACY_EXTERNAL="$API_DIR/config/production/services.env.external"
 LEGACY="$API_DIR/.env"
-mkdir -p "$(dirname "$EXTERNAL")"
 if [[ ! -f "$EXTERNAL" && -f "$LEGACY" ]]; then
     token="$(sed -n 's/^INFRA_ADMIN_TOKEN=//p' "$LEGACY" | head -1)"
     if [[ -n "$token" ]]; then
@@ -50,8 +48,7 @@ if ! grep -Eq '^SSO_SESSION_SECRET=.+$' "$EXTERNAL" 2>/dev/null; then
     echo "SSO_SESSION_SECRET gerado e preservado em services.env.external."
 fi
 chmod 0600 "$EXTERNAL"
-if ! grep -Eq '^INFRA_ADMIN_TOKEN=.+$' "$EXTERNAL" 2>/dev/null \
-   && ! grep -Eq '^INFRA_ADMIN_TOKEN=.+$' "$LEGACY_EXTERNAL" 2>/dev/null; then
+if ! grep -Eq '^INFRA_ADMIN_TOKEN=.+$' "$EXTERNAL" 2>/dev/null; then
     echo "Aviso: INFRA_ADMIN_TOKEN não configurado; administração web ficará somente leitura." >&2
 fi
 
