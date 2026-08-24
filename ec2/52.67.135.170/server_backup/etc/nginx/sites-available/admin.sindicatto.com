@@ -1,17 +1,23 @@
 server {
+    if ($host = admin.sindicatto.com) {
+        return 301 https://$host$request_uri;
+    } # managed by Certbot
+
+
     listen 80;
     listen [::]:80;
     server_name admin.sindicatto.com;
     return 301 https://$host$request_uri;
+
+
 }
 
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
     server_name admin.sindicatto.com;
-
-    ssl_certificate /etc/letsencrypt/live/admin.sindicatto.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/admin.sindicatto.com/privkey.pem;
+    ssl_certificate /etc/letsencrypt/live/admin.sindicatto.com/fullchain.pem; # managed by Certbot
+    ssl_certificate_key /etc/letsencrypt/live/admin.sindicatto.com/privkey.pem; # managed by Certbot
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
@@ -164,6 +170,18 @@ server {
         proxy_send_timeout 120s;
     }
 
+    location ^~ /orbital-tasks/api/ {
+        proxy_pass http://127.0.0.1:8114/api/;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_read_timeout 120s;
+        proxy_connect_timeout 30s;
+        proxy_send_timeout 120s;
+    }
+
     location ^~ /orbital-assets/ {
         proxy_pass http://127.0.0.1:4101;
         proxy_http_version 1.1;
@@ -296,6 +314,18 @@ server {
         proxy_read_timeout 60s;
     }
 
+    location ^~ /orbital-tasks/ {
+        proxy_pass http://127.0.0.1:4114;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 60s;
+    }
+
     location / {
         proxy_pass http://127.0.0.1:4001;
         proxy_http_version 1.1;
@@ -307,4 +337,5 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_read_timeout 60s;
     }
+
 }
