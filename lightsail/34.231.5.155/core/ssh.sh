@@ -3,4 +3,4 @@ ssh \
   -o ServerAliveInterval=30 \
   -o ServerAliveCountMax=120 \
   -o TCPKeepAlive=yes \
-  bitnami@34.199.171.33
+  bitnami@34.231.5.155
