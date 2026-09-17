@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -uo pipefail
+script_dir=$(cd -- "$(dirname -- "$(readlink -f -- "$0")")" && pwd)
+host=${INFINITY_HOST:-13.220.160.130}
+key="$script_dir/../.config/infinitetalk-teste-20260909.pem"
+interval=${INFINITY_INTERVAL:-1}
+case "${1:-}" in
+  --once) interval=0 ;;
+  '') ;;
+  *) echo 'Uso: infinity-status [--once]'; exit 2 ;;
+esac
+exec ssh -i "$key" -o BatchMode=yes -o ConnectTimeout=10 \
+  -o ServerAliveInterval=10 -o ServerAliveCountMax=2 "ubuntu@$host" \
+  bash -s -- "$interval" < "$script_dir/infinity-status-remote.sh"
